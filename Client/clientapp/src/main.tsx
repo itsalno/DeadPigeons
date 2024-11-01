@@ -1,10 +1,14 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import ReactDOM from 'react-dom/client'
+import './CSS/Styles.css'
+import React, {StrictMode} from "react";
+import 'jotai-devtools/styles.css';
+import {BrowserRouter} from "react-router-dom";
+import App from './Components/App';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+ReactDOM.createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+        <BrowserRouter>
+            <App/>
+        </BrowserRouter>
+    </StrictMode>
 )
