@@ -9,6 +9,7 @@ import GamesPage from "../Pages/GamesPage";
 import UsersPage from "../Pages/UsersPage";
 import HistoryOfBoards from "../Pages/HistoryOfBoards";
 import BalancePage from "../Pages/BalancePage";
+import LogInPage from "../Pages/LogInPage";
 
 
 
@@ -29,6 +30,7 @@ const App = () => {
         <Toaster position={"bottom-center"}/>
         <Routes>
             <Route path="/" element={<IntroPage/>}/>
+            <Route path="/LogIn" element={<LogInPage/>}/>
             <Route path="/Games" element={<GamesPage />} />
             <Route path="/Users" element={<UsersPage/>}/>
             <Route path="/History" element={<HistoryOfBoards/>}/>

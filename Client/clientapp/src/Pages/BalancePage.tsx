@@ -1,7 +1,7 @@
 function BalancePage(){
     return(
         <div>
-            
+            BALANCE
         </div>
     );
 }

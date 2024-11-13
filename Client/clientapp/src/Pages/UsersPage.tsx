@@ -1,7 +1,7 @@
 function UsersPage(){
     return(
         <div>
-
+        USERS
         </div>
     );
 }

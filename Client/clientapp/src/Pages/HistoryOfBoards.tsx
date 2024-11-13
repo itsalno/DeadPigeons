@@ -1,7 +1,7 @@
 function HistoryOfBoards(){
     return(
         <div>
-
+        HISTORY
         </div>
     );
 }
