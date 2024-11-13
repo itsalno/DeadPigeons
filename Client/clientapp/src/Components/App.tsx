@@ -10,6 +10,7 @@ import UsersPage from "../Pages/UsersPage";
 import HistoryOfBoards from "../Pages/HistoryOfBoards";
 import BalancePage from "../Pages/BalancePage";
 import LogInPage from "../Pages/LogInPage";
+import PlayersPage from "../Pages/PlayersPage";
 
 
 
@@ -32,7 +33,7 @@ const App = () => {
             <Route path="/" element={<IntroPage/>}/>
             <Route path="/LogIn" element={<LogInPage/>}/>
             <Route path="/Games" element={<GamesPage />} />
-            <Route path="/Users" element={<UsersPage/>}/>
+            <Route path="/Users" element={<PlayersPage/>}/>
             <Route path="/History" element={<HistoryOfBoards/>}/>
             <Route path="/Balance" element={<BalancePage/>}/>
         </Routes>

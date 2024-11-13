@@ -1,8 +1,8 @@
-function UsersPage(){
+function PlayersPage(){
     return(
         <div>
         USERS
         </div>
     );
 }
-export default UsersPage;
+export default PlayersPage;
