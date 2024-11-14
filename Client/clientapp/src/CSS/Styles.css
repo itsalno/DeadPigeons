@@ -16,3 +16,59 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   monospace;
 }
+
+
+.balance{
+  text-align: center;
+  margin-top: 15px;
+  font-size: 20px;
+}
+
+.gmtitle{
+  text-align:center;
+  font-size:35px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto ;
+  background-color: #FFFFFF;
+  padding: 10px;
+  margin-left: 15%;
+  margin-right: 15%;
+  margin-top: 50px;
+}
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  border-radius: 6px;
+  padding: 25px;
+  margin: 10px;
+  font-size: 20px;
+  text-align: center;
+  height: 85px;
+}
+
+.grid-item:hover {
+  background-color: greenyellow;
+}
+
+.playbtn{
+  text-align: center;
+  font-size: 30px;
+  margin-top: 2.5%;
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  border-radius: 6px;
+  width: 160px;  
+  height: 80px;
+}
+
+.playbtn:hover{
+  background-color: greenyellow;
+}
+
+.divBtn{
+  height: 25px;
+  text-align: center;
+}
+
