@@ -1,5 +1,4 @@
 using DataAccess;
-using DataAccess.Data;
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation.AspNetCore;
@@ -10,9 +9,18 @@ using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 
 Env.Load();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication();
+
+builder.Services.AddIdentityCore<User>()
+    .AddEntityFrameworkStores<MyDbContext>()
+    .AddApiEndpoints();
+
+
 
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
 
@@ -46,7 +54,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-//app.MapIdentityApi<IdentityUser>().AllowAnonymous(); 
+app.MapIdentityApi<User>().AllowAnonymous(); 
 
 
 app.UseAuthorization();

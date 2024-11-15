@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using DataAccess.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccess.Data;
+namespace DataAccess;
 
-public partial class MyDbContext : DbContext
+public partial class MyDbContext : IdentityDbContext<User>
 {
     public MyDbContext()
     {
