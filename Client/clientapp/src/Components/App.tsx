@@ -6,7 +6,6 @@ import { ThemeAtom } from "../Atoms/ThemeAtom";
 import Navigation from "./Navigation";
 import IntroPage from "../Pages/IntroPage";
 import GamesPage from "../Pages/GamesPage";
-import UsersPage from "../Pages/UsersPage";
 import HistoryOfBoards from "../Pages/HistoryOfBoards";
 import BalancePage from "../Pages/BalancePage";
 import LogInPage from "../Pages/LogInPage";
@@ -21,6 +20,7 @@ const App = () => {
     const [theme, setTheme] = useAtom(ThemeAtom);
 
     useEffect(() => {
+        
         localStorage.setItem('theme', theme);
         document.documentElement.setAttribute('data-theme', theme);
     }, [theme])
