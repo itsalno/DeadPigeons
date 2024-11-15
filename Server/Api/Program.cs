@@ -1,32 +1,41 @@
-
+using DataAccess;
+using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation.AspNetCore;
+using DotNetEnv;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Env.Load();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
 
-
-/*var connectionString = builder.Configuration.GetConnectionString("DBConnectionString");
-builder.Services.AddDbContext<DMDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.EnableSensitiveDataLogging();
     options.UseNpgsql(connectionString);
 });
-*/
+
+
+/*builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+
+/*builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});*/
+
 
 var app = builder.Build();
-
-
-/*using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<DMDbContext>();
-    dbContext.Database.EnsureCreated();
-}
-*/
 
 
 if (app.Environment.IsDevelopment())
@@ -36,7 +45,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+//app.MapIdentityApi<IdentityUser>().AllowAnonymous(); 
+
+
 app.UseAuthorization();
+app.UseAuthentication(); 
 app.MapControllers();
 app.UseCors(config => config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
