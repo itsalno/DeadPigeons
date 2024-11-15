@@ -1,4 +1,5 @@
 using DataAccess;
+using DataAccess.Data;
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation.AspNetCore;
@@ -15,7 +16,7 @@ builder.Services.AddSwaggerGen();
 
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<MyDbContext>(options =>
 {
     options.EnableSensitiveDataLogging();
     options.UseNpgsql(connectionString);

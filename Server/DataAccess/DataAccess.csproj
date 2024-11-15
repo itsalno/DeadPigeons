@@ -15,4 +15,10 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Data\" />
+      <Folder Include="Interfaces\" />
+      <Folder Include="Repositories\" />
+    </ItemGroup>
+
 </Project>
