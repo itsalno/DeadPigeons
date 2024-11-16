@@ -7,7 +7,7 @@ public partial class PlayerProfile
 {
     public Guid Id { get; set; }
 
-    public string? Userid { get; set; }
+    public Guid? Userid { get; set; }
 
     public decimal? Balance { get; set; }
 
@@ -19,5 +19,5 @@ public partial class PlayerProfile
 
     public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
-    public virtual AspNetUser? User { get; set; }
+    public virtual User? User { get; set; }
 }
