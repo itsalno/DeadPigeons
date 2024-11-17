@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "api": "npx swagger-typescript-api -p http://localhost:5169/swagger/v1/swagger.json -o ./src -n myApi.ts"
+    "api": "npx swagger-typescript-api -p !url! -o ./src -n myApi.ts"
 
   },
   "dependencies": {

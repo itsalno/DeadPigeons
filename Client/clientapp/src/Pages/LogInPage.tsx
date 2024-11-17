@@ -1,20 +1,29 @@
 import React, { useState } from 'react';
+import { http } from '../http';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { useAtom } from 'jotai';
+import { isLoggedInAtom } from '../Atoms/AuthAtom';
 
 const LogInPage: React.FC = () => {
+    
+    
     const [isRegister, setIsRegister] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: '',
         email: '',
-        phone: '',
         password: '',
     });
+    const [loading, setLoading] = useState(false);
+    
     
     const handleToggle = () => {
         setIsRegister(!isRegister);
         setFormData({
             username: '',
             email: '',
-            phone: '',
             password: '',
         });
     };
@@ -27,9 +36,51 @@ const LogInPage: React.FC = () => {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        //no logic right now,but when we do authorization and uthentication will modify this one
+        setLoading(true);
+        console.log(`Submitting to ${isRegister ? 'Register' : 'Login'} endpoint`);
+
+        /*if (isRegister && formData.password !== formData.confirmPassword) {
+            toast.error("Passwords don't match.");
+            setLoading(false);
+            return;
+        }*/
+        
+        try {
+            
+            if (isRegister) {
+                await http.api.authRegisterCreate({
+                    username: formData.username,
+                    email: formData.email,
+                    password: formData.password,
+                });
+                toast.success('Registration successful!');
+                handleToggle();
+            } else {
+                const response = await http.api.authLoginCreate({
+                    username: formData.username,
+                    password: formData.password,
+                });
+
+                /*if (response && response.Token) {
+                    const token = response.Token; 
+                    
+                    localStorage.setItem('authToken', token);
+                    
+                 */
+                    
+                toast.success('Login successful!');
+                setIsLoggedIn(true);
+                navigate("/Games");
+                
+            }
+            
+        } catch (err) {
+            toast.error('An error occurred. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -37,8 +88,7 @@ const LogInPage: React.FC = () => {
             <h2 className="text-2xl font-bold text-center mb-4">
                 {isRegister ? 'Register' : 'Login'}
             </h2>
-
-            {/* Toggle Login/Register */}
+            
             <div className="text-center mb-6">
                 <button
                     className="text-blue-500 underline"
@@ -49,48 +99,34 @@ const LogInPage: React.FC = () => {
             </div>
 
             <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">Username</label>
+                    <input
+                        type="text"
+                        name="username"
+                        value={formData.username}
+                        onChange={handleChange}
+                        placeholder="Creativelayer088"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required
+                    />
+                </div>
+                
                 {isRegister && (
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Username</label>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
                         <input
-                            type="text"
-                            name="username"
-                            value={formData.username}
+                            type="email"
+                            name="email"
+                            value={formData.email}
                             onChange={handleChange}
-                            placeholder="Creativelayer088"
+                            placeholder="example@gmail.com"
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             required={isRegister}
                         />
                     </div>
                 )}
-
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
-                    <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="example@gmail.com"
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required
-                    />
-                </div>
-
-                {isRegister && (
-                    <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Phone</label>
-                        <input
-                            type="text"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleChange}
-                            placeholder="+371"
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        />
-                    </div>
-                )}
-
+                
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
                     <input
