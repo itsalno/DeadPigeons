@@ -11,6 +11,7 @@ namespace Api.Controllers;
 [Route("api/[controller]")]
 public class PlayerProfileController(PlayerProfileService profileService) : ControllerBase
 {
+    
     [HttpGet("GetAllPlayers")]
     public ActionResult<List<PlayerDTO>> GetAllPlayerProfiles()
     {
@@ -53,8 +54,8 @@ public class PlayerProfileController(PlayerProfileService profileService) : Cont
             return NotFound("Player not found");
         }
 
-        // Update player profile with the new values
-        playerProfile.User.UserName = playerDto.UserName;
+       
+        playerProfile.User.Username = playerDto.UserName;
         playerProfile.User.Email = playerDto.Email;
         playerProfile.Balance = playerDto.Balance;
 

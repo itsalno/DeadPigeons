@@ -1,14 +1,12 @@
-using System.Collections;
 using System.Text;
 using DataAccess;
-using DataAccess.Data;
 using DataAccess.Data.Interfaces;
-using DataAccess.Data.Repositories;
-using DataAccess.Models;
+using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Services.Security;
+using Services.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,8 +32,6 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddAuthorization();
-builder.Services.AddAuthentication();
-
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

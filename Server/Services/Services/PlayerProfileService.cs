@@ -1,4 +1,5 @@
-﻿using DataAccess.Data;
+﻿using DataAccess;
+using DataAccess.Data;
 using DataAccess.Data.Interfaces;
 using DataAccess.Models;
 using Services.TransferModels.Responses;
@@ -7,7 +8,7 @@ namespace Services.Services;
 
 
 
-public class PlayerProfileService(IPlayerProfileRepository playerProfileRepository, MyDbContext context) 
+public class PlayerProfileService(IPlayerProfileRepository playerProfileRepository) 
 {
     public List<PlayerDTO> GetAllPlayers()
     {
@@ -18,7 +19,7 @@ public class PlayerProfileService(IPlayerProfileRepository playerProfileReposito
             {
                 PlayerId = player.Id,
                 Balance = player.Balance,
-                UserName = player.User.UserName, 
+                UserName = player.User.Username, 
                 Email = player.User.Email
                 
             })

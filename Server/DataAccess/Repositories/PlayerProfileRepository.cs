@@ -2,7 +2,7 @@
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccess.Data.Repositories;
+namespace DataAccess.Repositories;
 
 public class PlayerProfileRepository(MyDbContext context) : IPlayerProfileRepository
 {
