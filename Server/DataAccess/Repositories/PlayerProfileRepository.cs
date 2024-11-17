@@ -1,0 +1,27 @@
+﻿using DataAccess.Data.Interfaces;
+using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace DataAccess.Data.Repositories;
+
+public class PlayerProfileRepository(MyDbContext context) : IPlayerProfileRepository
+{
+    public List<PlayerProfile> GetAllPlayers()
+    {
+        return context.PlayerProfiles
+            .Where(player => player.Isactive == true) 
+            .Include(player=> player.User)
+            .ToList();
+    }
+
+    public PlayerProfile? GetById(Guid id)
+    {
+            return context.PlayerProfiles.FirstOrDefault(p => p.Id == id);
+    }
+    
+    public void UpdatePlayerProfile(PlayerProfile profile)
+    {
+        context.PlayerProfiles.Update(profile);
+        context.SaveChanges();
+    }
+}
