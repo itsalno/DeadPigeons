@@ -1,26 +1,33 @@
 using DataAccess;
 using DataAccess.Data;
+using DataAccess.Data.Interfaces;
+using DataAccess.Data.Repositories;
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation.AspNetCore;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Env.Load();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<MyDbContext>(options =>
+{
+    options.UseNpgsql(connectionString);
+    options.EnableSensitiveDataLogging();
+});
+
+
+
+builder.Services.AddScoped< PlayerProfileService>();
+builder.Services.AddScoped<IPlayerProfileRepository, PlayerProfileRepository>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
-
-builder.Services.AddDbContext<MyDbContext>(options =>
-{
-    options.EnableSensitiveDataLogging();
-    options.UseNpgsql(connectionString);
-});
 
 
 /*builder.Services.AddIdentity<IdentityUser, IdentityRole>()

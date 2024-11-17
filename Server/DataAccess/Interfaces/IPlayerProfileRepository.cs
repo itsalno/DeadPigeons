@@ -2,7 +2,12 @@
 
 namespace DataAccess.Data.Interfaces;
 
-public interface IUserRepository
+public interface IPlayerProfileRepository
 {
-    public List<PlayerProfile> GetAllUsers();
+    public List<PlayerProfile> GetAllPlayers();
+
+    public PlayerProfile? GetById(Guid id);
+
+    public void UpdatePlayerProfile(PlayerProfile profile);
+
 }
