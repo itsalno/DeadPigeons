@@ -1,14 +1,19 @@
 using System.Collections;
 using System.Text;
 using DataAccess;
+using DataAccess.Data;
+using DataAccess.Data.Interfaces;
+using DataAccess.Data.Repositories;
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Services.Security;
-
+using FluentValidation.AspNetCore;
+using DotNetEnv;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 
 
@@ -16,8 +21,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<MyDbContext>(options =>
 {
-    options.EnableSensitiveDataLogging();
     options.UseNpgsql(connectionString);
+    options.EnableSensitiveDataLogging();
 });
 
 builder.Services.AddScoped<JWTGenerator>();
@@ -43,10 +48,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
     });
-
-
-
-
 
 
 var app = builder.Build();
