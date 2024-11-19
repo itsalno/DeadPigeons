@@ -99,7 +99,7 @@ public partial class MyDbContext : DbContext
                 .HasColumnName("id");
             entity.Property(e => e.Amount).HasColumnName("amount");
             entity.Property(e => e.CreatedAt)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("date")
                 .HasColumnName("created_at");
             entity.Property(e => e.Playerid).HasColumnName("playerid");
             entity.Property(e => e.Transactionref)

@@ -20,6 +20,8 @@ const LogInPage: React.FC = () => {
     
     
     const handleToggle = () => {
+        
+        
         setIsRegister(!isRegister);
         setFormData({
             username: '',

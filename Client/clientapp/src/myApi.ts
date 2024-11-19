@@ -9,6 +9,64 @@
  * ---------------------------------------------------------------
  */
 
+export interface BalanceDTO {
+  /** @format uuid */
+  playerId?: string;
+  /** @format int32 */
+  amount?: number;
+  transactionType?: string | null;
+  transactionNerf?: string | null;
+  /** @format date-time */
+  timeStamp?: string;
+}
+
+export interface Board {
+  /** @format uuid */
+  id?: string;
+  /** @format uuid */
+  playerid?: string | null;
+  /** @format uuid */
+  gameid?: string | null;
+  /** @format double */
+  price?: number | null;
+  isautoplay?: boolean | null;
+  /** @format date-time */
+  createdAt?: string | null;
+  game?: Game;
+  player?: PlayerProfile;
+}
+
+export interface CreateBalanceDTO {
+  /** @format uuid */
+  playerId?: string;
+  /** @format int32 */
+  amount?: number;
+  transactionType?: string | null;
+  transactionNerf?: string | null;
+  /** @format date-time */
+  timeStamp?: string;
+}
+
+export interface Game {
+  /** @format uuid */
+  id?: string;
+  /** @format int32 */
+  week?: number;
+  winningseq?: string[] | null;
+  /** @format int32 */
+  year?: number | null;
+  /** @format double */
+  prizepool?: number | null;
+  /** @format double */
+  carryover?: number | null;
+  isactive?: boolean | null;
+  /** @format date-time */
+  createdAt?: string | null;
+  /** @format date-time */
+  updatedAt?: string | null;
+  boards?: Board[] | null;
+}
+
 export interface LogIn {
   /** @minLength 1 */
   username: string;
@@ -19,8 +77,28 @@ export interface LogIn {
   password: string;
 }
 
-interface LoginResponse {
-  Token: string; 
+export interface PlayerDTO {
+  /** @format uuid */
+  playerId?: string;
+  /** @format double */
+  balance?: number | null;
+  userName?: string | null;
+  email?: string | null;
+}
+
+export interface PlayerProfile {
+  /** @format uuid */
+  id?: string;
+  /** @format uuid */
+  userid?: string | null;
+  /** @format double */
+  balance?: number | null;
+  isactive?: boolean | null;
+  /** @format int32 */
+  createdAt?: number | null;
+  boards?: Board[] | null;
+  transactions?: Transaction[] | null;
+  user?: User;
 }
 
 export interface Register {
@@ -36,8 +114,30 @@ export interface Register {
    * @minLength 1
    */
   password: string;
-  /** @format password */
-  confirmPassword?: string | null;
+}
+
+export interface Transaction {
+  /** @format uuid */
+  id?: string;
+  /** @format uuid */
+  playerid?: string | null;
+  /** @format int32 */
+  amount?: number;
+  transactiontype?: string | null;
+  transactionref?: string | null;
+  /** @format date-time */
+  createdAt?: string;
+  player?: PlayerProfile;
+}
+
+export interface User {
+  /** @format uuid */
+  id?: string;
+  username?: string | null;
+  email?: string | null;
+  passwordHash?: string | null;
+  role?: string | null;
+  playerProfiles?: PlayerProfile[] | null;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -272,8 +372,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       }),
 
-    
-    
     /**
      * No description
      *
@@ -282,12 +380,76 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/api/auth/login
      */
     authLoginCreate: (data: LogIn, params: RequestParams = {}) =>
-        this.request<LoginResponse, any>({
-          path: `/api/auth/login`,
-          method: "POST",
-          body: data,
-          type: ContentType.Json,
-          ...params,
-        })
+      this.request<void, any>({
+        path: `/api/auth/login`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Balance
+     * @name BalanceCreate
+     * @request POST:/api/Balance
+     */
+    balanceCreate: (data: CreateBalanceDTO, params: RequestParams = {}) =>
+      this.request<BalanceDTO, any>({
+        path: `/api/Balance`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags PlayerProfile
+     * @name PlayerProfileGetAllPlayersList
+     * @request GET:/api/PlayerProfile/GetAllPlayers
+     */
+    playerProfileGetAllPlayersList: (params: RequestParams = {}) =>
+      this.request<PlayerDTO[], any>({
+        path: `/api/PlayerProfile/GetAllPlayers`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags PlayerProfile
+     * @name PlayerProfileSoftDeletePartialUpdate
+     * @request PATCH:/api/PlayerProfile/{id}/softDelete
+     */
+    playerProfileSoftDeletePartialUpdate: (id: string, params: RequestParams = {}) =>
+      this.request<PlayerProfile, any>({
+        path: `/api/PlayerProfile/${id}/softDelete`,
+        method: "PATCH",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags PlayerProfile
+     * @name PlayerProfileUpdateCreate
+     * @request POST:/api/PlayerProfile/update/{id}
+     */
+    playerProfileUpdateCreate: (id: string, data: PlayerDTO, params: RequestParams = {}) =>
+      this.request<PlayerDTO, any>({
+        path: `/api/PlayerProfile/update/${id}`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
   };
 }

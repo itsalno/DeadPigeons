@@ -11,6 +11,7 @@ using Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<MyDbContext>(options =>
@@ -23,6 +24,8 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 builder.Services.AddScoped<JWTGenerator>();
 builder.Services.AddScoped< PlayerProfileService>();
 builder.Services.AddScoped<IPlayerProfileRepository, PlayerProfileRepository>();
+builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
+builder.Services.AddScoped< BalanceService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
