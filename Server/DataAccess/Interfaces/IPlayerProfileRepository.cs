@@ -1,6 +1,6 @@
 ﻿using DataAccess.Models;
 
-namespace DataAccess.Data.Interfaces;
+namespace DataAccess.Interfaces;
 
 public interface IPlayerProfileRepository
 {
@@ -9,5 +9,7 @@ public interface IPlayerProfileRepository
     public PlayerProfile? GetById(Guid id);
 
     public void UpdatePlayerProfile(PlayerProfile profile);
+
+    PlayerProfile CreatePlayerProfile(PlayerProfile profile);
 
 }

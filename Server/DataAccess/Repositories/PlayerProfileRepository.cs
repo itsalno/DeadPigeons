@@ -1,4 +1,4 @@
-﻿using DataAccess.Data.Interfaces;
+﻿using DataAccess.Interfaces;
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,5 +23,12 @@ public class PlayerProfileRepository(MyDbContext context) : IPlayerProfileReposi
     {
         context.PlayerProfiles.Update(profile);
         context.SaveChanges();
+    }
+
+    public PlayerProfile CreatePlayerProfile(PlayerProfile profile)
+    {
+        context.PlayerProfiles.Add(profile);
+        context.SaveChanges();
+        return profile;
     }
 }
