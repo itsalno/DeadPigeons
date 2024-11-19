@@ -2,9 +2,11 @@ import {useAtom} from "jotai";
 import {PlayerAtom} from "../Atoms/PlayerAtom"
 import {useEffect} from "react";
 import { http } from '../http';
+import { useNavigate } from 'react-router-dom';
+
 function PlayersPage(){
    
-
+    const navigate = useNavigate();
     const [player , setPlayer] = useAtom(PlayerAtom);
 
     useEffect(() => {
@@ -20,7 +22,8 @@ function PlayersPage(){
     // Delete player function
     const deletePlayer = (id : string) => {
         http.api.playerProfileSoftDeletePartialUpdate(id);
-        window.location.reload();
+        
+        navigate("/Users")
         
     };
 
