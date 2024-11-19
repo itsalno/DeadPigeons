@@ -41,8 +41,7 @@ public class PlayerProfileController(PlayerProfileService profileService) : Cont
         {
             return BadRequest("Invalid player data.");
         }
-
-        // Make sure the playerId in the DTO matches the id in the URL
+        
         if (playerDto.PlayerId != id)
         {
             return BadRequest("Player ID in URL does not match Player ID in request body.");
@@ -61,6 +60,6 @@ public class PlayerProfileController(PlayerProfileService profileService) : Cont
 
         profileService.UpdatePlayerProfile(playerProfile);
 
-        return Ok(playerProfile);  // Return the updated player profile
+        return Ok(playerProfile); 
     }
 }
