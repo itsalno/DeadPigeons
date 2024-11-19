@@ -1,6 +1,6 @@
 using System.Text;
 using DataAccess;
-using DataAccess.Data.Interfaces;
+using DataAccess.Interfaces;
 using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -23,6 +23,8 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 builder.Services.AddScoped<JWTGenerator>();
 builder.Services.AddScoped< PlayerProfileService>();
 builder.Services.AddScoped<IPlayerProfileRepository, PlayerProfileRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
