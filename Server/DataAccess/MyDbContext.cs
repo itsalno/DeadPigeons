@@ -112,6 +112,7 @@ public partial class MyDbContext : DbContext
             entity.HasOne(d => d.Player).WithMany(p => p.Transactions)
                 .HasForeignKey(d => d.Playerid)
                 .HasConstraintName("transactions_playerprofile_id_fk");
+            
         });
 
         modelBuilder.Entity<User>(entity =>

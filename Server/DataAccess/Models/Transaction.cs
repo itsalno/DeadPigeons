@@ -6,6 +6,7 @@ namespace DataAccess.Models;
 public partial class Transaction
 {
     public Guid Id { get; set; }
+    
 
     public Guid? Playerid { get; set; }
 

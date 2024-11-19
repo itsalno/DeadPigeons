@@ -75,6 +75,7 @@ export interface LogIn {
    * @minLength 1
    */
   password: string;
+  
 }
 
 export interface PlayerDTO {

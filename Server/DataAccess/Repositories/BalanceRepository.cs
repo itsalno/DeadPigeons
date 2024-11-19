@@ -10,5 +10,6 @@ public class BalanceRepository(MyDbContext context) : IBalanceRepository
         context.Transactions.Add(transaction);
         context.SaveChanges();
         return transaction;
+        
     }
 }

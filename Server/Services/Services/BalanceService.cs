@@ -12,5 +12,6 @@ public class BalanceService(IBalanceRepository balanceRepository)
         var balance = createBalanceDto.ToBalance();
         Transaction newTransaction = balanceRepository.addFunds(balance);
         return new BalanceDTO().FromEntity(newTransaction);
+        
     }
 }

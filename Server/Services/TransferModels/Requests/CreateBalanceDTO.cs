@@ -23,7 +23,6 @@ public class CreateBalanceDTO
             Transactiontype = TransactionType,
             Transactionref = TransactionNerf,
             CreatedAt = TimeStamp
-           
         };
     }
 }

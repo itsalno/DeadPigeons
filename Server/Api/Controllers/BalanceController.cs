@@ -16,6 +16,7 @@ public class BalanceController(BalanceService balanceService): ControllerBase
     {
         var balance = balanceService.AddFunds(createBalanceDto);
         return Ok(balance);
+        
     }
     
 }

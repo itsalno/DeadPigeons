@@ -16,7 +16,6 @@ public class BalanceDTO
             TransactionNerf = transaction.Transactionref,
             TimeStamp = transaction.CreatedAt,
             
-            
         };
     }
     public Guid PlayerId { get; set; }

@@ -21,6 +21,7 @@ function PlayersPage(){
     const deletePlayer = (id : string) => {
         http.api.playerProfileSoftDeletePartialUpdate(id);
         window.location.reload();
+        
     };
 
     

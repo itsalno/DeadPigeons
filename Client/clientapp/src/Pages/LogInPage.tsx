@@ -7,7 +7,6 @@ import { isLoggedInAtom } from '../Atoms/AuthAtom';
 
 const LogInPage: React.FC = () => {
     
-    
     const [isRegister, setIsRegister] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
     const navigate = useNavigate();
