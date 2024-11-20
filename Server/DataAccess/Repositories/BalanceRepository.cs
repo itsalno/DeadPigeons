@@ -12,4 +12,12 @@ public class BalanceRepository(MyDbContext context) : IBalanceRepository
         return transaction;
         
     }
+
+    public List<Transaction> GetTransactionsByPlayerId(Guid playerId)
+    {
+        return context.Transactions
+            .Where(t => t.Playerid == playerId)
+            //.OrderByDescending(t => t.TimeStamp) 
+            .ToList();
+    }
 }

@@ -19,4 +19,16 @@ public class BalanceController(BalanceService balanceService): ControllerBase
         
     }
     
+    [HttpGet("{playerId}")]
+    public ActionResult<BalanceDTO> GetTransactionsByPlayerId(Guid playerId)
+    {
+        var transactions = balanceService.GetBalancesByPlayerId(playerId);
+        if (transactions == null || transactions.Count == 0)
+        {
+            return NotFound(new { Message = "No transactions found for this player." });
+        }
+
+        return Ok(transactions);
+    }
+    
 }

@@ -10,6 +10,8 @@ import HistoryOfBoards from "../Pages/HistoryOfBoards";
 import BalancePage from "../Pages/BalancePage";
 import LogInPage from "../Pages/LogInPage";
 import PlayersPage from "../Pages/PlayersPage";
+import HistoryOfGames from "../Pages/HistoryOfGames";
+import TransactionHistoryPage from "../Pages/TransactionHistoryPage";
 
 
 
@@ -34,9 +36,9 @@ const App = () => {
             <Route path="/LogIn" element={<LogInPage/>}/>
             <Route path="/Games" element={<GamesPage />} />
             <Route path="/Users" element={<PlayersPage/>}/>
-            <Route path="/History" element={<HistoryOfBoards/>}/>
+            <Route path="/History" element={<HistoryOfGames/>}/>
             <Route path="/Balance" element={<BalancePage/>} />
-           
+            <Route path="/players/:playerId/transactions" element={<TransactionHistoryPage />} />
         </Routes>
 
     </>)

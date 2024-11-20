@@ -17,9 +17,10 @@ function PlayersPage(){
         })
     }, [])
 
+    const viewTransactionHistory = (playerId: string) => {
+        navigate(`/players/${playerId}/transactions`);
+    };
     
-
-    // Delete player function
     const deletePlayer = (id : string) => {
         http.api.playerProfileSoftDeletePartialUpdate(id);
         
@@ -58,6 +59,12 @@ function PlayersPage(){
                                     className="mt-4 bg-red-500 text-white py-2 rounded hover:bg-red-600 focus:outline-none"
                                 >
                                     Delete
+                                </button>
+                                <button
+                                    onClick={() => viewTransactionHistory(player.playerId!)}
+                                    className="mt-4 bg-blue-500 text-white py-2 rounded hover:bg-blue-600 focus:outline-none"
+                                >
+                                    View Transactions
                                 </button>
                             </div>
                         ))}
