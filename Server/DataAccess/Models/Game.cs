@@ -24,4 +24,8 @@ public partial class Game
     public DateTime? UpdatedAt { get; set; }
 
     public virtual ICollection<Board> Boards { get; set; } = new List<Board>();
+    
+    public DateTime StartingDate { get; set; }
+
+    public DateTime EndingDate { get; set; }
 }

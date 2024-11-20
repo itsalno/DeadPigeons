@@ -1,6 +1,8 @@
 using System.Text;
 using DataAccess;
+using DataAccess.Data;
 using DataAccess.Data.Interfaces;
+using DataAccess.Models;
 using DataAccess.Interfaces;
 using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +13,9 @@ using Services.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
 
 builder.Services.AddDbContext<MyDbContext>(options =>
 {
@@ -30,6 +31,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
 builder.Services.AddScoped< BalanceService>();
+builder.Services.AddScoped<GameService>();
+builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
