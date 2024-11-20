@@ -8,6 +8,7 @@ public interface IGameRepository
     public Game CreateGame(Game game);
 
     public Game? GetActiveGame();
+    public List<Game> GetAllGames();
 
 
 }

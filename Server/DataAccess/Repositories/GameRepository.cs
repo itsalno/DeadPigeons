@@ -23,4 +23,8 @@ public class GameRepository(MyDbContext context) : IGameRepository
 
         return null;
     }
+    public List<Game> GetAllGames()
+    {
+        return context.Games.ToList();
+    }
 }
