@@ -1,34 +1,58 @@
-import { useState } from 'react';
+import {useEffect, useState } from 'react';
 import { http } from '../http';
 import {CreateBalanceDTO} from "../myApi";
+import toast from 'react-hot-toast';
 
 function BalancePage(){
-    const [amount, setAmount] = useState(""); // State for the amount
-    const [transactionNumber, setTransactionNumber] = useState(""); // State for the transaction number
+    const [amount, setAmount] = useState(""); 
+    const [transactionNumber, setTransactionNumber] = useState("");
+    const [playerProfileId, setPlayerProfileId] = useState("");
 
-    
+
+
+    useEffect(() => {
+        const storedPlayerProfileId = localStorage.getItem("playerProfileId");
+
+        if (storedPlayerProfileId) {
+            setPlayerProfileId(storedPlayerProfileId);
+        } else {
+            toast.error("Please log in.");
+        }
+    }, []);
     
     var balanceDto : CreateBalanceDTO ={
-        playerId: "e8157541-68ad-4d37-b3b8-7dbd8fe465f1", 
+        playerId: playerProfileId, 
         amount: parseInt(amount),
         transactionType: "Deposit", 
         transactionNerf: transactionNumber, 
         timeStamp: new Date().toISOString(),
-        //aa
     }
+
     const handleFormSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
-        try {
-            const response = await http.api.balanceCreate(balanceDto)
-            console.log('Balance added:', response.data);
-        } catch (error) {
-            console.error('Error :', error);
+        if (!playerProfileId) {
+            toast.error("Please log in.");
+            return;
         }
 
+        if (!amount || !transactionNumber) {
+            toast.error("Please fill in all fields.");
+            return;
+        }
+
+        try {
+            await http.api.balanceCreate(balanceDto);
+            //http.api.playerProfileUpdateUpdate(playerProfileId,parseInt(amount))
+            toast.success("Successfully replenished your balance");
+        } catch (error) {
+            toast.error("Couldn't make the operation, please try again.");
+        }
+        
         setAmount("");
         setTransactionNumber("");
     };
+
 
 
     return (
