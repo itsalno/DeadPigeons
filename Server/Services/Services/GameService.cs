@@ -10,14 +10,17 @@ namespace Services.Services;
 
 
 
-public class GameService(IGamesRepository gamesRepository)
+public class GameService(IGameRepository gameRepository)
 {
     public GameDto CreateGame(CreateGameDto createGameDto)
-    public List<Game> GetAllGames()
     {
         var game = createGameDto.ToGame();
         Game newGame = gameRepository.CreateGame(game);
         return new GameDto().FromEntity(newGame);
+    }
+    public List<Game> GetAllGames()
+    {
+        return gameRepository.GetAllGames();
     }
 
     public Game GetActiveGame()
@@ -54,6 +57,6 @@ public class GameService(IGamesRepository gamesRepository)
         Game newGame = gameRepository.CreateGame(game1);
         return newGame;
         
-        return gamesRepository.GetAllGames();
+        
     }
 }
