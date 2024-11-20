@@ -30,7 +30,7 @@ builder.Services.AddScoped<IPlayerProfileRepository, PlayerProfileRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
-builder.Services.AddScoped< BalanceService>();
+builder.Services.AddScoped<BalanceService>();
 builder.Services.AddScoped<GameService>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddControllers();

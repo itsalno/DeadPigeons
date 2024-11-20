@@ -44,12 +44,6 @@ const LogInPage: React.FC = () => {
         e.preventDefault();
         setLoading(true);
         console.log(`Submitting to ${isRegister ? 'Register' : 'Login'} endpoint`);
-
-        /*if (isRegister && formData.password !== formData.confirmPassword) {
-            toast.error("Passwords don't match.");
-            setLoading(false);
-            return;
-        }*/
         
         try {
             
@@ -66,19 +60,14 @@ const LogInPage: React.FC = () => {
                     username: formData.username,
                     password: formData.password,
                 });
+                
+                const { token, playerProfileId } = response.data;
+                
+                localStorage.setItem("token", token);
+                localStorage.setItem("playerProfileId", playerProfileId);
 
-                /*if (response && response.Token) {
-                    const token = response.Token; 
-                    
-                    localStorage.setItem('authToken', token);
-                    
-                 */
-                    
                 toast.success('Login successful!');
                 setIsLoggedIn(true);
-                //http.api.gameList().then((response)=> {setActiveGame(response.data)});
-                
-                console.log(game);
                 navigate("/Games");
             }
             

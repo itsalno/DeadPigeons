@@ -11,11 +11,11 @@
 
 export interface BalanceDTO {
   /** @format uuid */
-  playerId?: string;
+  playerId?: string | null;
   /** @format int32 */
   amount?: number;
   transactionType?: string | null;
-  transactionNerf?: string | null;
+  transactionRef?: string | null;
   /** @format date-time */
   timeStamp?: string;
 }
@@ -47,6 +47,20 @@ export interface CreateBalanceDTO {
   timeStamp?: string;
 }
 
+export interface CreateGameDto {
+  /** @format int32 */
+  week?: number;
+  /** @format int32 */
+  year?: number | null;
+  isactive?: boolean | null;
+  /** @format date-time */
+  createdAt?: string | null;
+  /** @format date-time */
+  startingDate?: string;
+  /** @format date-time */
+  endingDate?: string;
+}
+
 export interface Game {
   /** @format uuid */
   id?: string;
@@ -65,6 +79,10 @@ export interface Game {
   /** @format date-time */
   updatedAt?: string | null;
   boards?: Board[] | null;
+  /** @format date-time */
+  startingDate?: string;
+  /** @format date-time */
+  endingDate?: string;
 }
 
 export interface LogIn {
@@ -75,7 +93,11 @@ export interface LogIn {
    * @minLength 1
    */
   password: string;
-  
+}
+
+export interface LogInResponseDTO {
+  token?: string | null;
+  playerProfileId?: string | null;
 }
 
 export interface PlayerDTO {
@@ -129,6 +151,13 @@ export interface Transaction {
   /** @format date-time */
   createdAt?: string;
   player?: PlayerProfile;
+}
+
+export interface UpdatePlayerDTO {
+  /** @format uuid */
+  playerId?: string;
+  /** @format double */
+  balance?: number;
 }
 
 export interface User {
@@ -373,8 +402,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       }),
 
-    
-    
     /**
      * No description
      *
@@ -383,11 +410,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/api/auth/login
      */
     authLoginCreate: (data: LogIn, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<LogInResponseDTO, any>({
         path: `/api/auth/login`,
         method: "POST",
         body: data,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -404,6 +432,68 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "POST",
         body: data,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Balance
+     * @name BalanceDetail
+     * @request GET:/api/Balance/{playerId}
+     */
+    balanceDetail: (playerId: string, params: RequestParams = {}) =>
+      this.request<BalanceDTO, any>({
+        path: `/api/Balance/${playerId}`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameCreate
+     * @request POST:/api/Game
+     */
+    gameCreate: (data: CreateGameDto, params: RequestParams = {}) =>
+      this.request<Game, any>({
+        path: `/api/Game`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameActiveGameCreate
+     * @request POST:/api/Game/ActiveGame
+     */
+    gameActiveGameCreate: (params: RequestParams = {}) =>
+      this.request<Game, any>({
+        path: `/api/Game/ActiveGame`,
+        method: "POST",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameGetAllGamesList
+     * @request GET:/api/Game/GetAllGames
+     */
+    gameGetAllGamesList: (params: RequestParams = {}) =>
+      this.request<Game[], any>({
+        path: `/api/Game/GetAllGames`,
+        method: "GET",
         format: "json",
         ...params,
       }),
@@ -442,16 +532,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags PlayerProfile
-     * @name PlayerProfileUpdateCreate
-     * @request POST:/api/PlayerProfile/update/{id}
+     * @name PlayerProfileUpdateUpdate
+     * @request PUT:/api/PlayerProfile/update/{id}
      */
-    playerProfileUpdateCreate: (id: string, data: PlayerDTO, params: RequestParams = {}) =>
-      this.request<PlayerDTO, any>({
+    playerProfileUpdateUpdate: (id: string, data: UpdatePlayerDTO, params: RequestParams = {}) =>
+      this.request<void, any>({
         path: `/api/PlayerProfile/update/${id}`,
-        method: "POST",
+        method: "PUT",
         body: data,
         type: ContentType.Json,
-        format: "json",
         ...params,
       }),
   };

@@ -30,9 +30,5 @@
         
       <Folder Include="Validators\" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="TransferModels\Requests\" />
-    </ItemGroup>
 </Project>
 
