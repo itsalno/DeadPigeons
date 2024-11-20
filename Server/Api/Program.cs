@@ -1,6 +1,8 @@
 using System.Text;
 using DataAccess;
+using DataAccess.Data;
 using DataAccess.Data.Interfaces;
+using DataAccess.Models;
 using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,6 +12,7 @@ using Services.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -23,10 +26,13 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 builder.Services.AddScoped<JWTGenerator>();
 builder.Services.AddScoped< PlayerProfileService>();
 builder.Services.AddScoped<IPlayerProfileRepository, PlayerProfileRepository>();
+builder.Services.AddScoped<GameService>();
+builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
 
 
 
@@ -45,9 +51,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
     });
-
-
-
 
 
 

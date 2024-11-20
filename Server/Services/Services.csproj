@@ -25,6 +25,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Validators\" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Folder Include="TransferModels\Requests\" />
       <Folder Include="Validators\" />
     </ItemGroup>

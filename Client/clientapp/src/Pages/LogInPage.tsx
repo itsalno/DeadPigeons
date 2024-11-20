@@ -4,9 +4,11 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { isLoggedInAtom } from '../Atoms/AuthAtom';
+import { activeGameAtom } from '../Atoms/GameAtom';
 
 const LogInPage: React.FC = () => {
     
+    const [game, setActiveGame] = useAtom(activeGameAtom);
     
     const [isRegister, setIsRegister] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
@@ -16,6 +18,7 @@ const LogInPage: React.FC = () => {
         email: '',
         password: '',
     });
+    
     const [loading, setLoading] = useState(false);
     
     
@@ -72,8 +75,10 @@ const LogInPage: React.FC = () => {
                     
                 toast.success('Login successful!');
                 setIsLoggedIn(true);
-                navigate("/Games");
+                //http.api.gameList().then((response)=> {setActiveGame(response.data)});
                 
+                console.log(game);
+                navigate("/Games");
             }
             
         } catch (err) {

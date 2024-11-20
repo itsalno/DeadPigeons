@@ -10,8 +10,10 @@ public partial class MyDbContext : DbContext
     public MyDbContext(DbContextOptions<MyDbContext> options)
         : base(options)
     {
+        
     }
-
+    
+    
     public virtual DbSet<Board> Boards { get; set; }
 
     public virtual DbSet<Game> Games { get; set; }
@@ -69,6 +71,8 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.Week).HasColumnName("week");
             entity.Property(e => e.Winningseq).HasColumnName("winningseq");
             entity.Property(e => e.Year).HasColumnName("year");
+            entity.Property(e => e.StartingDate).HasColumnName("starting_date");
+            entity.Property(e => e.EndingDate).HasColumnName("ending_date");
         });
 
         modelBuilder.Entity<PlayerProfile>(entity =>
