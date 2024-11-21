@@ -66,20 +66,23 @@ const LogInPage: React.FC = () => {
                     username: formData.username,
                     password: formData.password,
                 });
-
+                
                 /*if (response && response.Token) {
                     const token = response.Token; 
                     
                     localStorage.setItem('authToken', token);
                     
                  */
-                    
-                toast.success('Login successful!');
+
                 setIsLoggedIn(true);
-                //http.api.gameList().then((response)=> {setActiveGame(response.data)});
+                toast.success('Login successful!');
+                http.api.gameActiveGameCreate().then((response)=> {setActiveGame(response.data)});
                 
-                console.log(game);
+                console.log(game.week);
+                localStorage.setItem('week', game.week);
+                localStorage.setItem('year', game.year);
                 navigate("/Games");
+                
             }
             
         } catch (err) {

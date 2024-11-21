@@ -29,6 +29,23 @@ code {
   font-size:35px;
 }
 
+.resetbtn{
+  text-align:center;
+  margin-top:15px;
+  margin-bottom:-25px;
+  font-size:20px;
+  padding-inline:10px;
+  padding-block: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  border-radius: 6px;
+}
+
+.resetbtn:hover{
+  background-color: crimson;
+}
+
+
+
 .grid-container {
   display: grid;
   grid-template-columns: auto auto auto auto ;
@@ -49,8 +66,12 @@ code {
   height: 85px;
 }
 
-.grid-item:hover {
-  background-color: greenyellow;
+.grid-item:hover{
+  background-color: cyan;
+}
+
+.grid-item:disabled {
+  background-color: lightblue;
 }
 
 .playbtn{
@@ -64,7 +85,18 @@ code {
 }
 
 .playbtn:hover{
-  background-color: greenyellow;
+  background-color:palevioletred;
+}
+
+.playbtn:disabled{
+  background-color:lightgrey;
+  color: white;
+}
+
+.cost{
+  height:25px;
+  text-align:center;
+  font-size:18px;
 }
 
 .divBtn{

@@ -47,6 +47,20 @@ export interface CreateBalanceDTO {
   timeStamp?: string;
 }
 
+export interface CreateGameDto {
+  /** @format int32 */
+  week?: number;
+  /** @format int32 */
+  year?: number | null;
+  isactive?: boolean | null;
+  /** @format date-time */
+  createdAt?: string | null;
+  /** @format date-time */
+  startingDate?: string;
+  /** @format date-time */
+  endingDate?: string;
+}
+
 export interface Game {
   /** @format uuid */
   id?: string;
@@ -65,6 +79,10 @@ export interface Game {
   /** @format date-time */
   updatedAt?: string | null;
   boards?: Board[] | null;
+  /** @format date-time */
+  startingDate?: string;
+  /** @format date-time */
+  endingDate?: string;
 }
 
 export interface LogIn {
@@ -75,7 +93,6 @@ export interface LogIn {
    * @minLength 1
    */
   password: string;
-  
 }
 
 export interface PlayerDTO {
@@ -373,8 +390,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       }),
 
-    
-    
     /**
      * No description
      *
@@ -404,6 +419,53 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "POST",
         body: data,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameCreate
+     * @request POST:/api/Game
+     */
+    gameCreate: (data: CreateGameDto, params: RequestParams = {}) =>
+      this.request<Game, any>({
+        path: `/api/Game`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameActiveGameCreate
+     * @request POST:/api/Game/ActiveGame
+     */
+    gameActiveGameCreate: (params: RequestParams = {}) =>
+      this.request<Game, any>({
+        path: `/api/Game/ActiveGame`,
+        method: "POST",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Games
+     * @name GamesGetAllGamesList
+     * @request GET:/api/Games/GetAllGames
+     */
+    gamesGetAllGamesList: (params: RequestParams = {}) =>
+      this.request<Game[], any>({
+        path: `/api/Games/GetAllGames`,
+        method: "GET",
         format: "json",
         ...params,
       }),
