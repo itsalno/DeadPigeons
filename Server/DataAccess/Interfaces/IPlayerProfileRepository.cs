@@ -6,7 +6,7 @@ public interface IPlayerProfileRepository
 {
     public List<PlayerProfile> GetAllPlayers();
 
-    public PlayerProfile? GetById(Guid id);
+    public PlayerProfile GetById(Guid id);
 
     public void UpdatePlayerProfile(PlayerProfile profile);
 

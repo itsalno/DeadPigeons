@@ -14,7 +14,7 @@ public class PlayerProfileRepository(MyDbContext context) : IPlayerProfileReposi
             .ToList();
     }
 
-    public PlayerProfile? GetById(Guid id)
+    public PlayerProfile GetById(Guid id)
     {
             return context.PlayerProfiles.FirstOrDefault(p => p.Id == id);
     }

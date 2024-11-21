@@ -38,22 +38,22 @@ public class PlayerProfileService(IPlayerProfileRepository playerProfileReposito
         return playerProfile;
     }
     
-    public PlayerProfile GetProfileById (Guid id)
+    public PlayerProfile GetProfileById(Guid id)
     {
         return playerProfileRepository.GetById(id);
     }
 
-    public void UpdatePlayerProfile(UpdatePlayerDTO updatePlayerDto)
+    public void UpdatePlayerBalance(UpdatePlayerDTO updatePlayerDto)
     {
         
         var playerProfile = playerProfileRepository.GetById(updatePlayerDto.PlayerId);
-        
+
         if (playerProfile == null)
         {
-            throw new Exception($"Player profile with ID {updatePlayerDto.PlayerId} not found.");
+            throw new Exception("Player not found");
         }
         
-        playerProfile.Balance = updatePlayerDto.Balance;
+        playerProfile.Balance += updatePlayerDto.Balance;
         
         playerProfileRepository.UpdatePlayerProfile(playerProfile);
     }

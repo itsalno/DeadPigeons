@@ -543,5 +543,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         type: ContentType.Json,
         ...params,
       }),
+
+    /**
+     * No description
+     *
+     * @tags PlayerProfile
+     * @name PlayerProfileGetByIdDetail
+     * @request GET:/api/PlayerProfile/getById/{id}
+     */
+    playerProfileGetByIdDetail: (id: string, params: RequestParams = {}) =>
+      this.request<PlayerProfile, any>({
+        path: `/api/PlayerProfile/getById/${id}`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
   };
 }
