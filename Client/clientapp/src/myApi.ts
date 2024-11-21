@@ -93,20 +93,17 @@ export interface LogIn {
    * @minLength 1
    */
   password: string;
-<<<<<<< HEAD
-=======
 }
 
 export interface LogInResponseDTO {
   token?: string | null;
   playerProfileId?: string | null;
->>>>>>> origin/alekss
 }
 
 export interface PlayerDTO {
   /** @format uuid */
   playerId?: string;
-  /** @format double */
+  /** @format int32 */
   balance?: number | null;
   userName?: string | null;
   email?: string | null;
@@ -117,7 +114,7 @@ export interface PlayerProfile {
   id?: string;
   /** @format uuid */
   userid?: string | null;
-  /** @format double */
+  /** @format int32 */
   balance?: number | null;
   isactive?: boolean | null;
   /** @format int32 */
@@ -159,7 +156,7 @@ export interface Transaction {
 export interface UpdatePlayerDTO {
   /** @format uuid */
   playerId?: string;
-  /** @format double */
+  /** @format int32 */
   balance?: number;
 }
 
@@ -442,8 +439,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-<<<<<<< HEAD
-=======
      * @tags Balance
      * @name BalanceDetail
      * @request GET:/api/Balance/{playerId}
@@ -459,7 +454,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
->>>>>>> origin/alekss
      * @tags Game
      * @name GameCreate
      * @request POST:/api/Game
@@ -492,15 +486,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-<<<<<<< HEAD
-     * @tags Games
-     * @name GamesGetAllGamesList
-     * @request GET:/api/Games/GetAllGames
-     */
-    gamesGetAllGamesList: (params: RequestParams = {}) =>
-      this.request<Game[], any>({
-        path: `/api/Games/GetAllGames`,
-=======
      * @tags Game
      * @name GameGetAllGamesList
      * @request GET:/api/Game/GetAllGames
@@ -508,7 +493,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     gameGetAllGamesList: (params: RequestParams = {}) =>
       this.request<Game[], any>({
         path: `/api/Game/GetAllGames`,
->>>>>>> origin/alekss
         method: "GET",
         format: "json",
         ...params,
@@ -557,8 +541,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "PUT",
         body: data,
         type: ContentType.Json,
-        playerId?: string | null;
-        transactionRef?: string | null;
         ...params,
       }),
   };

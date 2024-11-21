@@ -21,7 +21,7 @@ function TransactionHistoryPage() {
                 console.error("Failed to fetch transactions", error);
             });
     }, [playerId, setTransactions]);
-    
+
 
     return (
         <div className="w-full mx-auto space-y-12 text-gray-800">

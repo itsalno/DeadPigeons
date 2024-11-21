@@ -61,7 +61,6 @@ const LogInPage: React.FC = () => {
                     password: formData.password,
                 });
                 
-<<<<<<< HEAD
                 /*if (response && response.Token) {
                     const token = response.Token; 
                     
@@ -71,12 +70,16 @@ const LogInPage: React.FC = () => {
 
                 setIsLoggedIn(true);
                 toast.success('Login successful!');
+                
                 http.api.gameActiveGameCreate().then((response)=> {setActiveGame(response.data)});
                 
                 console.log(game.week);
                 localStorage.setItem('week', game.week);
                 localStorage.setItem('year', game.year);
-=======
+                
+                
+                
+                
                 const { token, playerProfileId } = response.data;
                 
                 localStorage.setItem("token", token);
@@ -84,22 +87,7 @@ const LogInPage: React.FC = () => {
 
                 toast.success('Login successful!');
                 setIsLoggedIn(true);
->>>>>>> origin/alekss
                 navigate("/Games");
-                
-                
-                const { token, playerProfileId } = response.data;
-                
-                localStorage.setItem("token", token);
-                localStorage.setItem("playerProfileId", playerProfileId);
-
-                toast.success('Login successful!');
-                toast.success('Login successful!');
-                http.api.gameActiveGameCreate().then((response)=> {setActiveGame(response.data)});
-                
-                console.log(game.week);
-                localStorage.setItem('week', game.week);
-                localStorage.setItem('year', game.year);
                 
             }
             

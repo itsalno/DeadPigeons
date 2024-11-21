@@ -3,15 +3,9 @@ import {activeGameAtom} from '../Atoms/GameAtom';
 import {useAtom} from 'jotai';
 import {useEffect, useState} from 'react';
 import toast from 'react-hot-toast';
-import { isLoggedInAtom } from '../Atoms/AuthAtom';
-import { useNavigate } from 'react-router-dom';
 
 export default function GamesPage() {
-    const navigate = useNavigate();
-    const [isLoggedIn] = useAtom(isLoggedInAtom);
-    if(!isLoggedIn) {
-       navigate('/LogIn'); 
-    }
+    
     
     const [num, setNum] = useState(0);
     
