@@ -5,5 +5,6 @@ namespace DataAccess.Data.Interfaces;
 public interface IBalanceRepository
 {
     public Transaction addFunds(Transaction transaction);
+    List<Transaction> GetTransactionsByPlayerId(Guid playerId);
     
 }

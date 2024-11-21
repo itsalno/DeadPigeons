@@ -1,4 +1,5 @@
-﻿using DataAccess.Interfaces;
+﻿using DataAccess;
+using DataAccess.Interfaces;
 using DataAccess.Models;
 using Services.TransferModels.Requests;
 using Services.TransferModels.Responses;
@@ -7,7 +8,7 @@ namespace Services.Services;
 
 
 
-public class PlayerProfileService(IPlayerProfileRepository playerProfileRepository) 
+public class PlayerProfileService(IPlayerProfileRepository playerProfileRepository,MyDbContext context) 
 {
     public List<PlayerDTO> GetAllPlayers()
     {
@@ -42,9 +43,19 @@ public class PlayerProfileService(IPlayerProfileRepository playerProfileReposito
         return playerProfileRepository.GetById(id);
     }
 
-    public void UpdatePlayerProfile(PlayerProfile profile)
+    public void UpdatePlayerProfile(UpdatePlayerDTO updatePlayerDto)
     {
-        playerProfileRepository.UpdatePlayerProfile(profile);
+        
+        var playerProfile = playerProfileRepository.GetById(updatePlayerDto.PlayerId);
+        
+        if (playerProfile == null)
+        {
+            throw new Exception($"Player profile with ID {updatePlayerDto.PlayerId} not found.");
+        }
+        
+        playerProfile.Balance = updatePlayerDto.Balance;
+        
+        playerProfileRepository.UpdatePlayerProfile(playerProfile);
     }
 
     public PlayerProfile CreatePlayerProfile(Guid userId, CreatePlayerDTO createPlayerDto)
@@ -59,4 +70,7 @@ public class PlayerProfileService(IPlayerProfileRepository playerProfileReposito
 
         return playerProfileRepository.CreatePlayerProfile(playerProfile);
     }
+    
+    
+    
 }

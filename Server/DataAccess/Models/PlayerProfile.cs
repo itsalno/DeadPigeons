@@ -9,7 +9,7 @@ public partial class PlayerProfile
 
     public Guid? Userid { get; set; }
 
-    public decimal? Balance { get; set; }
+    public int? Balance { get; set; }
 
     public bool? Isactive { get; set; }
 

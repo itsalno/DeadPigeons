@@ -14,4 +14,19 @@ public class BalanceService(IBalanceRepository balanceRepository)
         return new BalanceDTO().FromEntity(newTransaction);
         
     }
+    
+    public List<BalanceDTO> GetBalancesByPlayerId(Guid playerId)
+    {
+        var transactions = balanceRepository.GetTransactionsByPlayerId(playerId);
+
+        return transactions.Select(t => new BalanceDTO
+        {
+            PlayerId = t.Playerid,
+            Amount = t.Amount,
+            TransactionType = t.Transactiontype,
+            TransactionRef = t.Transactionref,
+            TimeStamp = t.CreatedAt,
+        }).ToList();
+    }
+    
 }

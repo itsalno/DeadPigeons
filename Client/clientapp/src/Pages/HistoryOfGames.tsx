@@ -1,8 +1,8 @@
-function HistoryOfBoards(){
+function HistoryOfGames(){
     return(
         <div>
         HISTORY
         </div>
     );
 }
-export default HistoryOfBoards;
+export default HistoryOfGames;

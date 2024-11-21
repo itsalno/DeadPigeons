@@ -27,4 +27,11 @@ public class GameController(GameService gameService): ControllerBase
         var game = gameService.GetActiveGame();
         return game;
     }
+    
+    [HttpGet("GetAllGames")]
+    public ActionResult<List<Game>> GetAllGames()
+    {
+        var games = gameService.GetAllGames();
+        return Ok(games);
+    }
 }

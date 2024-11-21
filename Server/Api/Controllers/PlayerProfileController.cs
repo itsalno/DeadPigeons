@@ -1,8 +1,10 @@
-﻿using DataAccess.Models;
+﻿using System.Security.Claims;
+using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Services;
 using Services.Services;
+using Services.TransferModels.Requests;
 using Services.TransferModels.Responses;
 
 namespace Api.Controllers;
@@ -11,6 +13,7 @@ namespace Api.Controllers;
 [Route("api/[controller]")]
 public class PlayerProfileController(PlayerProfileService profileService) : ControllerBase
 {
+    
     
     [HttpGet("GetAllPlayers")]
     public ActionResult<List<PlayerDTO>> GetAllPlayerProfiles()
@@ -33,33 +36,30 @@ public class PlayerProfileController(PlayerProfileService profileService) : Cont
         return Ok(profile);
     }
 
-    [HttpPost]
+    [HttpPut]
     [Route("update/{id}")]
-    public ActionResult<PlayerDTO> UpdatePlayerProfile(Guid id, [FromBody] PlayerDTO playerDto)
+    public IActionResult UpdatePlayerProfile(Guid id, [FromBody] UpdatePlayerDTO playerDto)
     {
         if (playerDto == null)
         {
             return BadRequest("Invalid player data.");
         }
-        
+
         if (playerDto.PlayerId != id)
         {
             return BadRequest("Player ID in URL does not match Player ID in request body.");
         }
 
-        var playerProfile = profileService.GetProfileById(id);
-        if (playerProfile == null)
+        try
         {
-            return NotFound("Player not found");
+            profileService.UpdatePlayerProfile(playerDto);
+
+            return Ok("Player profile updated successfully.");
         }
-
-       
-        playerProfile.User.Username = playerDto.UserName;
-        playerProfile.User.Email = playerDto.Email;
-        playerProfile.Balance = playerDto.Balance;
-
-        profileService.UpdatePlayerProfile(playerProfile);
-
-        return Ok(playerProfile); 
+        catch (Exception ex)
+        {
+            return NotFound(new { Message = ex.Message });
+        }
     }
+
 }

@@ -11,11 +11,11 @@
 
 export interface BalanceDTO {
   /** @format uuid */
-  playerId?: string;
+  playerId?: string | null;
   /** @format int32 */
   amount?: number;
   transactionType?: string | null;
-  transactionNerf?: string | null;
+  transactionRef?: string | null;
   /** @format date-time */
   timeStamp?: string;
 }
@@ -93,6 +93,14 @@ export interface LogIn {
    * @minLength 1
    */
   password: string;
+<<<<<<< HEAD
+=======
+}
+
+export interface LogInResponseDTO {
+  token?: string | null;
+  playerProfileId?: string | null;
+>>>>>>> origin/alekss
 }
 
 export interface PlayerDTO {
@@ -146,6 +154,13 @@ export interface Transaction {
   /** @format date-time */
   createdAt?: string;
   player?: PlayerProfile;
+}
+
+export interface UpdatePlayerDTO {
+  /** @format uuid */
+  playerId?: string;
+  /** @format double */
+  balance?: number;
 }
 
 export interface User {
@@ -398,11 +413,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/api/auth/login
      */
     authLoginCreate: (data: LogIn, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<LogInResponseDTO, any>({
         path: `/api/auth/login`,
         method: "POST",
         body: data,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -426,6 +442,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+<<<<<<< HEAD
+=======
+     * @tags Balance
+     * @name BalanceDetail
+     * @request GET:/api/Balance/{playerId}
+     */
+    balanceDetail: (playerId: string, params: RequestParams = {}) =>
+      this.request<BalanceDTO, any>({
+        path: `/api/Balance/${playerId}`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+>>>>>>> origin/alekss
      * @tags Game
      * @name GameCreate
      * @request POST:/api/Game
@@ -458,6 +492,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+<<<<<<< HEAD
      * @tags Games
      * @name GamesGetAllGamesList
      * @request GET:/api/Games/GetAllGames
@@ -465,6 +500,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     gamesGetAllGamesList: (params: RequestParams = {}) =>
       this.request<Game[], any>({
         path: `/api/Games/GetAllGames`,
+=======
+     * @tags Game
+     * @name GameGetAllGamesList
+     * @request GET:/api/Game/GetAllGames
+     */
+    gameGetAllGamesList: (params: RequestParams = {}) =>
+      this.request<Game[], any>({
+        path: `/api/Game/GetAllGames`,
+>>>>>>> origin/alekss
         method: "GET",
         format: "json",
         ...params,
@@ -504,16 +548,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags PlayerProfile
-     * @name PlayerProfileUpdateCreate
-     * @request POST:/api/PlayerProfile/update/{id}
+     * @name PlayerProfileUpdateUpdate
+     * @request PUT:/api/PlayerProfile/update/{id}
      */
-    playerProfileUpdateCreate: (id: string, data: PlayerDTO, params: RequestParams = {}) =>
-      this.request<PlayerDTO, any>({
+    playerProfileUpdateUpdate: (id: string, data: UpdatePlayerDTO, params: RequestParams = {}) =>
+      this.request<void, any>({
         path: `/api/PlayerProfile/update/${id}`,
-        method: "POST",
+        method: "PUT",
         body: data,
         type: ContentType.Json,
-        format: "json",
+        playerId?: string | null;
+        transactionRef?: string | null;
         ...params,
       }),
   };
