@@ -28,6 +28,7 @@ function BalancePage(){
             http.api.playerProfileGetByIdDetail(playerProfileId)
                 .then((response) => {
                     setCurrentBalance(response.data.balance); 
+                    localStorage.setItem('balance',currentBalance)
                 })
                 .catch((error) => {
                     toast.error("Failed to fetch current balance.");

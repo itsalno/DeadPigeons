@@ -73,7 +73,7 @@ export default function GamesPage() {
             </div>
 
             <div className="balance">
-                <p>Balance: <b>{balance} DKK</b></p>
+                <p>Balance: <b>{localStorage.getItem('balance')} DKK</b></p>
             </div>
 
 
