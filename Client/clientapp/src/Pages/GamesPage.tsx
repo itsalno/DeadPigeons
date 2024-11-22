@@ -15,7 +15,6 @@ export default function GamesPage() {
     const [cost, setCost] = useState<number>(0);
     const [game] = useAtom(activeGameAtom);
     const [seq, setSeq] = useState([]);
-    const [balance]=useAtom(BalanceAtom)
     
     
     
