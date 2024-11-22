@@ -83,7 +83,7 @@ const LogInPage: React.FC = () => {
                 const { token, playerProfileId } = response.data;
                 
                 localStorage.setItem("token", token);
-                localStorage.setItem("playerProfileId", playerProfileId);
+                localStorage.setItem("z", playerProfileId);
 
                 toast.success('Login successful!');
                 setIsLoggedIn(true);
