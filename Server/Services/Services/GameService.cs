@@ -57,6 +57,17 @@ public class GameService(IGameRepository gameRepository)
         Game newGame = gameRepository.CreateGame(game1);
         return newGame;
         
+    }
+    
+    public Game? EndGame(Guid id, string finalSequence)
+    {
         
+        var game = gameRepository.GetById(id);
+        if (game == null) return null;
+
+        game.Isactive = false;
+        game.Winningseq = finalSequence;
+        gameRepository.UpdateGame(game);
+        return game;
     }
 }

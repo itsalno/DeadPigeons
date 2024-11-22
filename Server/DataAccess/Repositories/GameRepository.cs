@@ -27,4 +27,15 @@ public class GameRepository(MyDbContext context) : IGameRepository
     {
         return context.Games.ToList();
     }
+
+    public Game? GetById(Guid id)
+    {
+        return context.Games.FirstOrDefault(g => g.Id == id);
+    }
+    
+    public void UpdateGame(Game game)
+    {
+        context.Games.Update(game);
+        context.SaveChanges();
+    }
 }

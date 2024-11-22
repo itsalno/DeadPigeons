@@ -50,13 +50,13 @@ using Services.TransferModels.Responses;
             }
             
             var token = _jwtGenerator.GenerateJwtToken(user);
-            //Console.WriteLine($"Logged in user: {user.Username}, UserId: {user.Id}");
+            Console.WriteLine($"Logged in user: {user.Username}, UserId: {user.Id}");
             
             var playerProfile = _context.PlayerProfiles
                 .FirstOrDefault(p => p.Userid == user.Id);
 
             
-            /*if (playerProfile != null)
+            if (playerProfile != null)
             {
                 Console.WriteLine($"PlayerProfile found: {playerProfile.Id}, Balance: {playerProfile.Balance}, IsActive: {playerProfile.Isactive}");
             }
@@ -68,7 +68,7 @@ using Services.TransferModels.Responses;
             if (playerProfile == null)
             {
                 return Unauthorized(new { Message = "Player profile not found" });
-            }*/
+            }
             
             var loginResponse = new LogInResponseDTO
             {
@@ -78,6 +78,5 @@ using Services.TransferModels.Responses;
             
             return Ok(loginResponse);
         }
-
-       
+        
     }

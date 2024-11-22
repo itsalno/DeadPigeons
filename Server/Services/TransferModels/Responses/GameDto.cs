@@ -27,7 +27,7 @@ public class GameDto
 
     public int Week { get; set; }
 
-    public List<string>? Winningseq { get; set; }
+    public string? Winningseq { get; set; }
 
     public int? Year { get; set; }
 
