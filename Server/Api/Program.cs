@@ -33,6 +33,8 @@ builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
 builder.Services.AddScoped<BalanceService>();
 builder.Services.AddScoped<GameService>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
+builder.Services.AddScoped<BoardService>();
+builder.Services.AddScoped<IBoardRepository, BoardRepository>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

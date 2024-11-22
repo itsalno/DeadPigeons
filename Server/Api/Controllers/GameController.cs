@@ -14,7 +14,7 @@ public class GameController(GameService gameService) : ControllerBase
 {
     [HttpPost]
     [Route("")]
-    public ActionResult<Game> CreatePaper(CreateGameDto createGameDto)
+    public ActionResult<Game> CreateGame(CreateGameDto createGameDto)
     {
         var game = gameService.CreateGame(createGameDto);
         return Ok(game);

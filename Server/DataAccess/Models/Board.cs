@@ -16,6 +16,8 @@ public partial class Board
     public bool? Isautoplay { get; set; }
 
     public DateTime? CreatedAt { get; set; }
+    
+    public string? Sequence { get; set; }
 
     public virtual Game? Game { get; set; }
 

@@ -68,10 +68,17 @@ code {
 
 .grid-item:hover{
   background-color: cyan;
+  box-shadow: 1px 1px 5px #555 inset;
+
 }
 
-.grid-item:disabled {
-  background-color: lightblue;
+.selected {
+  background-color:lightgrey;
+  color: white;
+  box-shadow: 1px 1px 5px #555 inset;
+}
+.selected:hover{
+  background-color: palevioletred;
 }
 
 .playbtn{
@@ -85,7 +92,7 @@ code {
 }
 
 .playbtn:hover{
-  background-color:palevioletred;
+  background-color:palegreen;
 }
 
 .playbtn:disabled{

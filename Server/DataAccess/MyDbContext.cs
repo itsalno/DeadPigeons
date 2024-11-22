@@ -42,6 +42,7 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.Isautoplay).HasColumnName("isautoplay");
             entity.Property(e => e.Playerid).HasColumnName("playerid");
             entity.Property(e => e.Price).HasColumnName("price");
+            entity.Property(e => e.Sequence).HasColumnName("sequence");
 
             entity.HasOne(d => d.Game).WithMany(p => p.Boards)
                 .HasForeignKey(d => d.Gameid)

@@ -32,6 +32,7 @@ export interface Board {
   isautoplay?: boolean | null;
   /** @format date-time */
   createdAt?: string | null;
+  sequence?: string | null;
   game?: Game;
   player?: PlayerProfile;
 }
@@ -45,6 +46,19 @@ export interface CreateBalanceDTO {
   transactionNerf?: string | null;
   /** @format date-time */
   timeStamp?: string;
+}
+
+export interface CreateBoardDto {
+  /** @format uuid */
+  playerid?: string | null;
+  /** @format uuid */
+  gameid?: string | null;
+  /** @format double */
+  price?: number | null;
+  isautoplay?: boolean | null;
+  /** @format date-time */
+  createdAt?: string | null;
+  sequence?: string | null;
 }
 
 export interface CreateGameDto {
@@ -447,6 +461,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<BalanceDTO, any>({
         path: `/api/Balance/${playerId}`,
         method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Board
+     * @name BoardCreate
+     * @request POST:/api/Board
+     */
+    boardCreate: (data: CreateBoardDto, params: RequestParams = {}) =>
+      this.request<Game, any>({
+        path: `/api/Board`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),
