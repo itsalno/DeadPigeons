@@ -38,7 +38,7 @@ public class PlayerProfileController(PlayerProfileService profileService) : Cont
 
     [HttpPut]
     [Route("update/{id}")]
-    public IActionResult UpdatePlayerProfile(Guid id, [FromBody] UpdatePlayerDTO playerDto)
+    public IActionResult UpdatePlayerBalance(Guid id, [FromBody] UpdatePlayerDTO playerDto)
     {
         if (playerDto == null)
         {
@@ -52,14 +52,29 @@ public class PlayerProfileController(PlayerProfileService profileService) : Cont
 
         try
         {
-            profileService.UpdatePlayerProfile(playerDto);
+            profileService.UpdatePlayerBalance(playerDto);
 
-            return Ok("Player profile updated successfully.");
+            return Ok("Player balance updated successfully.");
         }
         catch (Exception ex)
         {
             return NotFound(new { Message = ex.Message });
         }
+    }
+
+    [HttpGet]
+    [Route("getById/{id}")]
+    public ActionResult<PlayerProfile> GetPlayerById(Guid id)
+    {
+        
+        var player = profileService.GetProfileById(id);
+
+        if (player == null)
+        {
+            return NotFound($"Player with ID {id} not found.");
+        }
+
+        return Ok(player);
     }
 
 }

@@ -3,6 +3,7 @@ import {activeGameAtom} from '../Atoms/GameAtom';
 import {useAtom} from 'jotai';
 import {useEffect, useState} from 'react';
 import toast from 'react-hot-toast';
+import { BalanceAtom } from '../Atoms/BalanceAtom';
 import {http} from '../http';
 
 export default function GamesPage() {
@@ -14,6 +15,11 @@ export default function GamesPage() {
     const [cost, setCost] = useState<number>(0);
     const [game] = useAtom(activeGameAtom);
     const [seq, setSeq] = useState([]);
+    const [balance]=useAtom(BalanceAtom)
+    
+    
+    
+    
     const handleClick = (event) => {
         if (!event.currentTarget.classList.contains("selected")) {
             seq.push(event.currentTarget.value);
@@ -102,7 +108,7 @@ export default function GamesPage() {
             </div>
 
             <div className="balance">
-                <p>Balance: <b>0 DKK</b></p>
+                <p>Balance: <b>{localStorage.getItem('balance')} DKK</b></p>
             </div>
 
 

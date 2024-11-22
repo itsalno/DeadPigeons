@@ -2,12 +2,14 @@ import {useEffect, useState } from 'react';
 import { http } from '../http';
 import {CreateBalanceDTO} from "../myApi";
 import toast from 'react-hot-toast';
+import { useAtom } from 'jotai';
+import { BalanceAtom } from '../Atoms/BalanceAtom';
 
 function BalancePage(){
     const [amount, setAmount] = useState(""); 
     const [transactionNumber, setTransactionNumber] = useState("");
     const [playerProfileId, setPlayerProfileId] = useState("");
-
+    const [currentBalance, setCurrentBalance] = useAtom(BalanceAtom);
 
 
     useEffect(() => {
@@ -17,8 +19,27 @@ function BalancePage(){
             setPlayerProfileId(storedPlayerProfileId);
         } else {
             toast.error("Please log in.");
+            return; 
         }
-    }, []);
+    }, []); 
+
+    useEffect(() => {
+        if (playerProfileId) { 
+            http.api.playerProfileGetByIdDetail(playerProfileId)
+                .then((response) => {
+                    setCurrentBalance(response.data.balance); 
+                    localStorage.setItem('balance',currentBalance)
+                })
+                .catch((error) => {
+                    toast.error("Failed to fetch current balance.");
+                    console.error(error);
+                });
+        }
+    }, [playerProfileId]);
+    
+    
+    
+        
     
     var balanceDto : CreateBalanceDTO ={
         playerId: playerProfileId, 
@@ -43,7 +64,12 @@ function BalancePage(){
 
         try {
             await http.api.balanceCreate(balanceDto);
-            //http.api.playerProfileUpdateUpdate(playerProfileId,parseInt(amount))
+            const updatePlayerDto = {
+                playerId: playerProfileId,
+                balance: parseInt(amount), 
+            };
+            await http.api.playerProfileUpdateUpdate(playerProfileId, updatePlayerDto);
+            window.location.reload();
             toast.success("Successfully replenished your balance");
         } catch (error) {
             toast.error("Couldn't make the operation, please try again.");
@@ -66,7 +92,9 @@ function BalancePage(){
             {/* Balance Display Section */}
             <section id="balance-info" className="bg-white py-12 px-8 text-center">
                 <h2 className="text-2xl font-semibold">Current Balance</h2>
-                <p className="text-3xl mt-4 font-bold text-green-600">DKK Imaginery balance</p>
+                <p className="text-3xl mt-4 font-bold text-green-600">
+                    {currentBalance !== null ? `DKK ${currentBalance}` : "Loading..."}
+                </p>
             </section>
 
             {/* Form to Add Funds */}
@@ -96,7 +124,8 @@ function BalancePage(){
                         />
                     </div>
 
-                    <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 focus:outline-none">
+                    <button type="submit"
+                            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 focus:outline-none">
                         Add Funds
                     </button>
                 </form>
@@ -109,4 +138,5 @@ function BalancePage(){
         </div>
     );
 }
+
 export default BalancePage;

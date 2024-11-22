@@ -12,6 +12,7 @@ import LogInPage from "../Pages/LogInPage";
 import PlayersPage from "../Pages/PlayersPage";
 import HistoryOfGames from "../Pages/HistoryOfGames";
 import TransactionHistoryPage from "../Pages/TransactionHistoryPage";
+import { isLoggedInAtom } from "../Atoms/AuthAtom";
 
 
 
@@ -20,7 +21,15 @@ import TransactionHistoryPage from "../Pages/TransactionHistoryPage";
 const App = () => {
 
     const [theme, setTheme] = useAtom(ThemeAtom);
+    const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
 
+    useEffect(() => {
+        const loggedInStatus = localStorage.getItem('isLoggedIn');
+        
+        if (loggedInStatus === 'true') {
+            setIsLoggedIn(true); // Update atom state
+        }
+    }, []);
     useEffect(() => {
         
         localStorage.setItem('theme', theme);

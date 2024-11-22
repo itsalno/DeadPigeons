@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import { http } from "../http";
-import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import { useAtom } from "jotai";
-import {TransactionsAtom } from "../Atoms/TransactionsAtom";
+import { BalanceDTO } from "../myApi";
 
 function TransactionHistoryPage() {
     
     
     const { playerId } = useParams();
-    const [transactions, setTransactions] = useAtom(TransactionsAtom);
+    const [transactions, setTransactions] = useState<BalanceDTO[]>([]);
 
     console.log(playerId);
     useEffect(() => {
@@ -40,10 +38,10 @@ function TransactionHistoryPage() {
                             transactions.map((transaction) => (
                                 <div key={transaction.playerId}
                                      className="bg-white border border-gray-300 rounded-lg shadow-lg p-4">
-                                    <p><strong>Amount:</strong> ${transaction.amount}</p>
+                                    <p><strong>Amount:</strong> {transaction.amount}</p>
                                     <p><strong>Type:</strong> {transaction.transactionType}</p>
                                     <p><strong>Type:</strong> {transaction.transactionRef}</p>
-                                    <p><strong>Date:</strong> {(transaction.timeStamp)}</p>
+                                    <p><strong>Date:</strong> {transaction.timeStamp}</p>
                                 </div>
                             ))
                         ) : (
