@@ -6,7 +6,7 @@ import { ThemeAtom } from "../Atoms/ThemeAtom";
 import Navigation from "./Navigation";
 import IntroPage from "../Pages/IntroPage";
 import GamesPage from "../Pages/GamesPage";
-import HistoryOfBoards from "../Pages/HistoryOfBoards";
+import WiningNubers from "../Pages/WiningNumbers";
 import BalancePage from "../Pages/BalancePage";
 import LogInPage from "../Pages/LogInPage";
 import PlayersPage from "../Pages/PlayersPage";
@@ -36,6 +36,7 @@ const App = () => {
             <Route path="/LogIn" element={<LogInPage/>}/>
             <Route path="/Games" element={<GamesPage />} />
             <Route path="/Users" element={<PlayersPage/>}/>
+            <Route path="/WiningNumbers" element={<WiningNubers/>}/>
             <Route path="/History" element={<HistoryOfGames/>}/>
             <Route path="/Balance" element={<BalancePage/>} />
             <Route path="/players/:playerId/transactions" element={<TransactionHistoryPage />} />

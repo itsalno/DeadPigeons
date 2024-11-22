@@ -10,7 +10,7 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class GameController(GameService gameService): ControllerBase
+public class GameController(GameService gameService) : ControllerBase
 {
     [HttpPost]
     [Route("")]
@@ -27,11 +27,25 @@ public class GameController(GameService gameService): ControllerBase
         var game = gameService.GetActiveGame();
         return game;
     }
-    
+
     [HttpGet("GetAllGames")]
     public ActionResult<List<Game>> GetAllGames()
     {
         var games = gameService.GetAllGames();
         return Ok(games);
+    }
+
+    [HttpPatch]
+    [Route("endGame")]
+    public ActionResult<Game> EndGame(Guid id, string finalSequence)
+    {
+        var game = gameService.EndGame(id, finalSequence);
+
+        if (game == null)
+        {
+            return NotFound(new { message = "Game not found" });
+        }
+
+        return Ok(game);
     }
 }

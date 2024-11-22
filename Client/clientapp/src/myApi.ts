@@ -66,7 +66,7 @@ export interface Game {
   id?: string;
   /** @format int32 */
   week?: number;
-  winningseq?: string[] | null;
+  winningseq?: string | null;
   /** @format int32 */
   year?: number | null;
   /** @format double */
@@ -494,6 +494,29 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<Game[], any>({
         path: `/api/Game/GetAllGames`,
         method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameEndGamePartialUpdate
+     * @request PATCH:/api/Game/endGame
+     */
+    gameEndGamePartialUpdate: (
+      query?: {
+        /** @format uuid */
+        id?: string;
+        finalSequence?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<Game, any>({
+        path: `/api/Game/endGame`,
+        method: "PATCH",
+        query: query,
         format: "json",
         ...params,
       }),
