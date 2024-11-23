@@ -67,7 +67,23 @@ public class GameService(IGameRepository gameRepository)
 
         game.Isactive = false;
         game.Winningseq = finalSequence;
-        gameRepository.UpdateGame(game);
+        gameRepository.EndGame(game);
         return game;
     }
+    
+    public void UpdateGame(UpdateGameDto updateGameDto)
+    {
+        
+        var game = gameRepository.GetById(updateGameDto.GameId);
+
+        if (game == null)
+        {
+            throw new Exception("Player not found");
+        }
+        
+        game.Prizepool += updateGameDto.Prizepool;
+        
+        gameRepository.UpdateGame(game);
+    }
+    
 }

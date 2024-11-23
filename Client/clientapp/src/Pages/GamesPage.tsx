@@ -59,14 +59,20 @@ export default function GamesPage() {
 
     
     const handleBoardSubmit = async () => {
-
-
+        
+        
         console.log("Submitting board...");
         console.log("Game ID:", game.id);
         console.log("Selected Tiles:", seq);
         console.log("Cost:", cost);
         console.log("Balance:", visualBalance);
+        console.log("Creating prizepool",game.id,cost)
         
+        const updateGameDto = {
+            GameId: game.id,
+            Prizepool: cost,
+        };
+        http.api.gameUpdateUpdate(game.id,updateGameDto);
         
         console.log("Game ID:", game.id);
         const newBalance = balance;
@@ -84,7 +90,7 @@ export default function GamesPage() {
                 createdAt: new Date().toJSON(),
                 sequence: seq.toString(),
             });
-
+            
             const newBalance = visualBalance;
             setBalance(newBalance);
             
@@ -94,8 +100,11 @@ export default function GamesPage() {
                 balance: -cost,
             };
             
-            http.api.playerProfileUpdateUpdate(localStorage.getItem('playerProfileId'),updatePlayerDto)
+            http.api.playerProfileUpdateUpdate(localStorage.getItem('playerProfileId'),updatePlayerDto);
+            
+            
             toast.success("Your board has been saved");
+            
             setSeq([]);
             setCost(0);
             setDisabled(true);

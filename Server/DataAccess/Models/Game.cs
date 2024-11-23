@@ -13,9 +13,9 @@ public partial class Game
 
     public int? Year { get; set; }
 
-    public decimal? Prizepool { get; set; }
+    public int? Prizepool { get; set; }
 
-    public decimal? Carryover { get; set; }
+    public int? Carryover { get; set; }
 
     public bool? Isactive { get; set; }
 

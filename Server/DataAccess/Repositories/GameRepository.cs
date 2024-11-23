@@ -33,6 +33,12 @@ public class GameRepository(MyDbContext context) : IGameRepository
         return context.Games.FirstOrDefault(g => g.Id == id);
     }
     
+    public void EndGame(Game game)
+    {
+        context.Games.Update(game);
+        context.SaveChanges();
+    }
+
     public void UpdateGame(Game game)
     {
         context.Games.Update(game);
