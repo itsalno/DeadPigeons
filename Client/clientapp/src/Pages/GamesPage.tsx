@@ -112,13 +112,6 @@ export default function GamesPage() {
 
 
     }
-    function updateBalance(){
-        var playerid=localStorage.getItem('playerProfileId')
-        const updatePlayerDto = {
-            playerId: playerid,
-            balance: parseInt(amount),
-        };
-    }
     return (
         <div>
             <div className="gmtitle">
