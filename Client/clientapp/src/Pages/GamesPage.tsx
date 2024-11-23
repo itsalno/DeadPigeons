@@ -3,73 +3,73 @@ import {activeGameAtom} from '../Atoms/GameAtom';
 import {useAtom} from 'jotai';
 import {useEffect, useState} from 'react';
 import toast from 'react-hot-toast';
-import { BalanceAtom } from '../Atoms/BalanceAtom';
 import {http} from '../http';
+import { BalanceAtom } from '../Atoms/BalanceAtom';
 
 export default function GamesPage() {
 
 
     const [num, setNum] = useState(0);
-
     const [disabled, setDisabled] = useState(true);
     const [cost, setCost] = useState<number>(0);
     const [game] = useAtom(activeGameAtom);
     const [seq, setSeq] = useState([]);
-    
-    
-    
-    
+    const [balance, setBalance] = useAtom(BalanceAtom);
+    const [visualBalance, setVisualBalance] = useState<number>(balance ?? 0);
+
+
+
+
+
     const handleClick = (event) => {
+        const value = parseInt(event.currentTarget.value);
         if (!event.currentTarget.classList.contains("selected")) {
-            seq.push(event.currentTarget.value);
-            setNum(seq.length);
-
-            if (seq.length > 8) {
-                toast.error("You have already chosen the maximum of numbers.")
-                console.log("Max numbers");
-            } else {
-                console.log(seq);
-                //console.log(event.currentTarget.value);
-                //console.log("id" + event.currentTarget.id);
-                event.currentTarget.classList.add("selected");
-                console.log('button selected');
+            if (seq.length >= 8) {
+                toast.error("You have already chosen the maximum of numbers.");
+                return;
             }
+            setSeq([...seq, value]);
+            event.currentTarget.classList.add("selected");
         } else {
-            console.log("aaaa");
-            var index = seq.indexOf(event.currentTarget.value);
-            seq.splice(index, 1);
-            console.log(seq);
-            setNum(seq.length);
-            event.currentTarget.classList.remove('selected');
-            console.log("button unselected");
+            setSeq(seq.filter((item) => item !== value));
+            event.currentTarget.classList.remove("selected");
         }
-    }
-    useEffect(() => {
-        console.log(seq.length);
-        switch (true) {
-            case (num < 5):
-                setCost(0);
-                setDisabled(true);
-                break;
-            case (num == 5):
-                setCost(20);
-                setDisabled(false);
-                break;
-            case (num == 6):
-                setCost(40);
-                setDisabled(false);
-                break;
-            case (num == 7):
-                setCost(80);
-                setDisabled(false);
-                break;
-            case (num == 8):
-                setCost(160);
-                setDisabled(false);
-        }
-    }, [num]);
+    };
 
+    useEffect(() => {
+        const newCost = (() => {
+            switch (seq.length) {
+                case 5:
+                    return 20;
+                case 6:
+                    return 40;
+                case 7:
+                    return 80;
+                case 8:
+                    return 160;
+                default:
+                    return 0;
+            }
+        })();
+
+        setCost(newCost);
+        setDisabled(seq.length < 5 || visualBalance < newCost);
+        setVisualBalance((balance ?? 0) - newCost); 
+    }, [seq, balance]);
+
+    
     const handleBoardSubmit = async () => {
+
+
+        console.log("Submitting board...");
+        console.log("Game ID:", game.id);
+        console.log("Selected Tiles:", seq);
+        console.log("Cost:", cost);
+        console.log("Balance:", visualBalance);
+        
+        
+        console.log("Game ID:", game.id);
+        const newBalance = balance;
         console.log(localStorage.getItem("playerProfileId"));
         console.log(game.id);
         console.log(cost);
@@ -84,22 +84,41 @@ export default function GamesPage() {
                 createdAt: new Date().toJSON(),
                 sequence: seq.toString(),
             });
+
+            const newBalance = visualBalance;
+            setBalance(newBalance);
+            
+            const playerId = localStorage.getItem("playerProfileId");
+            const updatePlayerDto = {
+                playerId: playerId,
+                balance: -cost,
+            };
+            
+            http.api.playerProfileUpdateUpdate(localStorage.getItem('playerProfileId'),updatePlayerDto)
+            toast.success("Your board has been saved");
+            setSeq([]);
+            setCost(0);
+            setDisabled(true);
+            
+            const selected = document.querySelectorAll('.selected');
+            for (let i = 0; i < selected.length; i++) {
+                selected[i].classList.remove("selected");
+            }
+            
         } catch (error) {
             toast.error("An error has occured");
             console.log(error);
         }
-        toast.success("Your board has been saved");
-        setSeq([]);
-        setCost(0);
-        setDisabled(true);
-        const selected = document.querySelectorAll('.selected');
-        for (let i = 0; i < selected.length; i++) {
-            selected[i].classList.remove("selected");
-        }
 
 
     }
-
+    function updateBalance(){
+        var playerid=localStorage.getItem('playerProfileId')
+        const updatePlayerDto = {
+            playerId: playerid,
+            balance: parseInt(amount),
+        };
+    }
     return (
         <div>
             <div className="gmtitle">
@@ -107,7 +126,7 @@ export default function GamesPage() {
             </div>
 
             <div className="balance">
-                <p>Balance: <b>{localStorage.getItem('balance')} DKK</b></p>
+                <p>Balance: <b>{visualBalance} DKK</b></p>
             </div>
 
 
@@ -198,7 +217,7 @@ export default function GamesPage() {
                 <p className="">Cost: <b>{cost} DKK</b></p>
             </div>
             <div className="divBtn">
-                <button className="playbtn" disabled={disabled} onClick={() => handleBoardSubmit()}>Next</button>
+                <button className="playbtn" disabled={disabled|| !game.id} onClick={() => handleBoardSubmit()}>Next</button>
             </div>
         </div>
     );
