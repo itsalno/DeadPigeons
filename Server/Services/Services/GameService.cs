@@ -18,9 +18,11 @@ public class GameService(IGameRepository gameRepository)
         Game newGame = gameRepository.CreateGame(game);
         return new GameDto().FromEntity(newGame);
     }
-    public List<Game> GetAllGames()
+    public List<GameDto> GetAllGames()
     {
-        return gameRepository.GetAllGames();
+        var games = gameRepository.GetAllGames();
+        var gameDtos = games.Select(game => new GameDto().FromEntity(game)).ToList();
+        return gameDtos;
     }
 
     public Game GetActiveGame()
