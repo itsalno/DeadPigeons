@@ -16,7 +16,7 @@ function WiningNumbers() {
     };
 
     const handleReset = () => {
-        setWiningNum([]); // Reset winning numbers to an empty array
+        setWiningNum([]); 
     };
 
     const EndGame = () => {

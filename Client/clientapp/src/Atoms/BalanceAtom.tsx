@@ -1,3 +1,3 @@
-import { atom } from 'jotai';
+import { atomWithStorage } from 'jotai/utils';
 
-export const BalanceAtom = atom<number | null>(null);
+export const BalanceAtom = atomWithStorage<number>('userBalance', 0);

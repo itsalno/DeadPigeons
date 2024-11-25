@@ -48,4 +48,31 @@ public class GameController(GameService gameService) : ControllerBase
 
         return Ok(game);
     }
+    
+    [HttpPut]
+    [Route("update/{id}")]
+    public IActionResult UpdateGame(Guid id, [FromBody] UpdateGameDto gameDto)
+    {
+        if (gameDto == null)
+        {
+            return BadRequest("Invalid player data.");
+        }
+
+        if (gameDto.GameId != id)
+        {
+            return BadRequest("Player ID in URL does not match Player ID in request body.");
+        }
+
+        try
+        {
+            gameService.UpdateGame(gameDto);
+
+            return Ok("Player balance updated successfully.");
+        }
+        catch (Exception ex)
+        {
+            return NotFound(new { Message = ex.Message });
+        }
+    }
+    
 }

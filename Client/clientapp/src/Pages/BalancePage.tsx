@@ -9,7 +9,7 @@ function BalancePage(){
     const [amount, setAmount] = useState(""); 
     const [transactionNumber, setTransactionNumber] = useState("");
     const [playerProfileId, setPlayerProfileId] = useState("");
-    const [currentBalance, setCurrentBalance] = useAtom(BalanceAtom);
+    const [balance, setBalance] = useAtom(BalanceAtom);
 
 
     useEffect(() => {
@@ -27,8 +27,7 @@ function BalancePage(){
         if (playerProfileId) { 
             http.api.playerProfileGetByIdDetail(playerProfileId)
                 .then((response) => {
-                    setCurrentBalance(response.data.balance); 
-                    localStorage.setItem('balance',currentBalance)
+                    setBalance(response.data.balance);
                 })
                 .catch((error) => {
                     toast.error("Failed to fetch current balance.");
@@ -93,7 +92,7 @@ function BalancePage(){
             <section id="balance-info" className="bg-white py-12 px-8 text-center">
                 <h2 className="text-2xl font-semibold">Current Balance</h2>
                 <p className="text-3xl mt-4 font-bold text-green-600">
-                    {currentBalance !== null ? `DKK ${currentBalance}` : "Loading..."}
+                    {balance !== null ? `DKK ${balance}` : "Loading..."}
                 </p>
             </section>
 

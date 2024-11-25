@@ -8,9 +8,9 @@ import { activeGameAtom } from '../Atoms/GameAtom';
 
 const LogInPage: React.FC = () => {
     
-    const [game, setActiveGame] = useAtom(activeGameAtom);
     const [isRegister, setIsRegister] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
+    const [game, setGame] = useAtom(activeGameAtom);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: '',
@@ -75,7 +75,7 @@ const LogInPage: React.FC = () => {
                 navigate("/");
                 toast.success('Login successful!');
 
-                http.api.gameActiveGameCreate().then((response)=> {setActiveGame(response.data)});
+                http.api.gameActiveGameCreate().then((response)=> {setGame(response.data)});
 
                 console.log(game.week,game.year);
                 localStorage.setItem('week', game.week);

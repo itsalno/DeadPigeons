@@ -12,6 +12,7 @@ public interface IGameRepository
 
     public Game? GetById(Guid id);
 
+    public void EndGame(Game game);
     public void UpdateGame(Game game);
 
 }

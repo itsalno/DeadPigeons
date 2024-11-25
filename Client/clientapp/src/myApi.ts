@@ -83,9 +83,9 @@ export interface Game {
   winningseq?: string | null;
   /** @format int32 */
   year?: number | null;
-  /** @format double */
+  /** @format int32 */
   prizepool?: number | null;
-  /** @format double */
+  /** @format int32 */
   carryover?: number | null;
   isactive?: boolean | null;
   /** @format date-time */
@@ -165,6 +165,13 @@ export interface Transaction {
   /** @format date-time */
   createdAt?: string;
   player?: PlayerProfile;
+}
+
+export interface UpdateGameDto {
+  /** @format uuid */
+  gameId?: string;
+  /** @format int32 */
+  prizepool?: number;
 }
 
 export interface UpdatePlayerDTO {
@@ -548,6 +555,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/Game/endGame`,
         method: "PATCH",
         query: query,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameUpdateUpdate
+     * @request PUT:/api/Game/update/{id}
+     */
+    gameUpdateUpdate: (id: string, data: UpdateGameDto, params: RequestParams = {}) =>
+      this.request<Game, any>({
+        path: `/api/Game/update/${id}`,
+        method: "PUT",
+        body: data,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),
