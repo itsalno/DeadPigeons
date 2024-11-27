@@ -153,6 +153,15 @@ export interface Register {
    * @minLength 1
    */
   password: string;
+  /** @minLength 1 */
+  name: string;
+  /** @minLength 1 */
+  surname: string;
+  /**
+   * @format tel
+   * @minLength 1
+   */
+  phone: string;
 }
 
 export interface Transaction {
@@ -667,6 +676,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/Winner/GetAllWinners`,
         method: "GET",
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Winner
+     * @name WinnerProcessWinnersCreate
+     * @request POST:/api/Winner/process-winners/{gameId}
+     */
+    winnerProcessWinnersCreate: (gameId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/Winner/process-winners/${gameId}`,
+        method: "POST",
         ...params,
       }),
   };
