@@ -7,13 +7,12 @@ namespace DataAccess;
 
 public partial class MyDbContext : DbContext
 {
+
     public MyDbContext(DbContextOptions<MyDbContext> options)
         : base(options)
     {
-        
     }
-    
-    
+
     public virtual DbSet<Board> Boards { get; set; }
 
     public virtual DbSet<Game> Games { get; set; }
@@ -23,8 +22,8 @@ public partial class MyDbContext : DbContext
     public virtual DbSet<Transaction> Transactions { get; set; }
 
     public virtual DbSet<User> User { get; set; }
-    
-    public virtual DbSet<Winner> Winner { get; set; }
+
+    public virtual DbSet<Winner> Winners { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -44,7 +43,9 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.Isautoplay).HasColumnName("isautoplay");
             entity.Property(e => e.Playerid).HasColumnName("playerid");
             entity.Property(e => e.Price).HasColumnName("price");
-            entity.Property(e => e.Sequence).HasColumnName("sequence");
+            entity.Property(e => e.Sequence)
+                .HasColumnType("character varying")
+                .HasColumnName("sequence");
 
             entity.HasOne(d => d.Game).WithMany(p => p.Boards)
                 .HasForeignKey(d => d.Gameid)
@@ -66,16 +67,18 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_at");
+            entity.Property(e => e.EndingDate).HasColumnName("ending_date");
             entity.Property(e => e.Isactive).HasColumnName("isactive");
             entity.Property(e => e.Prizepool).HasColumnName("prizepool");
+            entity.Property(e => e.StartingDate).HasColumnName("starting_date");
             entity.Property(e => e.UpdatedAt)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("updated_at");
             entity.Property(e => e.Week).HasColumnName("week");
-            entity.Property(e => e.Winningseq).HasColumnName("winningseq");
+            entity.Property(e => e.Winningseq)
+                .HasColumnType("character varying")
+                .HasColumnName("winningseq");
             entity.Property(e => e.Year).HasColumnName("year");
-            entity.Property(e => e.StartingDate).HasColumnName("starting_date");
-            entity.Property(e => e.EndingDate).HasColumnName("ending_date");
         });
 
         modelBuilder.Entity<PlayerProfile>(entity =>
@@ -105,9 +108,7 @@ public partial class MyDbContext : DbContext
                 .HasDefaultValueSql("uuid_generate_v4()")
                 .HasColumnName("id");
             entity.Property(e => e.Amount).HasColumnName("amount");
-            entity.Property(e => e.CreatedAt)
-                .HasColumnType("date")
-                .HasColumnName("created_at");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
             entity.Property(e => e.Playerid).HasColumnName("playerid");
             entity.Property(e => e.Transactionref)
                 .HasColumnType("character varying")
@@ -119,7 +120,6 @@ public partial class MyDbContext : DbContext
             entity.HasOne(d => d.Player).WithMany(p => p.Transactions)
                 .HasForeignKey(d => d.Playerid)
                 .HasConstraintName("transactions_playerprofile_id_fk");
-            
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -130,30 +130,38 @@ public partial class MyDbContext : DbContext
 
             entity.Property(e => e.Id).HasDefaultValueSql("uuid_generate_v4()");
             entity.Property(e => e.Email).HasColumnType("character varying");
+            entity.Property(e => e.Name).HasColumnType("character varying");
             entity.Property(e => e.PasswordHash).HasColumnType("character varying");
+            entity.Property(e => e.Phone).HasColumnType("character varying");
             entity.Property(e => e.Role).HasColumnType("character varying");
+            entity.Property(e => e.Surname).HasColumnType("character varying");
             entity.Property(e => e.Username).HasColumnType("character varying");
         });
-/*
+
         modelBuilder.Entity<Winner>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("winners_pk");
-            //entity.HasKey(e => e.Playerid).HasName("winners_playerprofile_id_fk");
-            //entity.HasKey(e => e.Gameid).HasName("winners_games_id_fk");
-            
+
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("uuid_generate_v4()")
                 .HasColumnName("id");
-            entity.Property(e => e.Playerid).HasColumnName("playerid");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
             entity.Property(e => e.Gameid).HasColumnName("gameid");
+            entity.Property(e => e.Playerid).HasColumnName("playerid");
             entity.Property(e => e.Sequence)
                 .HasColumnType("character varying")
                 .HasColumnName("sequence");
-            entity.Property(e => e.CreatedAt)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("created_at");
+
+            entity.HasOne(d => d.Game).WithMany(p => p.Winners)
+                .HasForeignKey(d => d.Gameid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("winners_games_id_fk");
+
+            entity.HasOne(d => d.Player).WithMany(p => p.Winners)
+                .HasForeignKey(d => d.Playerid)
+                .HasConstraintName("winners_playerprofile_id_fk");
         });
-        */
+
         OnModelCreatingPartial(modelBuilder);
     }
 

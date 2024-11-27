@@ -11,12 +11,12 @@ public partial class Board
 
     public Guid? Gameid { get; set; }
 
-    public decimal? Price { get; set; }
+    public int? Price { get; set; }
 
     public bool? Isautoplay { get; set; }
 
     public DateTime? CreatedAt { get; set; }
-    
+
     public string? Sequence { get; set; }
 
     public virtual Game? Game { get; set; }

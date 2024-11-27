@@ -33,8 +33,8 @@ function WiningNumbers() {
     return (
         <div className="w-full mx-auto space-y-12 text-gray-800">
             {/* Game Title Section */}
-            <header className="text-center bg-gray-100 py-8">
-                <p className="text-xl font-semibold">
+            <header className="text-center bg-red-600 text-white py-16">
+                <p className="text-4xl font-bold">
                     Currently playing: Week {localStorage.getItem('week')}, {localStorage.getItem('year')}
                 </p>
             </header>
@@ -82,6 +82,10 @@ function WiningNumbers() {
                     Reset
                 </button>
             </section>
+            {/* Footer Section */}
+            <footer className="text-center text-gray-500 bg-gray-100 py-6">
+                <p>&copy; 2024 Dead Pigeons. All rights reserved.</p>
+            </footer>
         </div>
     );
 }

@@ -13,6 +13,7 @@ import PlayersPage from "../Pages/PlayersPage";
 import HistoryOfGames from "../Pages/HistoryOfGames";
 import TransactionHistoryPage from "../Pages/TransactionHistoryPage";
 import { isLoggedInAtom } from "../Atoms/AuthAtom";
+import RegisterUserPage from "../Pages/RegisterUserPage";
 
 
 
@@ -22,7 +23,7 @@ const App = () => {
 
     const [theme, setTheme] = useAtom(ThemeAtom);
     const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
-
+    
     useEffect(() => {
         const loggedInStatus = localStorage.getItem('isLoggedIn');
         
@@ -49,6 +50,8 @@ const App = () => {
             <Route path="/History" element={<HistoryOfGames/>}/>
             <Route path="/Balance" element={<BalancePage/>} />
             <Route path="/players/:playerId/transactions" element={<TransactionHistoryPage />} />
+            <Route path="/RegisterUser" element={<RegisterUserPage/>} />
+            
         </Routes>
 
     </>)

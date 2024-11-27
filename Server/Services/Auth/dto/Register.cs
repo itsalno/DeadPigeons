@@ -12,4 +12,13 @@ public class Register
 
     [Required, DataType(DataType.Password)]
     public string Password { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+    
+    [Required]
+    public string Surname { get; set; }
+    
+    [Required,DataType(DataType.PhoneNumber)]
+    public string Phone { get; set; }
 }

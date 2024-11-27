@@ -8,7 +8,7 @@ public class CreateBoardDto
 
     public Guid? Gameid { get; set; }
 
-    public decimal? Price { get; set; }
+    public int? Price { get; set; }
 
     public bool? Isautoplay { get; set; }
 

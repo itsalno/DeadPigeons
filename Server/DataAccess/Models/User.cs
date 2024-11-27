@@ -15,5 +15,11 @@ public partial class User
 
     public string? Role { get; set; }
 
+    public string? Name { get; set; }
+
+    public string? Surname { get; set; }
+
+    public string? Phone { get; set; }
+
     public virtual ICollection<PlayerProfile> PlayerProfiles { get; set; } = new List<PlayerProfile>();
 }

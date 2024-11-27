@@ -17,6 +17,9 @@ public class UserService(IUserRepository userRepository,PlayerProfileService pla
         {
             Username = model.Username,
             Email = model.Email,
+            Name = model.Name,
+            Surname = model.Surname,
+            Phone = model.Phone,
             PasswordHash = hashedPassword,
             Role = "User"
         };
@@ -26,9 +29,9 @@ public class UserService(IUserRepository userRepository,PlayerProfileService pla
         var playerProfileDto = new CreatePlayerDTO
         {
             InitialBalance = 0, 
-            IsActive = false       
+            IsActive = true       
         };
-
+        
         playerProfileService.CreatePlayerProfile(createdUser.Id, playerProfileDto);
 
         return createdUser;
