@@ -81,57 +81,62 @@ function BalancePage(){
 
 
     return (
-        <div className="w-full mx-auto space-y-12 text-gray-800">
+        <div className="w-full mx-auto space-y-16 text-gray-800">
             {/* Header Section */}
-            <header className="text-center bg-gray-100 text-gray-800 py-16">
-                <h1 className="text-3xl font-bold">Your Balance</h1>
-                <p className="text-lg mt-2">Keep track of your balance and add funds easily.</p>
+            <header className="text-center bg-red-600 text-white py-16">
+                <h1 className="text-4xl font-bold">Your Balance</h1>
+                <p className="text-lg mt-4">
+                    Easily track your balance and add funds securely.
+                </p>
             </header>
 
             {/* Balance Display Section */}
-            <section id="balance-info" className="bg-white py-12 px-8 text-center">
-                <h2 className="text-2xl font-semibold">Current Balance</h2>
-                <p className="text-3xl mt-4 font-bold text-green-600">
-                    {balance !== null ? `DKK ${balance}` : "Loading..."}
-                </p>
-            </section>
+                <div className="bg-white shadow-md rounded-md p-6 max-w-lg mx-auto text-center">
+                    <h2 className="text-2xl font-semibold">Current Balance</h2>
+                    <p className="text-4xl mt-4 font-bold text-green-600">
+                        {balance !== null ? `DKK ${balance}` : "Loading..."}
+                    </p>
+                </div>
 
             {/* Form to Add Funds */}
-            <section id="add-funds" className="bg-gray-50 py-12 px-8">
-                <h2 className="text-2xl font-semibold text-center">Add Funds to Your Balance</h2>
+                <div className="max-w-lg mx-auto bg-white shadow-md rounded-md p-6">
+                    <h2 className="text-2xl font-semibold text-center">Add Funds to Your Balance</h2>
+                    <form onSubmit={handleFormSubmit} className="mt-8 space-y-6">
+                        {/* Amount Input */}
+                        <div>
+                            <label className="block text-lg font-medium mb-2">Amount to Add</label>
+                            <input
+                                type="number"
+                                value={amount}
+                                onChange={(e) => setAmount(e.target.value)}
+                                placeholder="Enter amount"
+                                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-blue-300"
+                            />
+                        </div>
 
-                <form onSubmit={handleFormSubmit} className="mt-8 max-w-md mx-auto space-y-6">
-                    <div>
-                        <label className="block text-lg font-medium">Amount to Add</label>
-                        <input
-                            type="number"
-                            value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
-                            placeholder="Enter amount"
-                            className="w-full mt-2 border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:ring-blue-200"
-                        />
-                    </div>
+                        {/* Transaction Number Input */}
+                        <div>
+                            <label className="block text-lg font-medium mb-2">Upload Payment Confirmation</label>
+                            <input
+                                type="text"
+                                value={transactionNumber}
+                                onChange={(e) => setTransactionNumber(e.target.value)}
+                                placeholder="Enter Transaction Number"
+                                className="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring focus:ring-blue-300"
+                            />
+                        </div>
 
-                    <div>
-                        <label className="block text-lg font-medium">Upload Payment Confirmation</label>
-                        <input
-                            type="text"
-                            value={transactionNumber}
-                            onChange={(e) => setTransactionNumber(e.target.value)}
-                            placeholder="Enter Transaction Number"
-                            className="w-full mt-2 border border-gray-300 rounded p-2"
-                        />
-                    </div>
-
-                    <button type="submit"
-                            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 focus:outline-none">
-                        Add Funds
-                    </button>
-                </form>
-            </section>
+                        {/* Submit Button */}
+                        <button
+                            type="submit"
+                            className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 focus:outline-none transition">
+                            Add Funds
+                        </button>
+                    </form>
+                </div>
 
             {/* Footer Section */}
-            <footer className="text-center text-gray-500 bg-gray-100 py-6">
+            <footer className="text-center bg-gray-800 text-white py-6">
                 <p>&copy; 2024 Dead Pigeons. All rights reserved.</p>
             </footer>
         </div>

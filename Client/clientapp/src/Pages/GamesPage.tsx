@@ -122,10 +122,12 @@ export default function GamesPage() {
 
     }
     return (
-        <div>
-            <div className="gmtitle">
-                <p>Currently playing: Week {localStorage.getItem('week')}, {localStorage.getItem('year')}</p>
-            </div>
+        <div className="w-full mx-auto space-y-12 text-gray-800">
+            {/* Game Title Section */}
+            <header className="text-center bg-red-600 text-white py-16">
+                <p className="text-4xl font-bold">Currently playing: Week {localStorage.getItem('week')}, {localStorage.getItem('year')}</p>
+            </header>
+
 
             <div className="balance">
                 <p>Balance: <b>{visualBalance} DKK</b></p>
@@ -133,7 +135,7 @@ export default function GamesPage() {
 
 
             <div className="grid-container" id="grid">
-                <button id="id1" className="grid-item" onClick={(e) => {
+            <button id="id1" className="grid-item" onClick={(e) => {
                     handleClick(e)
                 }} value={1} key={1}>
                     <div>1</div>
