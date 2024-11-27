@@ -6,7 +6,7 @@ import { isLoggedInAtom } from "../Atoms/AuthAtom";
 export default function Navigation() {
 
     const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
-    
+    const navigate = useNavigate();
 
     
 
@@ -16,15 +16,13 @@ export default function Navigation() {
         localStorage.removeItem('token');
         localStorage.removeItem('playerProfileId');
         setIsLoggedIn(false);
+        navigate("/");
     };
     
     
     return (
         <div className="navbar bg-base-100 h-16 min-h-[4rem]">
             <div className="flex-1">
-                {!isLoggedIn && (
-                    <Link to="/" className="btn btn-ghost small-case text-l m-1">Home</Link>
-                )}
                 {isLoggedIn && (
                     <>
                         <Link to="/Games" className="btn btn-ghost small-case text-l m-1">Play</Link>

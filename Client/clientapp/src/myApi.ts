@@ -27,7 +27,7 @@ export interface Board {
   playerid?: string | null;
   /** @format uuid */
   gameid?: string | null;
-  /** @format double */
+  /** @format int32 */
   price?: number | null;
   isautoplay?: boolean | null;
   /** @format date-time */
@@ -53,7 +53,7 @@ export interface CreateBoardDto {
   playerid?: string | null;
   /** @format uuid */
   gameid?: string | null;
-  /** @format double */
+  /** @format int32 */
   price?: number | null;
   isautoplay?: boolean | null;
   /** @format date-time */
@@ -92,11 +92,12 @@ export interface Game {
   createdAt?: string | null;
   /** @format date-time */
   updatedAt?: string | null;
+  /** @format date-time */
+  startingDate?: string | null;
+  /** @format date-time */
+  endingDate?: string | null;
   boards?: Board[] | null;
-  /** @format date-time */
-  startingDate?: string;
-  /** @format date-time */
-  endingDate?: string;
+  winners?: Winner[] | null;
 }
 
 export interface LogIn {
@@ -136,6 +137,7 @@ export interface PlayerProfile {
   boards?: Board[] | null;
   transactions?: Transaction[] | null;
   user?: User;
+  winners?: Winner[] | null;
 }
 
 export interface Register {
@@ -158,12 +160,12 @@ export interface Transaction {
   id?: string;
   /** @format uuid */
   playerid?: string | null;
-  /** @format int32 */
-  amount?: number;
   transactiontype?: string | null;
   transactionref?: string | null;
   /** @format date-time */
   createdAt?: string;
+  /** @format int32 */
+  amount?: number;
   player?: PlayerProfile;
 }
 
@@ -188,7 +190,24 @@ export interface User {
   email?: string | null;
   passwordHash?: string | null;
   role?: string | null;
+  name?: string | null;
+  surname?: string | null;
+  phone?: string | null;
   playerProfiles?: PlayerProfile[] | null;
+}
+
+export interface Winner {
+  /** @format uuid */
+  id?: string;
+  /** @format uuid */
+  gameid?: string;
+  sequence?: string | null;
+  /** @format date-time */
+  createdAt?: string | null;
+  /** @format uuid */
+  playerid?: string | null;
+  game?: Game;
+  player?: PlayerProfile;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -567,12 +586,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/api/Game/update/{id}
      */
     gameUpdateUpdate: (id: string, data: UpdateGameDto, params: RequestParams = {}) =>
-      this.request<Game, any>({
+      this.request<void, any>({
         path: `/api/Game/update/${id}`,
         method: "PUT",
         body: data,
         type: ContentType.Json,
-        format: "json",
         ...params,
       }),
 

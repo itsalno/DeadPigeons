@@ -67,7 +67,7 @@ code {
 }
 
 .grid-item:hover{
-  background-color: cyan;
+  background-color: red;
   box-shadow: 1px 1px 5px #555 inset;
 
 }
@@ -78,7 +78,7 @@ code {
   box-shadow: 1px 1px 5px #555 inset;
 }
 .selected:hover{
-  background-color: palevioletred;
+  background-color: darkred;
 }
 
 .playbtn{
@@ -92,7 +92,7 @@ code {
 }
 
 .playbtn:hover{
-  background-color:palegreen;
+  background-color:red;
 }
 
 .playbtn:disabled{
