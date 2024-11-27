@@ -8,7 +8,6 @@ import { activeGameAtom } from '../Atoms/GameAtom';
 
 const LogInPage: React.FC = () => {
     
-    const [isRegister, setIsRegister] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
     const [game, setGame] = useAtom(activeGameAtom);
     const navigate = useNavigate();
@@ -16,24 +15,17 @@ const LogInPage: React.FC = () => {
         username: '',
         email: '',
         password: '',
+        name:'',
+        surname:'',
+        phone:''
     });
-    
+
     const [loading, setLoading] = useState(false);
+
     
-    
-    const handleToggle = () => {
-        
-        
-        setIsRegister(!isRegister);
-        setFormData({
-            username: '',
-            email: '',
-            password: '',
-        });
-    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value, type, checked } = e.target;
+        const {name, value, type, checked} = e.target;
         setFormData((prev) => ({
             ...prev,
             [name]: type === 'checkbox' ? checked : value,
@@ -43,52 +35,35 @@ const LogInPage: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        console.log(`Submitting to ${isRegister ? 'Register' : 'Login'} endpoint`);
-        
+
         try {
             
-            if (isRegister) {
-                await http.api.authRegisterCreate({
-                    username: formData.username,
-                    email: formData.email,
-                    password: formData.password,
-                });
-                toast.success('Registration successful!');
-                handleToggle();
-            } else {
                 const response = await http.api.authLoginCreate({
                     username: formData.username,
                     password: formData.password,
                 });
-                
 
-                const { token, playerProfileId } = response.data;
+
+                const {token, playerProfileId} = response.data;
 
                 localStorage.setItem("token", token);
                 localStorage.setItem("playerProfileId", playerProfileId);
-                console.log(token,playerProfileId)
-                
-                
+
+
                 localStorage.setItem('isLoggedIn', 'true');
                 setIsLoggedIn(true);
-                
+
                 navigate("/");
                 toast.success('Login successful!');
 
-                http.api.gameActiveGameCreate().then((response)=> {setGame(response.data)});
-
-                console.log(game.week,game.year);
+                http.api.gameActiveGameCreate().then((response) => {
+                    setGame(response.data)
+                });
+                
                 localStorage.setItem('week', game.week);
                 localStorage.setItem('year', game.year);
                 
-                
-                
-                
-                
-                
-                
-            }
-            
+
         } catch (err) {
             toast.error('An error occurred. Please try again.');
         } finally {
@@ -97,74 +72,52 @@ const LogInPage: React.FC = () => {
     };
 
     return (
-        <div className="w-full max-w-md mx-auto mt-10 bg-white shadow-md rounded px-8 py-6">
-            <h2 className="text-2xl font-bold text-center mb-4">
-                {isRegister ? 'Register' : 'Login'}
-            </h2>
-            
-            <div className="text-center mb-6">
-                <button
-                    className="text-blue-500 underline"
-                    onClick={handleToggle}
-                >
-                    {isRegister ? 'Already have an account? Login' : "Don't have an account? Register"}
-                </button>
+        <div className="w-full max-w-md mx-auto mt-10 bg-gray-100 shadow-lg rounded-lg overflow-hidden">
+            <div className="bg-gradient-to-r from-red-500 to-red-700 text-white py-6 text-center">
+                <h2 className="text-3xl font-bold">LogIn</h2>
             </div>
-
-            <form onSubmit={handleSubmit}>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Username</label>
-                    <input
-                        type="text"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        placeholder="Creativelayer088"
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required
-                    />
-                </div>
-                
-                {isRegister && (
+                <div>
+                <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <label className="block text-gray-700 font-semibold mb-2">Username</label>
                         <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
+                            type="text"
+                            name="username"
+                            value={formData.username}
                             onChange={handleChange}
-                            placeholder="example@gmail.com"
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            required={isRegister}
+                            placeholder="Creativelayer088"
+                            className="appearance-none border border-gray-300 rounded-lg w-full py-2 px-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-300 focus:border-red-500 transition"
+                            required
                         />
                     </div>
-                )}
-                
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
-                    <input
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        placeholder="********"
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required
-                    />
-                </div>
+                    
+                    <div className="mb-4">
+                        <label className="block text-gray-700 font-semibold mb-2">Password</label>
+                        <input
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="********"
+                            className="appearance-none border border-gray-300 rounded-lg w-full py-2 px-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-300 focus:border-red-500 transition"
+                            required
+                        />
+                    </div>
 
-                <div className="flex items-center justify-between">
-                    <button
-                        type="submit"
-                        className="bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-blue-700 transition"
-                    >
-                        {isRegister ? 'Register' : 'Login'}
-                    </button>
+                    <div className="flex justify-center mt-6">
+                        <button
+                            type="submit"
+                            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition focus:outline-none focus:ring-2 focus:ring-red-400"
+                        >
+                           Login
+                        </button>
+                    </div>
+                </form>
+
                 </div>
-            </form>
         </div>
     );
-};
+}
 
 export default LogInPage;
 
