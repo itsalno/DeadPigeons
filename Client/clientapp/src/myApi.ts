@@ -191,6 +191,18 @@ export interface User {
   playerProfiles?: PlayerProfile[] | null;
 }
 
+export interface Winner {
+  /** @format uuid */
+  id?: string;
+  /** @format uuid */
+  playerid?: string;
+  /** @format uuid */
+  gameid?: string;
+  sequence?: string | null;
+  /** @format date-time */
+  createdAt?: string | null;
+}
+
 export type QueryParamsType = Record<string | number, any>;
 export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
 
@@ -567,12 +579,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/api/Game/update/{id}
      */
     gameUpdateUpdate: (id: string, data: UpdateGameDto, params: RequestParams = {}) =>
-      this.request<Game, any>({
+      this.request<void, any>({
         path: `/api/Game/update/${id}`,
         method: "PUT",
         body: data,
         type: ContentType.Json,
-        format: "json",
         ...params,
       }),
 
@@ -632,6 +643,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     playerProfileGetByIdDetail: (id: string, params: RequestParams = {}) =>
       this.request<PlayerProfile, any>({
         path: `/api/PlayerProfile/getById/${id}`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Winner
+     * @name WinnerGetAllWinnersList
+     * @request GET:/api/Winner/GetAllWinners
+     */
+    winnerGetAllWinnersList: (params: RequestParams = {}) =>
+      this.request<Winner[], any>({
+        path: `/api/Winner/GetAllWinners`,
         method: "GET",
         format: "json",
         ...params,

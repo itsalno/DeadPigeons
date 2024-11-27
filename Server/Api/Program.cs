@@ -35,6 +35,8 @@ builder.Services.AddScoped<GameService>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<BoardService>();
 builder.Services.AddScoped<IBoardRepository, BoardRepository>();
+builder.Services.AddScoped<IWinnerRepository, WinnerRepository>();
+builder.Services.AddScoped<WinnerService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

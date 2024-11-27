@@ -4,11 +4,11 @@ import {useAtom} from 'jotai';
 import {useEffect, useState} from 'react';
 import toast from 'react-hot-toast';
 import {http} from '../http';
-import { BalanceAtom } from '../Atoms/BalanceAtom';
+import {BalanceAtom} from '../Atoms/BalanceAtom';
 
 export default function GamesPage() {
 
-
+    const date = new Date();
     const [num, setNum] = useState(0);
     const [disabled, setDisabled] = useState(true);
     const [cost, setCost] = useState<number>(0);
@@ -16,9 +16,6 @@ export default function GamesPage() {
     const [seq, setSeq] = useState([]);
     const [balance, setBalance] = useAtom(BalanceAtom);
     const [visualBalance, setVisualBalance] = useState<number>(balance ?? 0);
-
-
-
 
 
     const handleClick = (event) => {
@@ -54,71 +51,74 @@ export default function GamesPage() {
 
         setCost(newCost);
         setDisabled(seq.length < 5 || visualBalance < newCost);
-        setVisualBalance((balance ?? 0) - newCost); 
+        setVisualBalance((balance ?? 0) - newCost);
     }, [seq, balance]);
 
-    
-    const handleBoardSubmit = async () => {
-        
-        
-        console.log("Submitting board...");
-        console.log("Game ID:", game.id);
-        console.log("Selected Tiles:", seq);
-        console.log("Cost:", cost);
-        console.log("Balance:", visualBalance);
-        console.log("Creating prizepool",game.id,cost)
-        
-        const updateGameDto = {
-            GameId: game.id,
-            Prizepool: cost,
-        };
-        http.api.gameUpdateUpdate(game.id,updateGameDto);
-        
-        console.log("Game ID:", game.id);
-        const newBalance = balance;
-        console.log(localStorage.getItem("playerProfileId"));
-        console.log(game.id);
-        console.log(cost);
-        console.log(new Date().toJSON());
-        console.log(seq.toString());
-        try {
-            await http.api.boardCreate({
-                playerid: localStorage.getItem("playerProfileId"),
-                gameid: game.id,
-                price: cost,
-                isautoplay: false,
-                createdAt: new Date().toJSON(),
-                sequence: seq.toString(),
-            });
-            
-            const newBalance = visualBalance;
-            setBalance(newBalance);
-            
-            const playerId = localStorage.getItem("playerProfileId");
-            const updatePlayerDto = {
-                playerId: playerId,
-                balance: -cost,
-            };
-            
-            http.api.playerProfileUpdateUpdate(localStorage.getItem('playerProfileId'),updatePlayerDto);
-            
-            
-            toast.success("Your board has been saved");
-            
-            setSeq([]);
-            setCost(0);
-            setDisabled(true);
-            
-            const selected = document.querySelectorAll('.selected');
-            for (let i = 0; i < selected.length; i++) {
-                selected[i].classList.remove("selected");
-            }
-            
-        } catch (error) {
-            toast.error("An error has occured");
-            console.log(error);
-        }
 
+    const handleBoardSubmit = async () => {
+        if (date.getDay() >= 5 && date.getHours() >= 17) {
+            toast.error("Playing is prohibited after 5pm on Saturdays");
+        } else {
+
+
+            console.log("Submitting board...");
+            console.log("Game ID:", game.id);
+            console.log("Selected Tiles:", seq);
+            console.log("Cost:", cost);
+            console.log("Balance:", visualBalance);
+            console.log("Creating prizepool", game.id, cost)
+
+            const updateGameDto = {
+                GameId: game.id,
+                Prizepool: cost,
+            };
+            http.api.gameUpdateUpdate(game.id, updateGameDto);
+
+            console.log("Game ID:", game.id);
+            const newBalance = balance;
+            console.log(localStorage.getItem("playerProfileId"));
+            console.log(game.id);
+            console.log(cost);
+            console.log(new Date().toJSON());
+            console.log(seq.toString());
+            try {
+                await http.api.boardCreate({
+                    playerid: localStorage.getItem("playerProfileId"),
+                    gameid: game.id,
+                    price: cost,
+                    isautoplay: false,
+                    createdAt: new Date().toJSON(),
+                    sequence: seq.toString(),
+                });
+
+                const newBalance = visualBalance;
+                setBalance(newBalance);
+
+                const playerId = localStorage.getItem("playerProfileId");
+                const updatePlayerDto = {
+                    playerId: playerId,
+                    balance: -cost,
+                };
+
+                http.api.playerProfileUpdateUpdate(localStorage.getItem('playerProfileId'), updatePlayerDto);
+
+
+                toast.success("Your board has been saved");
+
+                setSeq([]);
+                setCost(0);
+                setDisabled(true);
+
+                const selected = document.querySelectorAll('.selected');
+                for (let i = 0; i < selected.length; i++) {
+                    selected[i].classList.remove("selected");
+                }
+
+            } catch (error) {
+                toast.error("An error has occured");
+                console.log(error);
+            }
+        }
 
     }
     return (
@@ -219,7 +219,8 @@ export default function GamesPage() {
                 <p className="">Cost: <b>{cost} DKK</b></p>
             </div>
             <div className="divBtn">
-                <button className="playbtn" disabled={disabled|| !game.id} onClick={() => handleBoardSubmit()}>Next</button>
+                <button className="playbtn" disabled={disabled || !game.id} onClick={() => handleBoardSubmit()}>Next
+                </button>
             </div>
         </div>
     );

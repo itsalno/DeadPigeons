@@ -23,6 +23,8 @@ public partial class MyDbContext : DbContext
     public virtual DbSet<Transaction> Transactions { get; set; }
 
     public virtual DbSet<User> User { get; set; }
+    
+    public virtual DbSet<Winner> Winner { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -132,7 +134,26 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.Role).HasColumnType("character varying");
             entity.Property(e => e.Username).HasColumnType("character varying");
         });
-
+/*
+        modelBuilder.Entity<Winner>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("winners_pk");
+            //entity.HasKey(e => e.Playerid).HasName("winners_playerprofile_id_fk");
+            //entity.HasKey(e => e.Gameid).HasName("winners_games_id_fk");
+            
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("uuid_generate_v4()")
+                .HasColumnName("id");
+            entity.Property(e => e.Playerid).HasColumnName("playerid");
+            entity.Property(e => e.Gameid).HasColumnName("gameid");
+            entity.Property(e => e.Sequence)
+                .HasColumnType("character varying")
+                .HasColumnName("sequence");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_at");
+        });
+        */
         OnModelCreatingPartial(modelBuilder);
     }
 

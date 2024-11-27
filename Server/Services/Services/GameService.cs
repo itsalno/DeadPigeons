@@ -28,12 +28,15 @@ public class GameService(IGameRepository gameRepository)
     public Game GetActiveGame()
     {
         var game = gameRepository.GetActiveGame();
+        DateTime date = DateTime.Today;
         if (game != null)
         {
             return game;
         }
 
-        DateTime date = DateTime.Today;
+        if (date.DayOfWeek != DayOfWeek.Sunday && date.TimeOfDay < TimeSpan.FromHours(12)) return new Game();
+        
+        date = date.AddDays(1);
         int offset = date.DayOfWeek - DayOfWeek.Monday;
 
         DateTime lastMonday = date.AddDays(-offset);
@@ -58,7 +61,9 @@ public class GameService(IGameRepository gameRepository)
         };
         Game newGame = gameRepository.CreateGame(game1);
         return newGame;
-        
+
+        //
+
     }
     
     public Game? EndGame(Guid id, string finalSequence)

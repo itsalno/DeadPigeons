@@ -74,7 +74,7 @@ const LogInPage: React.FC = () => {
                 
                 navigate("/");
                 toast.success('Login successful!');
-
+                
                 http.api.gameActiveGameCreate().then((response)=> {setGame(response.data)});
 
                 console.log(game.week,game.year);
