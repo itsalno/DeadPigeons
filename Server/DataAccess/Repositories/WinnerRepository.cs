@@ -8,6 +8,6 @@ public class WinnerRepository(MyDbContext context):IWinnerRepository
     public List<Winner> GetWinners()
     {
         //return context;
-        return context.Winner.ToList();
+        return context.Winners.ToList();
     }
 }
