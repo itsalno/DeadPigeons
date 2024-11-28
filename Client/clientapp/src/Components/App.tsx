@@ -7,6 +7,7 @@ import Navigation from "./Navigation";
 import IntroPage from "../Pages/IntroPage";
 import GamesPage from "../Pages/GamesPage";
 import WiningNubers from "../Pages/WiningNumbers";
+import WinnersPage from "../Pages/WinnersPage";
 import BalancePage from "../Pages/BalancePage";
 import LogInPage from "../Pages/LogInPage";
 import PlayersPage from "../Pages/PlayersPage";
@@ -47,6 +48,7 @@ const App = () => {
             <Route path="/Games" element={<GamesPage />} />
             <Route path="/Users" element={<PlayersPage/>}/>
             <Route path="/WiningNumbers" element={<WiningNubers/>}/>
+            <Route path="/Winners" element={<WinnersPage/>}/>
             <Route path="/History" element={<HistoryOfGames/>}/>
             <Route path="/Balance" element={<BalancePage/>} />
             <Route path="/players/:playerId/transactions" element={<TransactionHistoryPage />} />

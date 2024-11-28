@@ -224,6 +224,16 @@ export interface Winner {
   player?: PlayerProfile;
 }
 
+export interface WinnerDto {
+  /** @format date-time */
+  createdAt?: string;
+  sequence?: string | null;
+  email?: string | null;
+  name?: string | null;
+  surname?: string | null;
+  phone?: string | null;
+}
+
 export type QueryParamsType = Record<string | number, any>;
 export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
 
@@ -714,7 +724,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/Winner/GetAllWinners
      */
     winnerGetAllWinnersList: (params: RequestParams = {}) =>
-      this.request<Winner[], any>({
+      this.request<WinnerDto[], any>({
         path: `/api/Winner/GetAllWinners`,
         method: "GET",
         format: "json",

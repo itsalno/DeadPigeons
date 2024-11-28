@@ -29,6 +29,7 @@ export default function Navigation() {
                         <Link to="/Users" className="btn btn-ghost small-case text-l m-1">Players (Admin)</Link>
                         <Link to="/WiningNumbers" className="btn btn-ghost small-case text-l m-1">Wining Numbers (Admin)</Link>
                         <Link to="/History" className="btn btn-ghost small-case text-l m-1">History (Admin)</Link>
+                        <Link to="/Winners" className="btn btn-ghost small-case text-l m-1">Winners (Admin)</Link>
                         <Link to="/Balance" className="btn btn-ghost small-case text-l m-1">Balance</Link>
                         <button
                             onClick={handleLogOut}

@@ -1,4 +1,4 @@
 import {atom} from "jotai";
-import {PlayerDTO} from "../myApi.ts";
+import {WinnerDto} from "../myApi.ts";
 
-export const PlayerAtom = atom<PlayerDTO[]>([]);
+export const WinnerAtom = atom<WinnerDto[]>([]);
