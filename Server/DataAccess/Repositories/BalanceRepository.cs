@@ -20,4 +20,15 @@ public class BalanceRepository(MyDbContext context) : IBalanceRepository
             //.OrderByDescending(t => t.TimeStamp) 
             .ToList();
     }
+
+    public Transaction? GetById(Guid id)
+    {
+        return context.Transactions.FirstOrDefault(t => t.Id == id);
+    }
+
+    public void UpdateTransaction(Transaction transaction)
+    {
+        context.Transactions.Update(transaction);
+        context.SaveChanges();
+    }
 }

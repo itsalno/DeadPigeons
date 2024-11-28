@@ -63,8 +63,8 @@ public class PlayerProfileController(PlayerProfileService profileService) : Cont
     }
 
     [HttpGet]
-    [Route("getById/{id}")]
-    public ActionResult<PlayerProfile> GetPlayerById(Guid id)
+    [Route("getBalance/{id}")]
+    public ActionResult<PlayerProfile> GetPlayerBalance(Guid id)
     {
         
         var player = profileService.GetProfileById(id);

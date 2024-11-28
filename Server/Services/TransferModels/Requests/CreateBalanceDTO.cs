@@ -14,6 +14,8 @@ public class CreateBalanceDTO
 
     public DateTime TimeStamp { get; set; }
     
+    public bool Pending { get; set; }
+    
     public Transaction ToBalance()
     {
         return new Transaction()
@@ -22,7 +24,8 @@ public class CreateBalanceDTO
             Amount = Amount,
             Transactiontype = TransactionType,
             Transactionref = TransactionNerf,
-            CreatedAt = TimeStamp
+            CreatedAt = TimeStamp,
+            Pending = Pending
         };
     }
 }

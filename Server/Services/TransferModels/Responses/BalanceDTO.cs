@@ -10,14 +10,17 @@ public class BalanceDTO
         
         return new BalanceDTO()
         {
+            Id = transaction.Id,
             PlayerId = transaction.Playerid.Value,
             Amount = transaction.Amount,
             TransactionType = transaction.Transactiontype,
             TransactionRef = transaction.Transactionref,
             TimeStamp = transaction.CreatedAt,
-            
+            Pending = transaction.Pending,
         };
     }
+    
+    public Guid? Id { get; set; }
     public Guid? PlayerId { get; set; }
 
     public int Amount { get; set; } 
@@ -27,4 +30,6 @@ public class BalanceDTO
     public string TransactionRef{ get; set; }
 
     public DateTime TimeStamp { get; set; }
+    
+    public bool Pending { get; set; }
 }

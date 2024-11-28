@@ -2,24 +2,62 @@ import { useEffect, useState } from "react";
 import { http } from "../http";
 import { useParams } from "react-router-dom";
 import { BalanceDTO } from "../myApi";
+import toast from 'react-hot-toast';
 
 function TransactionHistoryPage() {
 
-
+    const [approvedAmounts, setApprovedAmounts] = useState<number[]>([]);
     const {playerId} = useParams();
     const [transactions, setTransactions] = useState<BalanceDTO[]>([]);
+    const [pendingTransactions, setPendingTransactions] = useState<BalanceDTO[]>([]);
 
     console.log(playerId);
     useEffect(() => {
-        http.api.balanceDetail(playerId)
+        // Fetch all transactions
+        http.api.balanceAllDetail(playerId)
             .then((response) => {
                 setTransactions(response.data);
             })
             .catch((error) => {
                 console.error("Failed to fetch transactions", error);
             });
-    }, [playerId, setTransactions]);
 
+        // Fetch pending transactions
+        http.api.balancePendingDetail(playerId)
+            .then((response) => {
+                setPendingTransactions(response.data);
+            })
+            .catch((error) => {
+                console.error("Failed to fetch pending transactions", error);
+            });
+    }, [playerId]);
+
+
+    const handleApprove = async (transactionId: string) => {
+        const transaction = pendingTransactions.find((t) => t.id === transactionId); 
+        if (!transaction) return;
+
+        if (!transaction.playerId) {
+            console.error("Player ID is undefined or null");
+            return;
+        }
+
+        try {
+            const updatePlayerDto = {
+                playerId: transaction.playerId,
+                balance: parseInt(transaction.amount.toString()), // Ensure amount is an integer
+            };
+            
+            await http.api.playerProfileUpdateUpdate(transaction.playerId, updatePlayerDto);
+            await http.api.balanceApproveTransactionPartialUpdate({id : transactionId})
+            
+            toast.success("Successfully replenished the player's balance");
+            window.location.reload();
+        } catch (error) {
+            console.error("Failed to approve transaction or update balance", error);
+            toast.error("Something went wrong. Please try again.");
+        }
+    };
 
     return (
         <div className="w-full mx-auto space-y-12 text-gray-800">
@@ -40,7 +78,7 @@ function TransactionHistoryPage() {
                         {transactions.length > 0 ? (
                             transactions.map((transaction) => (
                                 <div
-                                    key={transaction.playerId}
+                                    key={transaction.id}
                                     className="bg-white border rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
                                 >
                                     <p className="text-lg font-semibold text-gray-700">
@@ -61,6 +99,57 @@ function TransactionHistoryPage() {
                             <div className="bg-white border rounded-lg shadow-md p-6 text-center">
                                 <p className="text-lg font-semibold text-gray-500">
                                     No transactions available for this player.
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </section>
+
+            {/* Pending Transactions Section */}
+            <section className="bg-gray-100 py-12 px-6">
+                <div className="max-w-6xl mx-auto">
+                    <h2 className="text-3xl font-semibold text-center mb-12">Pending Transactions</h2>
+
+                    <div className="space-y-6">
+                        {pendingTransactions.length > 0 ? (
+                            pendingTransactions.map((transaction) => (
+                                <div
+                                    key={transaction.id}
+                                    className="bg-white border rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
+                                >
+                                    <p className="text-lg font-semibold text-gray-700">
+                                        Amount: <span className="text-yellow-600">{transaction.amount} DKK</span>
+                                    </p>
+                                    <p className="mt-2 text-sm text-gray-600">
+                                        <strong>Type:</strong> {transaction.transactionType}
+                                    </p>
+                                    <p className="mt-2 text-sm text-gray-600">
+                                        <strong>Reference:</strong> {transaction.transactionRef}
+                                    </p>
+                                    <p className="mt-2 text-sm text-gray-600">
+                                        <strong>Date:</strong> {transaction.timeStamp}
+                                    </p>
+                                    <div className="flex space-x-4 mt-4">
+                                        <button
+                                            onClick={() => transaction.id && handleApprove(transaction.id)}
+                                            className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
+                                        >
+                                            Approve
+                                        </button>
+                                        <button
+                                           // onClick={() => handleDecline(transaction.id)}
+                                            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                                        >
+                                            Decline
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="bg-white border rounded-lg shadow-md p-6 text-center">
+                                <p className="text-lg font-semibold text-gray-500">
+                                    No pending transactions available for this player.
                                 </p>
                             </div>
                         )}

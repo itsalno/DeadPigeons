@@ -25,7 +25,7 @@ function BalancePage(){
 
     useEffect(() => {
         if (playerProfileId) { 
-            http.api.playerProfileGetByIdDetail(playerProfileId)
+            http.api.playerProfileGetBalanceDetail(playerProfileId)
                 .then((response) => {
                     setBalance(response.data.balance);
                 })
@@ -46,6 +46,7 @@ function BalancePage(){
         transactionType: "Deposit", 
         transactionNerf: transactionNumber, 
         timeStamp: new Date().toISOString(),
+        pending: true,
     }
 
     const handleFormSubmit = async (event: React.FormEvent) => {
@@ -63,13 +64,8 @@ function BalancePage(){
 
         try {
             await http.api.balanceCreate(balanceDto);
-            const updatePlayerDto = {
-                playerId: playerProfileId,
-                balance: parseInt(amount), 
-            };
-            await http.api.playerProfileUpdateUpdate(playerProfileId, updatePlayerDto);
             window.location.reload();
-            toast.success("Successfully replenished your balance");
+            toast.success("Wait for admmin to approve your transaction");
         } catch (error) {
             toast.error("Couldn't make the operation, please try again.");
         }
