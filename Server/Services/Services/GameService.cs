@@ -10,7 +10,7 @@ namespace Services.Services;
 
 
 
-public class GameService(IGameRepository gameRepository)
+public class GameService(IGameRepository gameRepository, IBoardRepository boardRepository, IPlayerProfileRepository playerProfileRepository)
 {
     public GameDto CreateGame(CreateGameDto createGameDto)
     {
@@ -60,6 +60,35 @@ public class GameService(IGameRepository gameRepository)
             Isactive = true
         };
         Game newGame = gameRepository.CreateGame(game1);
+
+        List <Board> boards = boardRepository.GetAutoplayBoard();
+        foreach (Board board in boards)
+        {
+            PlayerProfile player = playerProfileRepository.GetById(board.Playerid);
+            if (board.AutoplayWeeksRemaining > 0 || player.Balance >= board.Price)
+            {
+                CreateBoardDto newBoard = new CreateBoardDto()
+                {
+                    AutoplayWeeksRemaining = board.AutoplayWeeksRemaining - 1,
+                    AutoplayEnabled = true,
+                    AutoplayStartWeek = board.AutoplayStartWeek,
+                    CreatedAt = DateTime.Now,
+                    Gameid = newGame.Id,
+                    Playerid = board.Playerid,
+                    Price = board.Price,
+                    Sequence = board.Sequence,
+                };
+                player.Balance -= board.Price;
+                playerProfileRepository.UpdatePlayerProfile(player);
+                boardRepository.CreateBoard(newBoard.ToBoard());
+            }
+            else
+            {
+                board.AutoplayEnabled = false;
+                boardRepository.UpdateBoard(board);
+            }
+        }
+        
         return newGame;
 
         //

@@ -12,11 +12,13 @@ public class BoardDto
             Playerid = board.Playerid,
             Gameid = board.Gameid,
             Price = board.Price,
-            Isautoplay = board.Isautoplay,
+            AutoplayEnabled = board.AutoplayEnabled,
             CreatedAt = board.CreatedAt,
             Game = board.Game,
             Player = board.Player,
             Sequence = board.Sequence,
+            AutoplayWeeksRemaining = board.AutoplayWeeksRemaining,
+            AutoplayStartWeek = board.AutoplayStartWeek,
         };
     }
     
@@ -28,7 +30,7 @@ public class BoardDto
 
     public decimal? Price { get; set; }
 
-    public bool? Isautoplay { get; set; }
+    public bool? AutoplayEnabled { get; set; }
 
     public DateTime? CreatedAt { get; set; }
     
@@ -37,4 +39,8 @@ public class BoardDto
     public virtual Game? Game { get; set; }
 
     public virtual PlayerProfile? Player { get; set; }
+    
+    public int? AutoplayStartWeek { get; set; }
+    
+    public int? AutoplayWeeksRemaining { get; set; }
 }

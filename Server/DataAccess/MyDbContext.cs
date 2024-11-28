@@ -40,12 +40,16 @@ public partial class MyDbContext : DbContext
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_at");
             entity.Property(e => e.Gameid).HasColumnName("gameid");
-            entity.Property(e => e.Isautoplay).HasColumnName("isautoplay");
+            entity.Property(e => e.AutoplayEnabled)
+                .HasDefaultValueSql("false")
+                .HasColumnName("autoplay_enabled");
             entity.Property(e => e.Playerid).HasColumnName("playerid");
             entity.Property(e => e.Price).HasColumnName("price");
             entity.Property(e => e.Sequence)
                 .HasColumnType("character varying")
                 .HasColumnName("sequence");
+            entity.Property(e => e.AutoplayStartWeek).HasColumnName("autoplay");
+            entity.Property(e => e.AutoplayWeeksRemaining).HasColumnName("autoplay_weeks_remaining");
 
             entity.HasOne(d => d.Game).WithMany(p => p.Boards)
                 .HasForeignKey(d => d.Gameid)
