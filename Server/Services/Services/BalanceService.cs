@@ -60,4 +60,14 @@ public class BalanceService(IBalanceRepository balanceRepository)
         return transaction;
     }
     
+    public Transaction? RejectTransaction(Guid id)
+    {
+
+        var transaction = balanceRepository.GetById(id);
+        if (transaction == null) return null;
+        
+        balanceRepository.RejectTransaction(transaction);
+        return transaction;
+    }
+    
 }

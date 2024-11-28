@@ -31,4 +31,10 @@ public class BalanceRepository(MyDbContext context) : IBalanceRepository
         context.Transactions.Update(transaction);
         context.SaveChanges();
     }
+    
+    public void RejectTransaction(Transaction transaction)
+    {
+        context.Transactions.Remove(transaction);
+        context.SaveChanges();
+    }
 }
