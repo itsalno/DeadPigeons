@@ -122,6 +122,9 @@ export interface PlayerDTO {
   balance?: number | null;
   userName?: string | null;
   email?: string | null;
+  name?: string | null;
+  surname?: string | null;
+  phone?: string | null;
 }
 
 export interface PlayerProfile {
