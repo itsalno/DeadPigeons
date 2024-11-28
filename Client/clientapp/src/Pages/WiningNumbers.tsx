@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 function WiningNumbers() {
     const [winingNum, setWiningNum] = useState([]);
     const [game]= useAtom(activeGameAtom);
+    const [isDisabled, setIsDisabled] = useState(false);
 
     const handleClick = (num) => {
         if (winingNum.length < 3 && !winingNum.includes(num)) {
@@ -19,16 +20,28 @@ function WiningNumbers() {
         setWiningNum([]); 
     };
 
+    const handleWinners = () => {
+        setIsDisabled(true);
+        try {
+            http.api.winnerProcessWinnersCreate(game.id);
+        } catch (error) {
+            toast.error('Error processing winners!');
+            setIsDisabled(false);
+        }
+    };
+
     const EndGame = () => {
         if (winingNum.length === 3) {
             http.api.gameEndGamePartialUpdate({id: game.id, finalSequence: winingNum.toString()})
             setWiningNum([]);
             toast.success("Winning sequence set succsesfuly")
             
+            
         } else {
             toast.error("Error in setting a winning sequence")
         }
     };
+    
 
     return (
         <div className="w-full mx-auto space-y-12 text-gray-800">
@@ -81,6 +94,14 @@ function WiningNumbers() {
                 >
                     Reset
                 </button>
+                <button onClick={handleWinners}
+                        disabled={isDisabled} 
+                        className={`py-2 px-6 rounded-lg text-xl font-semibold text-white focus:outline-none 
+                ${isDisabled
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-green-500 hover:bg-blue-600 focus:ring focus:ring-blue-300"
+                        }`}>
+                    Determine Winners</button>
             </section>
             {/* Footer Section */}
             <footer className="text-center text-gray-500 bg-gray-100 py-6">

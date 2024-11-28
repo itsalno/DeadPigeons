@@ -53,8 +53,9 @@ function PlayersPage() {
                             >
                                 {/* Player Info */}
                                 <div>
-                                    <h3 className="text-xl font-bold text-gray-700">{player.userName}</h3>
+                                    <h3 className="text-xl font-bold text-gray-700">{player.name} {player.surname}</h3>
                                     <p className="text-sm text-gray-500">{player.email}</p>
+                                    <p className="text-sm text-gray-500">{player.phone}</p>
                                     <p className="mt-3 text-sm text-gray-600">
                                         <span className="font-semibold text-gray-800">Balance:</span> ${player.balance}
                                     </p>

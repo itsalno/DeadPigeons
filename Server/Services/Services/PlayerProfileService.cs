@@ -20,6 +20,9 @@ public class PlayerProfileService(IPlayerProfileRepository playerProfileReposito
                 PlayerId = player.Id,
                 Balance = player.Balance,
                 UserName = player.User.Username, 
+                Name = player.User.Name,
+                Surname = player.User.Surname,
+                Phone = player.User.Phone,
                 Email = player.User.Email
                 
             })

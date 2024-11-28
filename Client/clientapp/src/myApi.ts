@@ -126,6 +126,9 @@ export interface PlayerDTO {
   balance?: number | null;
   userName?: string | null;
   email?: string | null;
+  name?: string | null;
+  surname?: string | null;
+  phone?: string | null;
 }
 
 export interface PlayerProfile {
@@ -728,6 +731,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/Winner/GetAllWinners`,
         method: "GET",
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Winner
+     * @name WinnerProcessWinnersCreate
+     * @request POST:/api/Winner/process-winners/{gameId}
+     */
+    winnerProcessWinnersCreate: (gameId: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/Winner/process-winners/${gameId}`,
+        method: "POST",
         ...params,
       }),
   };
