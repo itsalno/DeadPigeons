@@ -1,6 +1,7 @@
 ﻿using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
+using Services.TransferModels.Responses;
 
 namespace Api.Controllers;
 
@@ -10,7 +11,7 @@ namespace Api.Controllers;
 public class WinnerController(WinnerService winnerService):ControllerBase
 {
     [HttpGet("GetAllWinners")]
-    public ActionResult<List<Winner>> GetAllPlayerProfiles()
+    public ActionResult<List<WinnerDto>> GetAllPlayerProfiles()
     {
         var players = winnerService.GetWinners();
         return Ok(players);

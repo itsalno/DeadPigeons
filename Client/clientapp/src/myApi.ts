@@ -11,6 +11,8 @@
 
 export interface BalanceDTO {
   /** @format uuid */
+  id?: string | null;
+  /** @format uuid */
   playerId?: string | null;
   /** @format int32 */
   amount?: number;
@@ -18,6 +20,7 @@ export interface BalanceDTO {
   transactionRef?: string | null;
   /** @format date-time */
   timeStamp?: string;
+  pending?: boolean;
 }
 
 export interface Board {
@@ -46,6 +49,7 @@ export interface CreateBalanceDTO {
   transactionNerf?: string | null;
   /** @format date-time */
   timeStamp?: string;
+  pending?: boolean;
 }
 
 export interface CreateBoardDto {
@@ -153,6 +157,15 @@ export interface Register {
    * @minLength 1
    */
   password: string;
+  /** @minLength 1 */
+  name: string;
+  /** @minLength 1 */
+  surname: string;
+  /**
+   * @format tel
+   * @minLength 1
+   */
+  phone: string;
 }
 
 export interface Transaction {
@@ -166,6 +179,7 @@ export interface Transaction {
   createdAt?: string;
   /** @format int32 */
   amount?: number;
+  pending?: boolean;
   player?: PlayerProfile;
 }
 
@@ -208,6 +222,16 @@ export interface Winner {
   playerid?: string | null;
   game?: Game;
   player?: PlayerProfile;
+}
+
+export interface WinnerDto {
+  /** @format date-time */
+  createdAt?: string;
+  sequence?: string | null;
+  email?: string | null;
+  name?: string | null;
+  surname?: string | null;
+  phone?: string | null;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -480,13 +504,50 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Balance
-     * @name BalanceDetail
-     * @request GET:/api/Balance/{playerId}
+     * @name BalanceAllDetail
+     * @request GET:/api/Balance/all/{playerId}
      */
-    balanceDetail: (playerId: string, params: RequestParams = {}) =>
+    balanceAllDetail: (playerId: string, params: RequestParams = {}) =>
       this.request<BalanceDTO, any>({
-        path: `/api/Balance/${playerId}`,
+        path: `/api/Balance/all/${playerId}`,
         method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Balance
+     * @name BalancePendingDetail
+     * @request GET:/api/Balance/pending/{playerId}
+     */
+    balancePendingDetail: (playerId: string, params: RequestParams = {}) =>
+      this.request<BalanceDTO, any>({
+        path: `/api/Balance/pending/${playerId}`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Balance
+     * @name BalanceApproveTransactionPartialUpdate
+     * @request PATCH:/api/Balance/approveTransaction
+     */
+    balanceApproveTransactionPartialUpdate: (
+      query?: {
+        /** @format uuid */
+        id?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<Transaction, any>({
+        path: `/api/Balance/approveTransaction`,
+        method: "PATCH",
+        query: query,
         format: "json",
         ...params,
       }),
@@ -644,12 +705,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags PlayerProfile
-     * @name PlayerProfileGetByIdDetail
-     * @request GET:/api/PlayerProfile/getById/{id}
+     * @name PlayerProfileGetBalanceDetail
+     * @request GET:/api/PlayerProfile/getBalance/{id}
      */
-    playerProfileGetByIdDetail: (id: string, params: RequestParams = {}) =>
+    playerProfileGetBalanceDetail: (id: string, params: RequestParams = {}) =>
       this.request<PlayerProfile, any>({
-        path: `/api/PlayerProfile/getById/${id}`,
+        path: `/api/PlayerProfile/getBalance/${id}`,
         method: "GET",
         format: "json",
         ...params,
@@ -663,7 +724,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/api/Winner/GetAllWinners
      */
     winnerGetAllWinnersList: (params: RequestParams = {}) =>
-      this.request<Winner[], any>({
+      this.request<WinnerDto[], any>({
         path: `/api/Winner/GetAllWinners`,
         method: "GET",
         format: "json",

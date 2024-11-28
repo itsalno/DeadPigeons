@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataAccess.Models;
+using Microsoft.AspNetCore.Mvc;
 using Services.Services;
 using Services.TransferModels.Requests;
 using Services.TransferModels.Responses;
@@ -19,7 +20,7 @@ public class BalanceController(BalanceService balanceService): ControllerBase
         
     }
     
-    [HttpGet("{playerId}")]
+    [HttpGet("all/{playerId}")]
     public ActionResult<BalanceDTO> GetTransactionsByPlayerId(Guid playerId)
     {
         var transactions = balanceService.GetBalancesByPlayerId(playerId);
@@ -30,6 +31,35 @@ public class BalanceController(BalanceService balanceService): ControllerBase
 
         return Ok(transactions);
     }
+    
+    
+    [HttpGet("pending/{playerId}")]
+    public ActionResult<BalanceDTO> GetPendingTransactionsByPlayerId(Guid playerId)
+    {
+        var transactions = balanceService.GetPendingBalancesByPlayerId(playerId);
+        if (transactions == null || transactions.Count == 0)
+        {
+            return NotFound(new { Message = "No transactions found for this player." });
+        }
+
+        return Ok(transactions);
+    }
+    
+    [HttpPatch]
+    [Route("approveTransaction")]
+    public ActionResult<Transaction> ApproveTransaction(Guid id)
+    {
+        var transaction = balanceService.ApproveTransaction(id);
+
+        if (transaction == null)
+        {
+            return NotFound(new { message = "Transaction not found" });
+        }
+
+        return Ok(transaction);
+    }
+    
+    
     
     
     

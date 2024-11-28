@@ -16,6 +16,8 @@ public partial class Transaction
     public DateTime CreatedAt { get; set; }
 
     public int Amount { get; set; }
+    
+    public bool Pending { get; set; }
 
     public virtual PlayerProfile? Player { get; set; }
 }

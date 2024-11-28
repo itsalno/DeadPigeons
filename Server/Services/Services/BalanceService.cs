@@ -18,15 +18,46 @@ public class BalanceService(IBalanceRepository balanceRepository)
     public List<BalanceDTO> GetBalancesByPlayerId(Guid playerId)
     {
         var transactions = balanceRepository.GetTransactionsByPlayerId(playerId);
+        
+        var filteredTransactions = transactions.Where(t => !t.Pending);
 
-        return transactions.Select(t => new BalanceDTO
+        return filteredTransactions.Select(t => new BalanceDTO
         {
+            Id = t.Id,
             PlayerId = t.Playerid,
             Amount = t.Amount,
             TransactionType = t.Transactiontype,
             TransactionRef = t.Transactionref,
             TimeStamp = t.CreatedAt,
         }).ToList();
+    }
+    
+    public List<BalanceDTO> GetPendingBalancesByPlayerId(Guid playerId)
+    {
+        var transactions = balanceRepository.GetTransactionsByPlayerId(playerId);
+        
+        var filteredTransactions = transactions.Where(t => t.Pending);
+
+        return filteredTransactions.Select(t => new BalanceDTO
+        {
+            Id= t.Id,
+            PlayerId = t.Playerid,
+            Amount = t.Amount,
+            TransactionType = t.Transactiontype,
+            TransactionRef = t.Transactionref,
+            TimeStamp = t.CreatedAt,
+        }).ToList();
+    }
+    
+    public Transaction? ApproveTransaction(Guid id)
+    {
+
+        var transaction = balanceRepository.GetById(id);
+        if (transaction == null) return null;
+
+        transaction.Pending = false;
+        balanceRepository.UpdateTransaction(transaction);
+        return transaction;
     }
     
 }
