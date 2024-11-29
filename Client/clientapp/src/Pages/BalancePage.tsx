@@ -10,6 +10,7 @@ function BalancePage(){
     const [transactionNumber, setTransactionNumber] = useState("");
     const [playerProfileId, setPlayerProfileId] = useState("");
     const [balance, setBalance] = useAtom(BalanceAtom);
+    const [isActive, setIsActive] = useState(true);
 
 
     useEffect(() => {
@@ -28,6 +29,7 @@ function BalancePage(){
             http.api.playerProfileGetBalanceDetail(playerProfileId)
                 .then((response) => {
                     setBalance(response.data.balance);
+                    setIsActive(response.data.isactive)
                 })
                 .catch((error) => {
                     toast.error("Failed to fetch current balance.");
@@ -87,14 +89,15 @@ function BalancePage(){
             </header>
 
             {/* Balance Display Section */}
-                <div className="bg-white shadow-md rounded-md p-6 max-w-lg mx-auto text-center">
-                    <h2 className="text-2xl font-semibold">Current Balance</h2>
-                    <p className="text-4xl mt-4 font-bold text-green-600">
-                        {balance !== null ? `DKK ${balance}` : "Loading..."}
-                    </p>
-                </div>
+            <div className="bg-white shadow-md rounded-md p-6 max-w-lg mx-auto text-center">
+                <h2 className="text-2xl font-semibold">Current Balance</h2>
+                <p className="text-4xl mt-4 font-bold text-green-600">
+                    {balance !== null ? `DKK ${balance}` : "Loading..."}
+                </p>
+            </div>
 
             {/* Form to Add Funds */}
+            {isActive ? ( // Conditionally render the form based on player's active status
                 <div className="max-w-lg mx-auto bg-white shadow-md rounded-md p-6">
                     <h2 className="text-2xl font-semibold text-center">Add Funds to Your Balance</h2>
                     <form onSubmit={handleFormSubmit} className="mt-8 space-y-6">
@@ -130,6 +133,16 @@ function BalancePage(){
                         </button>
                     </form>
                 </div>
+            ) : (
+                <div className="max-w-lg mx-auto bg-white shadow-md rounded-md p-6 text-center">
+                    <h2 className="text-2xl font-semibold text-red-600">
+                        Your account is currently inactive.
+                    </h2>
+                    <p className="text-lg mt-4 text-gray-600">
+                        Please contact support to reactivate your account.
+                    </p>
+                </div>
+            )}
 
             {/* Footer Section */}
             <footer className="text-center bg-gray-800 text-white py-6">

@@ -699,12 +699,42 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags PlayerProfile
+     * @name PlayerProfileGetAllInactivePlayersList
+     * @request GET:/api/PlayerProfile/GetAllInactivePlayers
+     */
+    playerProfileGetAllInactivePlayersList: (params: RequestParams = {}) =>
+      this.request<PlayerDTO[], any>({
+        path: `/api/PlayerProfile/GetAllInactivePlayers`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags PlayerProfile
      * @name PlayerProfileSoftDeletePartialUpdate
      * @request PATCH:/api/PlayerProfile/{id}/softDelete
      */
     playerProfileSoftDeletePartialUpdate: (id: string, params: RequestParams = {}) =>
       this.request<PlayerProfile, any>({
         path: `/api/PlayerProfile/${id}/softDelete`,
+        method: "PATCH",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags PlayerProfile
+     * @name PlayerProfileMakeActivePartialUpdate
+     * @request PATCH:/api/PlayerProfile/{id}/makeActive
+     */
+    playerProfileMakeActivePartialUpdate: (id: string, params: RequestParams = {}) =>
+      this.request<PlayerProfile, any>({
+        path: `/api/PlayerProfile/${id}/makeActive`,
         method: "PATCH",
         format: "json",
         ...params,

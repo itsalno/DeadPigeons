@@ -18,7 +18,14 @@ public class PlayerProfileController(PlayerProfileService profileService) : Cont
     [HttpGet("GetAllPlayers")]
     public ActionResult<List<PlayerDTO>> GetAllPlayerProfiles()
     {
-        var players = profileService.GetAllPlayers();
+        var players = profileService.GetAllActivePlayers();
+        return Ok(players);
+    }
+    
+    [HttpGet("GetAllInactivePlayers")]
+    public ActionResult<List<PlayerDTO>> GetAllInactivePlayerProfiles()
+    {
+        var players = profileService.GetAllInactivePlayers();
         return Ok(players);
     }
     
@@ -27,6 +34,20 @@ public class PlayerProfileController(PlayerProfileService profileService) : Cont
     public ActionResult<PlayerProfile> SoftDeleteProfile(Guid id)
     {
         var profile = profileService.SoftDeleteProfile(id);
+
+        if (profile == null)
+        {
+            return NotFound(new { message = "Profile not found" });
+        }
+
+        return Ok(profile);
+    }
+    
+    [HttpPatch]
+    [Route("{id}/makeActive")]
+    public ActionResult<PlayerProfile> MakeProfileActive(Guid id)
+    {
+        var profile = profileService.MakeProfileActive(id);
 
         if (profile == null)
         {

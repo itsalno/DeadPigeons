@@ -4,7 +4,9 @@ namespace DataAccess.Interfaces;
 
 public interface IPlayerProfileRepository
 {
-    public List<PlayerProfile> GetAllPlayers();
+    public List<PlayerProfile> GetAllActivePlayers();
+
+    public List<PlayerProfile> GetAllInactivePlayers();
 
     public PlayerProfile GetById(Guid id);
 

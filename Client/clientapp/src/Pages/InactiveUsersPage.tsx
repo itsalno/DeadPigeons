@@ -1,61 +1,51 @@
-import {useAtom} from "jotai";
-import {PlayerAtom} from "../Atoms/PlayerAtom"
-import {useEffect} from "react";
+import { useAtom } from "jotai";
+import { PlayerAtom } from "../Atoms/PlayerAtom";
+import { useEffect } from "react";
 import { http } from '../http';
-import {Link, useNavigate} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 
-function PlayersPage() {
+function InactiveUsersPage() {
 
     const navigate = useNavigate();
-    const [player, setPlayer] = useAtom(PlayerAtom);
+    const [inactivePlayers, setInactivePlayers] = useAtom(PlayerAtom);
 
+    // Fetch inactive players on mount
     useEffect(() => {
-        http.api.playerProfileGetAllPlayersList().then((response) => {
-            setPlayer(response.data);
-        }).catch(e => {
-            console.log("Failed to Fetch all papers" + e)
-        })
-    }, [])
+        http.api.playerProfileGetAllInactivePlayersList()
+            .then((response) => {
+                setInactivePlayers(response.data);
+            })
+            .catch((e) => {
+                console.error("Failed to fetch inactive players", e);
+            });
+    }, []);
 
     const viewTransactionHistory = (playerId: string) => {
         navigate(`/players/${playerId}/transactions`);
     };
 
-    const deletePlayer = (id: string) => {
-        http.api.playerProfileSoftDeletePartialUpdate(id);
+   const makeActive = (id: string) => {
+        http.api.playerProfileMakeActivePartialUpdate(id);
         window.location.reload();
 
-        navigate("/Users")
-
+        
     };
-
 
     return (
         <div className="w-full mx-auto space-y-12 text-gray-800">
             {/* Header Section */}
             <header className="text-center bg-red-600 text-white py-16">
-                <h1 className="text-4xl font-extrabold">Players</h1>
+                <h1 className="text-4xl font-extrabold">Inactive Players</h1>
                 <p className="text-lg mt-2">
-                    Manage all players from this page. View balances, transactions, and manage accounts efficiently.
+                    Manage inactive players. Reactivate accounts as needed.
                 </p>
             </header>
 
-            {/* Players Section */}
+            {/* Inactive Players Section */}
             <div className="max-w-7xl mx-auto">
-                <h2 className="text-3xl font-semibold text-center mb-12">Player Profiles</h2>
+                <h2 className="text-3xl font-semibold text-center mb-12">Inactive Player Profiles</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    {/* Button Section */}
-                    <div className="flex flex-col space-y-4">
-                        <Link to="/RegisterUser" className="btn btn-ghost small-case text-l m-1">
-                            Register a New User
-                        </Link>
-                        <Link to="/InactiveUsers" className="btn btn-ghost small-case text-l m-1">
-                            View Inactive Users
-                        </Link>
-                    </div>
-
-                    {/* Player Cards */}
-                    {player.map((player) => (
+                    {inactivePlayers.map((player) => (
                         <div
                             key={player.playerId}
                             className="bg-white border rounded-lg shadow-md p-6 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300"
@@ -72,13 +62,13 @@ function PlayersPage() {
                                 </p>
                             </div>
 
-                            {/* Action Buttons */}
+                            {/* Make Active Button */}
                             <div className="mt-6 space-y-3">
                                 <button
-                                    onClick={() => deletePlayer(player.playerId!)}
-                                    className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
+                                    onClick={() => makeActive(player.playerId!)}
+                                    className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300"
                                 >
-                                    Make Inactive
+                                    Make Active
                                 </button>
                                 <button
                                     onClick={() => viewTransactionHistory(player.playerId!)}
@@ -100,4 +90,4 @@ function PlayersPage() {
     );
 }
 
-export default PlayersPage;
+export default InactiveUsersPage;

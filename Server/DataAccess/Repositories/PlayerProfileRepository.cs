@@ -6,10 +6,18 @@ namespace DataAccess.Repositories;
 
 public class PlayerProfileRepository(MyDbContext context) : IPlayerProfileRepository
 {
-    public List<PlayerProfile> GetAllPlayers()
+    public List<PlayerProfile> GetAllActivePlayers()
     {
         return context.PlayerProfiles
             .Where(player => player.Isactive == true) 
+            .Include(player=> player.User)
+            .ToList();
+    }
+    
+    public List<PlayerProfile> GetAllInactivePlayers()
+    {
+        return context.PlayerProfiles
+            .Where(player => player.Isactive == false) 
             .Include(player=> player.User)
             .ToList();
     }
