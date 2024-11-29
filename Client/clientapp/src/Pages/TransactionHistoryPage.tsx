@@ -59,6 +59,27 @@ function TransactionHistoryPage() {
         }
     };
 
+
+    const handleDecline = async (transactionId: string) => {
+        const transaction = pendingTransactions.find((t) => t.id === transactionId);
+        if (!transaction) return;
+
+        if (!transaction.playerId) {
+            console.error("Player ID is undefined or null");
+            return;
+        }
+
+        try {
+            await http.api.balanceRejectTransactionPartialUpdate({id: transactionId});
+
+            toast.success("Successfully rejected a transaction");
+            window.location.reload();
+        } catch (error) {
+            console.error("Failed to reject transaction", error);
+            toast.error("Something went wrong. Please try again.");
+        }
+    };
+
     return (
         <div className="w-full mx-auto space-y-12 text-gray-800">
             {/* Header Section */}
@@ -138,7 +159,7 @@ function TransactionHistoryPage() {
                                             Approve
                                         </button>
                                         <button
-                                           // onClick={() => handleDecline(transaction.id)}
+                                            onClick={() => transaction.id && handleDecline(transaction.id)}
                                             className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
                                         >
                                             Decline
