@@ -147,6 +147,7 @@ public partial class MyDbContext : DbContext
                 .HasDefaultValueSql("uuid_generate_v4()")
                 .HasColumnName("id");
             entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.AmountWon).HasColumnName("amountwon");
             entity.Property(e => e.Gameid).HasColumnName("gameid");
             entity.Property(e => e.Playerid).HasColumnName("playerid");
             entity.Property(e => e.Sequence)

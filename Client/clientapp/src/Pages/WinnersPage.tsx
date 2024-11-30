@@ -1,6 +1,5 @@
 import {useAtom} from "jotai/index";
 import {WinnerAtom} from "../Atoms/WinnerAtom"
-import { Link } from 'react-router-dom';
 import { useEffect } from "react";
 import { http } from '../http';
 
@@ -9,7 +8,6 @@ function WinnersPage() {
     const [winner, setWinner] = useAtom(WinnerAtom);
     
     useEffect(() => {
-        // Fetch the winners data
         http.api.winnerGetAllWinnersList().then((response) => {
             setWinner(response.data);
         }).catch(e => {
@@ -57,7 +55,11 @@ function WinnersPage() {
                                         <span className="text-yellow-500">Sequence:</span> {w.sequence}
                                     </p>
                                     <p className="text-lg font-semibold text-gray-800">
-                                        <span className="text-yellow-500">Date:</span> {new Date(w.createdAt).toLocaleDateString()}
+                                        <span className="text-yellow-500">Winning amount:</span>{w.amountWon}
+                                    </p>
+                                    <p className="text-lg font-semibold text-gray-800">
+                                        <span
+                                            className="text-yellow-500">Date:</span> {new Date(w.createdAt).toLocaleDateString()}
                                     </p>
                                 </div>
 

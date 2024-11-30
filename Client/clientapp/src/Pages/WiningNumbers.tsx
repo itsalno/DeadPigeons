@@ -3,12 +3,14 @@ import { http } from '../http';
 import {activeGameAtom} from '../Atoms/GameAtom';
 import {useAtom} from 'jotai';
 import toast from 'react-hot-toast';
+import {useNavigate} from "react-router-dom";
 
 
 function WiningNumbers() {
     const [winingNum, setWiningNum] = useState([]);
     const [game]= useAtom(activeGameAtom);
     const [isDisabled, setIsDisabled] = useState(false);
+    const navigate = useNavigate();
 
     const handleClick = (num) => {
         if (winingNum.length < 3 && !winingNum.includes(num)) {
@@ -24,6 +26,8 @@ function WiningNumbers() {
         setIsDisabled(true);
         try {
             http.api.winnerProcessWinnersCreate(game.id);
+            toast.success("Winners have been determined!")
+            navigate("/Winners")
         } catch (error) {
             toast.error('Error processing winners!');
             setIsDisabled(false);

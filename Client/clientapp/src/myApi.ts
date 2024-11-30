@@ -87,7 +87,7 @@ export interface Game {
   winningseq?: string | null;
   /** @format int32 */
   year?: number | null;
-  /** @format int32 */
+  /** @format double */
   prizepool?: number | null;
   /** @format int32 */
   carryover?: number | null;
@@ -189,8 +189,8 @@ export interface Transaction {
 export interface UpdateGameDto {
   /** @format uuid */
   gameId?: string;
-  /** @format int32 */
-  prizepool?: number;
+  /** @format double */
+  prizepool?: number | null;
 }
 
 export interface UpdatePlayerDTO {
@@ -223,6 +223,8 @@ export interface Winner {
   createdAt?: string | null;
   /** @format uuid */
   playerid?: string | null;
+  /** @format double */
+  amountWon?: number;
   game?: Game;
   player?: PlayerProfile;
 }
@@ -235,6 +237,8 @@ export interface WinnerDto {
   name?: string | null;
   surname?: string | null;
   phone?: string | null;
+  /** @format double */
+  amountWon?: number;
 }
 
 export type QueryParamsType = Record<string | number, any>;

@@ -67,7 +67,7 @@ public class GameController(GameService gameService) : ControllerBase
         {
             gameService.UpdateGame(gameDto);
 
-            return Ok("Player balance updated successfully.");
+            return Ok("Game prizepool updated successfully.");
         }
         catch (Exception ex)
         {
