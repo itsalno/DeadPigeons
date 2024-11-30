@@ -87,7 +87,7 @@ export interface Game {
   winningseq?: string | null;
   /** @format int32 */
   year?: number | null;
-  /** @format double */
+  /** @format int32 */
   prizepool?: number | null;
   /** @format int32 */
   carryover?: number | null;
@@ -102,6 +102,30 @@ export interface Game {
   endingDate?: string | null;
   boards?: Board[] | null;
   winners?: Winner[] | null;
+}
+
+export interface GameDto {
+  /** @format uuid */
+  id?: string;
+  /** @format int32 */
+  week?: number;
+  winningseq?: string | null;
+  /** @format int32 */
+  year?: number | null;
+  /** @format int32 */
+  prizepool?: number | null;
+  /** @format int32 */
+  carryover?: number | null;
+  isactive?: boolean | null;
+  /** @format date-time */
+  createdAt?: string | null;
+  /** @format date-time */
+  updatedAt?: string | null;
+  boards?: Board[] | null;
+  /** @format date-time */
+  startingDate?: string | null;
+  /** @format date-time */
+  endingDate?: string | null;
 }
 
 export interface LogIn {
@@ -189,7 +213,7 @@ export interface Transaction {
 export interface UpdateGameDto {
   /** @format uuid */
   gameId?: string;
-  /** @format double */
+  /** @format int32 */
   prizepool?: number | null;
 }
 
@@ -681,6 +705,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "PUT",
         body: data,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameGetGameByIdDetail
+     * @request GET:/api/Game/getGameById/{id}
+     */
+    gameGetGameByIdDetail: (id: string, params: RequestParams = {}) =>
+      this.request<GameDto, any>({
+        path: `/api/Game/getGameById/${id}`,
+        method: "GET",
+        format: "json",
         ...params,
       }),
 

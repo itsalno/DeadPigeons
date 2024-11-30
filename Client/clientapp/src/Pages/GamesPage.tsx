@@ -16,8 +16,18 @@ export default function GamesPage() {
     const [seq, setSeq] = useState([]);
     const [balance, setBalance] = useAtom(BalanceAtom);
     const [visualBalance, setVisualBalance] = useState<number>(balance ?? 0);
+    const [prizepool,setPrizePool]=useState<number>(0)
 
 
+
+    useEffect(() => {
+        http.api.gameGetGameByIdDetail(game.id).then((response) => {
+            setPrizePool(response.data.prizepool);
+        }).catch(e => {
+            console.log("Failed to Fetch current game" + e)
+        })
+    }, [])
+    
     const handleClick = (event) => {
         const value = parseInt(event.currentTarget.value);
         if (!event.currentTarget.classList.contains("selected")) {
@@ -113,7 +123,7 @@ export default function GamesPage() {
                 for (let i = 0; i < selected.length; i++) {
                     selected[i].classList.remove("selected");
                 }
-
+                window.location.reload();
             } catch (error) {
                 toast.error("An error has occured");
                 console.log(error);
@@ -125,17 +135,21 @@ export default function GamesPage() {
         <div className="w-full mx-auto space-y-12 text-gray-800">
             {/* Game Title Section */}
             <header className="text-center bg-red-600 text-white py-16">
-                <p className="text-4xl font-bold">Currently playing: Week {localStorage.getItem('week')}, {localStorage.getItem('year')}</p>
+                <p className="text-4xl font-bold">Currently playing:
+                    Week {localStorage.getItem('week')}, {localStorage.getItem('year')}</p>
             </header>
 
 
             <div className="balance">
                 <p>Balance: <b>{visualBalance} DKK</b></p>
             </div>
+            <div className="balance">
+                <p>Total prizepool for the game: <b>{prizepool} DKK</b></p>
+            </div>
 
 
             <div className="grid-container" id="grid">
-            <button id="id1" className="grid-item" onClick={(e) => {
+                <button id="id1" className="grid-item" onClick={(e) => {
                     handleClick(e)
                 }} value={1} key={1}>
                     <div>1</div>

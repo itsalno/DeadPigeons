@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services.Services;
 using Services.TransferModels.Requests;
+using Services.TransferModels.Responses;
 
 
 namespace Api.Controllers;
@@ -73,6 +74,14 @@ public class GameController(GameService gameService) : ControllerBase
         {
             return NotFound(new { Message = ex.Message });
         }
+    }
+
+    [HttpGet]
+    [Route("getGameById/{id}")]
+    public ActionResult<GameDto> GetById(Guid id)
+    {
+        var game =gameService.getById(id);
+        return Ok(game);
     }
     
 }

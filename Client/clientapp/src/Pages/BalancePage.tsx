@@ -64,7 +64,6 @@ function BalancePage(){
 
         try {
             await http.api.balanceCreate(balanceDto);
-            window.location.reload();
             toast.success("Wait for admmin to approve your transaction");
         } catch (error) {
             toast.error("Couldn't make the operation, please try again.");

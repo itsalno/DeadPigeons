@@ -92,5 +92,10 @@ public class GameService(IGameRepository gameRepository)
         
         gameRepository.UpdateGame(game);
     }
+
+    public Game? getById(Guid id)
+    {
+        return gameRepository.GetById(id);
+    }
     
 }
