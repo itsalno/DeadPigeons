@@ -48,7 +48,7 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.Sequence)
                 .HasColumnType("character varying")
                 .HasColumnName("sequence");
-            entity.Property(e => e.AutoplayStartWeek).HasColumnName("autoplay");
+            entity.Property(e => e.AutoplayStartWeek).HasColumnName("autoplay_start_week");
             entity.Property(e => e.AutoplayWeeksRemaining).HasColumnName("autoplay_weeks_remaining");
 
             entity.HasOne(d => d.Game).WithMany(p => p.Boards)
@@ -135,11 +135,11 @@ public partial class MyDbContext : DbContext
 
             entity.Property(e => e.Id).HasDefaultValueSql("uuid_generate_v4()");
             entity.Property(e => e.Email).HasColumnType("character varying");
-            entity.Property(e => e.Name).HasColumnType("character varying");
+            entity.Property(e => e.Name).HasColumnType("character varying").HasColumnName("name");
             entity.Property(e => e.PasswordHash).HasColumnType("character varying");
-            entity.Property(e => e.Phone).HasColumnType("character varying");
+            entity.Property(e => e.Phone).HasColumnType("character varying").HasColumnName("phone");
             entity.Property(e => e.Role).HasColumnType("character varying");
-            entity.Property(e => e.Surname).HasColumnType("character varying");
+            entity.Property(e => e.Surname).HasColumnType("character varying").HasColumnName("surname");
             entity.Property(e => e.Username).HasColumnType("character varying");
         });
 

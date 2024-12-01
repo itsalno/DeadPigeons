@@ -18,7 +18,7 @@ export default function GamesPage() {
     const [seq, setSeq] = useState([]);
     const [balance, setBalance] = useAtom(BalanceAtom);
     const [visualBalance, setVisualBalance] = useState<number>(balance ?? 0);
-
+    
     
     const handleAuto = (event) => {
         setAutoNum(event.currentTarget.value);

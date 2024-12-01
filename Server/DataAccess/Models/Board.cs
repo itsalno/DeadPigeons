@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace DataAccess.Models;
 
@@ -23,6 +24,7 @@ public partial class Board
     
     public int? AutoplayWeeksRemaining { get; set; }
 
+    [JsonIgnore]
     public virtual Game? Game { get; set; }
 
     public virtual PlayerProfile? Player { get; set; }

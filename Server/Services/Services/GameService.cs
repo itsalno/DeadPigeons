@@ -60,27 +60,22 @@ public class GameService(IGameRepository gameRepository, IBoardRepository boardR
             Isactive = true
         };
         Game newGame = gameRepository.CreateGame(game1);
+        Guid newId = newGame.Id;
 
         List <Board> boards = boardRepository.GetAutoplayBoard();
         foreach (Board board in boards)
         {
             PlayerProfile player = playerProfileRepository.GetById(board.Playerid);
-            if (board.AutoplayWeeksRemaining > 0 || player.Balance >= board.Price)
+            
+            if (board.AutoplayWeeksRemaining > 0 && player.Balance >= board.Price)
             {
-                CreateBoardDto newBoard = new CreateBoardDto()
-                {
-                    AutoplayWeeksRemaining = board.AutoplayWeeksRemaining - 1,
-                    AutoplayEnabled = true,
-                    AutoplayStartWeek = board.AutoplayStartWeek,
-                    CreatedAt = DateTime.Now,
-                    Gameid = newGame.Id,
-                    Playerid = board.Playerid,
-                    Price = board.Price,
-                    Sequence = board.Sequence,
-                };
+                board.AutoplayWeeksRemaining -= 1;
+                board.AutoplayEnabled = true;
+                board.CreatedAt = DateTime.Now;
+                board.Gameid = newId;
                 player.Balance -= board.Price;
                 playerProfileRepository.UpdatePlayerProfile(player);
-                boardRepository.CreateBoard(newBoard.ToBoard());
+                boardRepository.UpdateBoard(board);
             }
             else
             {
@@ -88,8 +83,8 @@ public class GameService(IGameRepository gameRepository, IBoardRepository boardR
                 boardRepository.UpdateBoard(board);
             }
         }
-        
         return newGame;
+        
 
         //
 
