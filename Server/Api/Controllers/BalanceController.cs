@@ -59,6 +59,20 @@ public class BalanceController(BalanceService balanceService): ControllerBase
         return Ok(transaction);
     }
     
+    [HttpPatch]
+    [Route("rejectTransaction")]
+    public ActionResult<Transaction> RejectTransaction(Guid id)
+    {
+        var transaction = balanceService.RejectTransaction(id);
+
+        if (transaction == null)
+        {
+            return NotFound(new { message = "Transaction not found" });
+        }
+
+        return Ok(transaction);
+    }
+    
     
     
     

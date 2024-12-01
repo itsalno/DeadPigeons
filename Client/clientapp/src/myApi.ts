@@ -566,6 +566,28 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Balance
+     * @name BalanceRejectTransactionPartialUpdate
+     * @request PATCH:/api/Balance/rejectTransaction
+     */
+    balanceRejectTransactionPartialUpdate: (
+      query?: {
+        /** @format uuid */
+        id?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<Transaction, any>({
+        path: `/api/Balance/rejectTransaction`,
+        method: "PATCH",
+        query: query,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Board
      * @name BoardCreate
      * @request POST:/api/Board

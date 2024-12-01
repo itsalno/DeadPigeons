@@ -11,4 +11,6 @@ public interface IBalanceRepository
 
     public void UpdateTransaction(Transaction transaction);
 
+    public void RejectTransaction(Transaction transaction);
+
 }
