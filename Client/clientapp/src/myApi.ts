@@ -79,6 +79,19 @@ export interface CreateGameDto {
   endingDate?: string;
 }
 
+export interface DetailGameHystoryDto {
+  /** @format double */
+  price?: number | null;
+  /** @format date-time */
+  createdAt?: string | null;
+  sequence?: string | null;
+  userName?: string | null;
+  email?: string | null;
+  name?: string | null;
+  surname?: string | null;
+  phone?: string | null;
+}
+
 export interface Game {
   /** @format uuid */
   id?: string;
@@ -590,6 +603,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "POST",
         body: data,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Board
+     * @name BoardDetail
+     * @request GET:/api/Board/{gameId}
+     */
+    boardDetail: (gameId: string, params: RequestParams = {}) =>
+      this.request<DetailGameHystoryDto, any>({
+        path: `/api/Board/${gameId}`,
+        method: "GET",
         format: "json",
         ...params,
       }),
