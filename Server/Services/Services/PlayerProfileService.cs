@@ -10,11 +10,32 @@ namespace Services.Services;
 
 public class PlayerProfileService(IPlayerProfileRepository playerProfileRepository,MyDbContext context) 
 {
-    public List<PlayerDTO> GetAllPlayers()
+    public List<PlayerDTO> GetAllActivePlayers()
     {
-        var activePlayers = playerProfileRepository.GetAllPlayers(); 
+        var activePlayers = playerProfileRepository.GetAllActivePlayers(); 
 
         var playersWithDetails = activePlayers
+            .Select(player => new PlayerDTO()
+            {
+                PlayerId = player.Id,
+                Balance = player.Balance,
+                UserName = player.User.Username, 
+                Name = player.User.Name,
+                Surname = player.User.Surname,
+                Phone = player.User.Phone,
+                Email = player.User.Email
+                
+            })
+            .ToList();
+
+        return playersWithDetails;
+    }
+    
+    public List<PlayerDTO> GetAllInactivePlayers()
+    {
+        var inactivePlayers = playerProfileRepository.GetAllInactivePlayers(); 
+
+        var playersWithDetails = inactivePlayers
             .Select(player => new PlayerDTO()
             {
                 PlayerId = player.Id,
@@ -37,6 +58,16 @@ public class PlayerProfileService(IPlayerProfileRepository playerProfileReposito
         if (playerProfile == null) return null;
 
         playerProfile.Isactive = false;
+        playerProfileRepository.UpdatePlayerProfile(playerProfile);
+        return playerProfile;
+    }
+    
+    public PlayerProfile? MakeProfileActive(Guid id)
+    {
+        var playerProfile = playerProfileRepository.GetById(id);
+        if (playerProfile == null) return null;
+
+        playerProfile.Isactive = true;
         playerProfileRepository.UpdatePlayerProfile(playerProfile);
         return playerProfile;
     }

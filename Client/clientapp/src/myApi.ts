@@ -79,6 +79,19 @@ export interface CreateGameDto {
   endingDate?: string;
 }
 
+export interface DetailGameHystoryDto {
+  /** @format double */
+  price?: number | null;
+  /** @format date-time */
+  createdAt?: string | null;
+  sequence?: string | null;
+  userName?: string | null;
+  email?: string | null;
+  name?: string | null;
+  surname?: string | null;
+  phone?: string | null;
+}
+
 export interface Game {
   /** @format uuid */
   id?: string;
@@ -597,6 +610,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Board
+     * @name BoardDetail
+     * @request GET:/api/Board/{gameId}
+     */
+    boardDetail: (gameId: string, params: RequestParams = {}) =>
+      this.request<DetailGameHystoryDto, any>({
+        path: `/api/Board/${gameId}`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Game
      * @name GameCreate
      * @request POST:/api/Game
@@ -699,12 +727,42 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags PlayerProfile
+     * @name PlayerProfileGetAllInactivePlayersList
+     * @request GET:/api/PlayerProfile/GetAllInactivePlayers
+     */
+    playerProfileGetAllInactivePlayersList: (params: RequestParams = {}) =>
+      this.request<PlayerDTO[], any>({
+        path: `/api/PlayerProfile/GetAllInactivePlayers`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags PlayerProfile
      * @name PlayerProfileSoftDeletePartialUpdate
      * @request PATCH:/api/PlayerProfile/{id}/softDelete
      */
     playerProfileSoftDeletePartialUpdate: (id: string, params: RequestParams = {}) =>
       this.request<PlayerProfile, any>({
         path: `/api/PlayerProfile/${id}/softDelete`,
+        method: "PATCH",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags PlayerProfile
+     * @name PlayerProfileMakeActivePartialUpdate
+     * @request PATCH:/api/PlayerProfile/{id}/makeActive
+     */
+    playerProfileMakeActivePartialUpdate: (id: string, params: RequestParams = {}) =>
+      this.request<PlayerProfile, any>({
+        path: `/api/PlayerProfile/${id}/makeActive`,
         method: "PATCH",
         format: "json",
         ...params,
