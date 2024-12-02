@@ -8,4 +8,5 @@ public class WinnerDto
     public string Name { get; set; }
     public string Surname { get; set; }
     public string Phone { get; set; }
+    public decimal AmountWon { get; set; }
 }

@@ -116,5 +116,10 @@ public class GameService(IGameRepository gameRepository, IBoardRepository boardR
         
         gameRepository.UpdateGame(game);
     }
+
+    public Game? getById(Guid id)
+    {
+        return gameRepository.GetById(id);
+    }
     
 }

@@ -14,6 +14,7 @@ public partial class Winner
     public DateTime? CreatedAt { get; set; }
 
     public Guid? Playerid { get; set; }
+    public decimal AmountWon { get; set; }
 
     public virtual Game Game { get; set; } = null!;
 

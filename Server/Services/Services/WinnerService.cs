@@ -20,7 +20,8 @@ public class WinnerService(IWinnerRepository winnerRepository,IGameRepository ga
                Email = winner.Player.User.Email,
                Name = winner.Player.User.Name,
                Surname = winner.Player.User.Surname,
-               Phone = winner.Player.User.Phone
+               Phone = winner.Player.User.Phone,
+               AmountWon = winner.AmountWon
                
                 
             })
@@ -31,24 +32,18 @@ public class WinnerService(IWinnerRepository winnerRepository,IGameRepository ga
     
     public string ProcessWinners(Guid gameId)
     {
-        
         var game = gameRepository.GetById(gameId);
         if (game == null)
         {
             throw new InvalidOperationException("Game not found.");
         }
         
-
-        if (string.IsNullOrEmpty(game.Winningseq))
+        if (string.IsNullOrEmpty(game.Winningseq) || string.IsNullOrEmpty(game.Winningseq?.Trim()))
         {
             throw new InvalidOperationException("Winning sequence not found.");
         }
 
         string winningSequence = game.Winningseq;
-        if (string.IsNullOrEmpty(game.Winningseq?.Trim()))
-        {
-            throw new InvalidOperationException("Winning sequence not found.");
-        }
         
         var matchingBoards = winnerRepository.GetMatchingBoards(gameId, winningSequence);
         if (!matchingBoards.Any())
@@ -56,16 +51,24 @@ public class WinnerService(IWinnerRepository winnerRepository,IGameRepository ga
             return "No matching boards found.";
         }
         
+        int prizePool = game.Prizepool ?? 0;
+        decimal prizePoolForWinners = prizePool * 0.7m;
+
+        int numberOfWinningBoards = matchingBoards.Count();
+        decimal amountPerWinner = numberOfWinningBoards > 0 ? prizePoolForWinners / numberOfWinningBoards : 0;
+
+        
         var winners = matchingBoards.Select(board => new Winner
         {
             Gameid = gameId,
             Sequence = board.Sequence,
             Playerid = board.Playerid,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            AmountWon = amountPerWinner 
         }).ToList();
         
         winnerRepository.SaveWinners(winners);
 
-        return $"{winners.Count} winners processed successfully.";
+        return $"{winners.Count} winners processed successfully. Each winner receives {amountPerWinner:C}.";
     }
 }
