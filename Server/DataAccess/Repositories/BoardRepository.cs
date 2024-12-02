@@ -11,6 +11,15 @@ public class BoardRepository(MyDbContext context) : IBoardRepository
         context.SaveChanges();
         return board;
     }
+    
+    public List<Board> GetDetailGameHistory(Guid gameId)
+    {
+        return context.Boards
+            .Where(board => board.Gameid==gameId) 
+            .Include(board=> board.Player)
+            .ThenInclude(player => player.User)
+            .ToList();
+    }
 
     public List<Board> GetAutoplayBoard()
     {

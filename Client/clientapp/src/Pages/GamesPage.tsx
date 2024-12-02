@@ -18,6 +18,36 @@ export default function GamesPage() {
     const [seq, setSeq] = useState([]);
     const [balance, setBalance] = useAtom(BalanceAtom);
     const [visualBalance, setVisualBalance] = useState<number>(balance ?? 0);
+    const [isActive, setIsActive] = useState(true);
+    const [playerProfileId, setPlayerProfileId] = useState("");
+
+    useEffect(() => {
+        const storedPlayerProfileId = localStorage.getItem("playerProfileId");
+
+        if (storedPlayerProfileId) {
+            setPlayerProfileId(storedPlayerProfileId);
+        } else {
+            toast.error("Please log in.");
+            return;
+        }
+    }, []);
+
+     
+    useEffect(() => {
+        if (playerProfileId) {
+            //this is used in the balance page to get the balance but we can also use it to get the isActive
+            http.api.playerProfileGetBalanceDetail(playerProfileId)
+                .then((response) => {
+                    setIsActive(response.data.isactive)
+                })
+                .catch((error) => {
+                    toast.error("Failed to fetch current balance.");
+                    console.error(error);
+                });
+        }
+    }, [playerProfileId]);
+
+
     
     
     const handleAuto = (event) => {
@@ -139,113 +169,59 @@ export default function GamesPage() {
     }
     return (
         <div className="w-full mx-auto space-y-12 text-gray-800">
-            {/* Game Title Section */}
-            <header className="text-center bg-red-600 text-white py-16">
-                <p className="text-4xl font-bold">Currently playing: Week {localStorage.getItem('week')}, {localStorage.getItem('year')}</p>
-            </header>
+            {/* Check if Player is Active */}
+            {isActive ? (
+                <>
+                    {/* Game Title Section */}
+                    <header className="text-center bg-red-600 text-white py-16">
+                        <p className="text-4xl font-bold">
+                            Currently playing: Week {localStorage.getItem('week')}, {localStorage.getItem('year')}
+                        </p>
+                    </header>
 
+                    {/* Balance Section */}
+                    <div className="balance">
+                        <p>Balance: <b>{visualBalance} DKK</b></p>
+                    </div>
 
-            <div className="balance">
-                <p>Balance: <b>{visualBalance} DKK</b></p>
-            </div>
+                    {/* Grid Section */}
+                    <div className="grid-container" id="grid">
+                        {[...Array(16).keys()].map((index) => (
+                            <button
+                                key={index + 1}
+                                id={`id${index + 1}`}
+                                className="grid-item"
+                                onClick={(e) => handleClick(e)}
+                                value={index + 1}>
+                                <div>{index + 1}</div>
+                            </button>
+                        ))}
+                    </div>
 
+                    {/* Cost Section */}
+                    <div className="cost">
+                        <p className="">Cost: <b>{cost} DKK</b></p>
+                    </div>
 
-            <div className="grid-container" id="grid">
-            <button id="id1" className="grid-item" onClick={(e) => {
-                    handleClick(e)
-                }} value={1} key={1}>
-                    <div>1</div>
-                </button>
-                <button id="id2" className="grid-item" onClick={(e) => {
-                    handleClick(e)
-                }} value={2}>
-                    <div>2</div>
-                </button>
-                <button id="id3" className="grid-item" onClick={(e) => {
-                    handleClick(e)
-                }} value={3}>
-                    <div>3</div>
-                </button>
-                <button id="id4" className="grid-item" onClick={(e) => {
-                    handleClick(e)
-                }} value={4}>
-                    <div>4</div>
-                </button>
-                <button id="id5" className="grid-item" onClick={(e) => {
-                    handleClick(e)
-                }} value={5}>
-                    <div>5</div>
-                </button>
-                <button id="id6" className="grid-item" onClick={(e) => {
-                    handleClick(e)
-                }} value={6}>
-                    <div>6</div>
-                </button>
-                <button id="id7" className="grid-item" onClick={(e) => {
-                    handleClick(e)
-                }} value={7}>
-                    <div>7</div>
-                </button>
-                <button id="id8" className="grid-item" onClick={(e) => {
-                    handleClick(e)
-                }} value={8}>
-                    <div>8</div>
-                </button>
-                <button id="id9" className="grid-item" onClick={(e) => {
-                    handleClick(e)
-                }} value={9}>
-                    <div>9</div>
-                </button>
-                <button id="id10" className="grid-item" onClick={(e) => {
-                    handleClick(e)
-                }} value={10}>
-                    <div>10</div>
-                </button>
-                <button id="id11" className="grid-item" onClick={(e) => {
-                    handleClick(e)
-                }} value={11}>
-                    <div>11</div>
-                </button>
-                <button id="id12" className="grid-item" onClick={(e) => {
-                    handleClick(e)
-                }} value={12}>
-                    <div>12</div>
-                </button>
-                <button id="id13" className="grid-item" onClick={(e) => {
-                    handleClick(e)
-                }} value={13}>
-                    <div>13</div>
-                </button>
-                <button id="id14" className="grid-item" onClick={(e) => {
-                    handleClick(e)
-                }} value={14}>
-                    <div>14</div>
-                </button>
-                <button id="id15" className="grid-item" onClick={(e) => {
-                    handleClick(e)
-                }} value={15}>
-                    <div>15</div>
-                </button>
-                <button id="id16" className="grid-item" onClick={(e) => {
-                    handleClick(e)
-                }} value={16}>
-                    <div>16</div>
-                </button>
-
-            </div>
-            <div className="cost">
-                <p className="">Cost: <b>{cost} DKK</b></p>
-            </div>
-            <div className="divBtn">
-                <button className="playbtn" disabled={disabled || !game.id} onClick={() => handleBoardSubmit()}>Next
-                </button><br/>
-                <div className="divAuto">
-                    <p>How many weeks do you wish to autoplay?</p>
-                    <input className="inputAuto" type="number" min="0" onChange={(e)=>handleAuto(e)}></input>
-                    
+                    {/* Play Button */}
+                    <div className="divBtn">
+                        <button
+                            className="playbtn"
+                            disabled={disabled || !game.id}
+                            onClick={() => handleBoardSubmit()}>
+                            Next
+                        </button>
+                    </div>
+                </>
+            ) : (
+                // Display if the Player is Inactive
+                <div className="text-center bg-gray-100 py-16">
+                    <h1 className="text-4xl font-bold text-red-700">Access Denied</h1>
+                    <p className="text-lg mt-4 text-gray-600">
+                        Your account is currently inactive. Please contact support to reactivate your account.
+                    </p>
                 </div>
-
-            </div>
+            )}
         </div>
     );
 }

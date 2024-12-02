@@ -10,4 +10,5 @@ public interface IBoardRepository
 
     public Board UpdateBoard(Board board);
 
+    public List<Board> GetDetailGameHistory(Guid gameId);
 }
