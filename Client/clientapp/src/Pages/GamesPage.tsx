@@ -5,6 +5,7 @@ import {useEffect, useState} from 'react';
 import toast from 'react-hot-toast';
 import {http} from '../http';
 import {BalanceAtom} from '../Atoms/BalanceAtom';
+import { atomWithStorage } from 'jotai/utils';
 
 export default function GamesPage() {
 
@@ -23,17 +24,13 @@ export default function GamesPage() {
     const [isActive, setIsActive] = useState(true);
     const [playerProfileId, setPlayerProfileId] = useState("");
 
-    useEffect(() => {
-        const storedPlayerProfileId = localStorage.getItem("playerProfileId");
+    const storedPlayerProfileId = localStorage.getItem("playerProfileId");
 
-    useEffect(() => {
-        http.api.gameGetGameByIdDetail(game.id).then((response) => {
-            setPrizePool(response.data.prizepool);
-        }).catch(e => {
-            console.log("Failed to Fetch current game" + e)
-        })
-    }, [])
     
+    
+     
+    
+    useEffect(() => {
         if (storedPlayerProfileId) {
             setPlayerProfileId(storedPlayerProfileId);
         } else {
@@ -62,6 +59,7 @@ export default function GamesPage() {
     
     const handleAuto = (event) => {
         setAutoNum(event.currentTarget.value);
+        console.log(autoNum);
     }
     
     const handleClick = (event) => {
@@ -105,7 +103,11 @@ export default function GamesPage() {
         if (date.getDay() >= 5 && date.getHours() >= 17) {
             toast.error("Playing is prohibited after 5pm on Saturdays");
         } else {
-
+            if(autoNum > 0){
+                setAutoplay(true);
+                console.log(autoplay);
+                console.log(autoNum);
+            }
 
             console.log("Submitting board...");
             console.log("Game ID:", game.id);
@@ -128,11 +130,7 @@ export default function GamesPage() {
             console.log(new Date().toJSON());
             console.log(seq.toString());
 
-            if(autoNum > 0){
-                setAutoplay(true);
-                console.log(autoNum);
-                console.log(autoplay);
-            }
+            
             
             try {
                 await http.api.boardCreate({
@@ -163,12 +161,14 @@ export default function GamesPage() {
                 setSeq([]);
                 setCost(0);
                 setDisabled(true);
+                setAutoplay(false);
+                setAutoNum(0);
 
                 const selected = document.querySelectorAll('.selected');
                 for (let i = 0; i < selected.length; i++) {
                     selected[i].classList.remove("selected");
                 }
-                window.location.reload();
+                //window.location.reload();
             } catch (error) {
                 toast.error("An error has occured");
                 console.log(error);
@@ -177,13 +177,10 @@ export default function GamesPage() {
         }
 
     }
+    
+    
     return (
         <div className="w-full mx-auto space-y-12 text-gray-800">
-            {/* Game Title Section */}
-            <header className="text-center bg-red-600 text-white py-16">
-                <p className="text-4xl font-bold">Currently playing:
-                    Week {localStorage.getItem('week')}, {localStorage.getItem('year')}</p>
-            </header>
             {/* Check if Player is Active */}
             {isActive ? (
                 <>
@@ -228,7 +225,12 @@ export default function GamesPage() {
                             disabled={disabled || !game.id}
                             onClick={() => handleBoardSubmit()}>
                             Next
-                        </button>
+                        </button><br/>
+                        <div className="divAuto">
+                            <p>Autoplay weeks:</p>
+                            <input className="inputAuto" type="number" onChange={(e)=>handleAuto(e)} />
+                        </div>
+
                     </div>
                 </>
             ) : (
@@ -239,6 +241,8 @@ export default function GamesPage() {
                         Your account is currently inactive. Please contact support to reactivate your account.
                     </p>
                 </div>
+                
+                
             )}
         </div>
     );

@@ -59,6 +59,8 @@ const LogInPage: React.FC = () => {
                     setGame(response.data)
                 });
                 
+                
+                
                 localStorage.setItem('week', game.week);
                 localStorage.setItem('year', game.year);
 
