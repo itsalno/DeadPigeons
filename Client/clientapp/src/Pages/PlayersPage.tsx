@@ -3,6 +3,7 @@ import {PlayerAtom} from "../Atoms/PlayerAtom"
 import {useEffect} from "react";
 import { http } from '../http';
 import {Link, useNavigate} from 'react-router-dom';
+import addAuthHeaders from "../AuthHeader";
 
 function PlayersPage() {
 
@@ -10,8 +11,10 @@ function PlayersPage() {
     const [player, setPlayer] = useAtom(PlayerAtom);
 
     useEffect(() => {
-        http.api.playerProfileGetAllPlayersList().then((response) => {
-            setPlayer(response.data);
+        http.api.playerProfileGetAllPlayersList({
+            headers: addAuthHeaders(),
+        }).then((response) => {
+                setPlayer(response.data);
         }).catch(e => {
             console.log("Failed to Fetch all papers" + e)
         })
@@ -22,7 +25,9 @@ function PlayersPage() {
     };
 
     const deletePlayer = (id: string) => {
-        http.api.playerProfileSoftDeletePartialUpdate(id);
+        http.api.playerProfileSoftDeletePartialUpdate(id,{
+            headers: addAuthHeaders(),
+        });
         window.location.reload();
 
         navigate("/Users")

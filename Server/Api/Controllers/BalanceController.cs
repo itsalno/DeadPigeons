@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
 using Services.TransferModels.Requests;
@@ -13,6 +14,7 @@ public class BalanceController(BalanceService balanceService): ControllerBase
     
     [HttpPost]
     [Route("")]
+    [Authorize(Roles = "User")]
     public ActionResult<BalanceDTO> AddFunds([FromBody] CreateBalanceDTO createBalanceDto)
     {
         var balance = balanceService.AddFunds(createBalanceDto);
@@ -21,6 +23,7 @@ public class BalanceController(BalanceService balanceService): ControllerBase
     }
     
     [HttpGet("all/{playerId}")]
+    [Authorize(Roles = "Admin")]
     public ActionResult<BalanceDTO> GetTransactionsByPlayerId(Guid playerId)
     {
         var transactions = balanceService.GetBalancesByPlayerId(playerId);
@@ -34,6 +37,7 @@ public class BalanceController(BalanceService balanceService): ControllerBase
     
     
     [HttpGet("pending/{playerId}")]
+    [Authorize(Roles = "Admin")]
     public ActionResult<BalanceDTO> GetPendingTransactionsByPlayerId(Guid playerId)
     {
         var transactions = balanceService.GetPendingBalancesByPlayerId(playerId);
@@ -47,6 +51,7 @@ public class BalanceController(BalanceService balanceService): ControllerBase
     
     [HttpPatch]
     [Route("approveTransaction")]
+    [Authorize(Roles = "Admin")]
     public ActionResult<Transaction> ApproveTransaction(Guid id)
     {
         var transaction = balanceService.ApproveTransaction(id);
@@ -61,6 +66,7 @@ public class BalanceController(BalanceService balanceService): ControllerBase
     
     [HttpPatch]
     [Route("rejectTransaction")]
+    [Authorize(Roles = "Admin")]
     public ActionResult<Transaction> RejectTransaction(Guid id)
     {
         var transaction = balanceService.RejectTransaction(id);

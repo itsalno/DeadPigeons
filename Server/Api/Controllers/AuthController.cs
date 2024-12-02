@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using DataAccess;
 using DataAccess.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services;
@@ -40,6 +41,7 @@ using Services.TransferModels.Responses;
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public ActionResult<LogInResponseDTO> Login([FromBody] LogIn model)
         {
             var user = _userService.GetUserByUsername(model.Username);
@@ -51,6 +53,7 @@ using Services.TransferModels.Responses;
             
             var token = _jwtGenerator.GenerateJwtToken(user);
             Console.WriteLine($"Logged in user: {user.Username}, UserId: {user.Id}");
+            
             
             var playerProfile = _context.PlayerProfiles
                 .FirstOrDefault(p => p.Userid == user.Id);
@@ -78,5 +81,6 @@ using Services.TransferModels.Responses;
             
             return Ok(loginResponse);
         }
+
         
     }

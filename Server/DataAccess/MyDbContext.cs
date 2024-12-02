@@ -135,11 +135,11 @@ public partial class MyDbContext : DbContext
 
             entity.Property(e => e.Id).HasDefaultValueSql("uuid_generate_v4()");
             entity.Property(e => e.Email).HasColumnType("character varying");
-            entity.Property(e => e.Name).HasColumnType("character varying").HasColumnName("name");
+            entity.Property(e => e.Name).HasColumnType("character varying").HasColumnName("Name");
             entity.Property(e => e.PasswordHash).HasColumnType("character varying");
-            entity.Property(e => e.Phone).HasColumnType("character varying").HasColumnName("phone");
+            entity.Property(e => e.Phone).HasColumnType("character varying").HasColumnName("Phone");
             entity.Property(e => e.Role).HasColumnType("character varying");
-            entity.Property(e => e.Surname).HasColumnType("character varying").HasColumnName("surname");
+            entity.Property(e => e.Surname).HasColumnType("character varying").HasColumnName("Surname");
             entity.Property(e => e.Username).HasColumnType("character varying");
         });
 

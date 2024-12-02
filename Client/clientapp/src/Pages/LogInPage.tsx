@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { isLoggedInAtom } from '../Atoms/AuthAtom';
 import { activeGameAtom } from '../Atoms/GameAtom';
+import { jwtDecode } from 'jwt-decode';
+import addAuthHeaders from '../AuthHeader';
 
 const LogInPage: React.FC = () => {
     
@@ -42,12 +44,13 @@ const LogInPage: React.FC = () => {
                     username: formData.username,
                     password: formData.password,
                 });
-
-
+                
                 const {token, playerProfileId} = response.data;
 
                 localStorage.setItem("token", token);
                 localStorage.setItem("playerProfileId", playerProfileId);
+                
+                
 
 
                 localStorage.setItem('isLoggedIn', 'true');
@@ -55,7 +58,7 @@ const LogInPage: React.FC = () => {
 
                
 
-                http.api.gameActiveGameCreate().then((response) => {
+                http.api.gameActiveGameCreate({headers: addAuthHeaders()}).then((response) => {
                     setGame(response.data)
                 });
                 

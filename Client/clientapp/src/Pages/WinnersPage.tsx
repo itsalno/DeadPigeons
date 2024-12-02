@@ -2,13 +2,16 @@ import {useAtom} from "jotai/index";
 import {WinnerAtom} from "../Atoms/WinnerAtom"
 import { useEffect } from "react";
 import { http } from '../http';
+import addAuthHeaders from "../AuthHeader";
 
 function WinnersPage() {
 
     const [winner, setWinner] = useAtom(WinnerAtom);
     
     useEffect(() => {
-        http.api.winnerGetAllWinnersList().then((response) => {
+        http.api.winnerGetAllWinnersList({
+            headers: addAuthHeaders(), 
+        }).then((response) => {
             setWinner(response.data);
         }).catch(e => {
             console.log("Failed to fetch winners data", e);

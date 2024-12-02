@@ -3,6 +3,7 @@ import { http } from "../http";
 import { useParams } from "react-router-dom";
 import { DetailGameHystoryDto } from "../myApi";
 import toast from 'react-hot-toast';
+import addAuthHeaders from "../AuthHeader";
 
 
 function DetailGameHistoryPage() {
@@ -19,7 +20,9 @@ function DetailGameHistoryPage() {
 
         const fetchGameHistory = async () => {
             try {
-                const response = await http.api.boardDetail(gameId); // Replace with your API call
+                const response = await http.api.boardDetail(gameId,{
+                    headers: addAuthHeaders(), 
+                }); 
                 setHistory(response.data);
             } catch (error) {
                 toast.error("Failed to fetch game history.");

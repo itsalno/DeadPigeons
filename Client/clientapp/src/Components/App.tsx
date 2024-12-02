@@ -1,7 +1,7 @@
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import {Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { ThemeAtom } from "../Atoms/ThemeAtom";
 import Navigation from "./Navigation";
 import IntroPage from "../Pages/IntroPage";
@@ -17,51 +17,50 @@ import TransactionHistoryPage from "../Pages/TransactionHistoryPage";
 import { isLoggedInAtom } from "../Atoms/AuthAtom";
 import RegisterUserPage from "../Pages/RegisterUserPage";
 import DetailGameHistoryPage from "../Pages/DetailGameHistoryPage";
-
-
-
-
-
+import ProtectedRoute from "./ProtectedRoute";
 
 const App = () => {
-
     const [theme, setTheme] = useAtom(ThemeAtom);
     const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
-    
+
     useEffect(() => {
         const loggedInStatus = localStorage.getItem('isLoggedIn');
-        
+
         if (loggedInStatus === 'true') {
             setIsLoggedIn(true); // Update atom state
         }
     }, []);
+
     useEffect(() => {
-        
         localStorage.setItem('theme', theme);
         document.documentElement.setAttribute('data-theme', theme);
-    }, [theme])
+    }, [theme]);
 
-    return (<>
+    return (
+        <>
+            <Navigation />
+            <Toaster position={"bottom-center"} />
+            <Routes>
+                {/* Everybody */}
+                <Route path="/" element={<IntroPage />} />
+                <Route path="/LogIn" element={<LogInPage />} />
 
-        <Navigation/>
-        <Toaster position={"bottom-center"}/>
-        <Routes>
-            <Route path="/" element={<IntroPage/>}/>
-            <Route path="/LogIn" element={<LogInPage/>}/>
-            <Route path="/Games" element={<GamesPage />} />
-            <Route path="/Users" element={<PlayersPage/>}/>
-            <Route path="/WiningNumbers" element={<WiningNubers/>}/>
-            <Route path="/Winners" element={<WinnersPage/>}/>
-            <Route path="/History" element={<HistoryOfGames/>}/>
-            <Route path="/Balance" element={<BalancePage/>} />
-            <Route path="/players/:playerId/transactions" element={<TransactionHistoryPage />} />
-            <Route path="/RegisterUser" element={<RegisterUserPage/>} />
-            <Route path="/InactiveUsers" element={<InactiveUsersPage/>} />
-            <Route path="/game/:gameId/detailHistory" element={<DetailGameHistoryPage/>} />
-            
-            
-        </Routes>
+                {/* User */}
+                <Route path="/Games" element={<ProtectedRoute requiredRole="User"><GamesPage /></ProtectedRoute>} />
+                <Route path="/Balance" element={<ProtectedRoute requiredRole="User"><BalancePage /></ProtectedRoute>} />
 
-    </>)
-}
+                {/*Admin*/}
+                <Route path="/Users" element={<ProtectedRoute requiredRole="Admin"><PlayersPage /></ProtectedRoute>} />
+                <Route path="/WiningNumbers" element={<ProtectedRoute requiredRole="Admin"><WiningNubers /></ProtectedRoute>} />
+                <Route path="/Winners" element={<ProtectedRoute requiredRole="Admin"><WinnersPage /></ProtectedRoute>} />
+                <Route path="/History" element={<ProtectedRoute requiredRole="Admin"><HistoryOfGames /></ProtectedRoute>} />
+                <Route path="/players/:playerId/transactions" element={<ProtectedRoute requiredRole="Admin"><TransactionHistoryPage /></ProtectedRoute>} />
+                <Route path="/RegisterUser" element={<ProtectedRoute requiredRole="Admin"><RegisterUserPage /></ProtectedRoute>} />
+                <Route path="/InactiveUsers" element={<ProtectedRoute requiredRole="Admin"><InactiveUsersPage /></ProtectedRoute>} />
+                <Route path="/game/:gameId/detailHistory" element={<ProtectedRoute requiredRole="Admin"><DetailGameHistoryPage /></ProtectedRoute>} />
+            </Routes>
+        </>
+    );
+};
+
 export default App;

@@ -3,6 +3,7 @@ import {http} from '../http';
 import {useAtom} from "jotai";
 import {GameAtom} from "../Atoms/GameAtom"
 import {useNavigate} from 'react-router-dom';
+import addAuthHeaders from "../AuthHeader";
 
 function HistoryOfGames() {
 
@@ -10,7 +11,9 @@ function HistoryOfGames() {
     const [games, setGames] = useAtom(GameAtom);
 
     useEffect(() => {
-        http.api.gameGetAllGamesList().then((response) => {
+        http.api.gameGetAllGamesList({
+            headers: addAuthHeaders(),
+        }).then((response) => {
             setGames(response.data);
         }).catch(e => {
             console.log("Failed to Fetch all papers" + e)

@@ -4,6 +4,7 @@ import {activeGameAtom} from '../Atoms/GameAtom';
 import {useAtom} from 'jotai';
 import toast from 'react-hot-toast';
 import {useNavigate} from "react-router-dom";
+import addAuthHeaders from '../AuthHeader';
 
 
 function WiningNumbers() {
@@ -25,7 +26,9 @@ function WiningNumbers() {
     const handleWinners = () => {
         setIsDisabled(true);
         try {
-            http.api.winnerProcessWinnersCreate(game.id);
+            http.api.winnerProcessWinnersCreate(game.id,{
+                headers: addAuthHeaders(),
+            });
             toast.success("Winners have been determined!")
             navigate("/Winners")
         } catch (error) {
@@ -36,7 +39,9 @@ function WiningNumbers() {
 
     const EndGame = () => {
         if (winingNum.length === 3) {
-            http.api.gameEndGamePartialUpdate({id: game.id, finalSequence: winingNum.toString()})
+            http.api.gameEndGamePartialUpdate({id: game.id, finalSequence: winingNum.toString()},{
+                headers: addAuthHeaders(),
+            })
             setWiningNum([]);
             toast.success("Winning sequence set succsesfuly")
             

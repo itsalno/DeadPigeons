@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services.Services;
@@ -12,9 +13,13 @@ namespace Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class BoardController(BoardService boardService): ControllerBase
+
 {
+    
+    
     [HttpPost]
     [Route("")]
+    [Authorize(Roles = "User")]
     public ActionResult<Game> CreatePaper(CreateBoardDto createBoardDto)
     {
         var board = boardService.CreateBoard(createBoardDto);
@@ -22,6 +27,7 @@ public class BoardController(BoardService boardService): ControllerBase
     }
     
     [HttpGet("{gameId}")]
+    [Authorize(Roles = "Admin")]
     public ActionResult<DetailGameHystoryDto> GetDetailGameHistory(Guid gameId)
     {
         var boardHistory = boardService.GetDetailGameHistory(gameId);
