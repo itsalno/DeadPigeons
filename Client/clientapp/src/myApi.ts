@@ -40,7 +40,6 @@ export interface Board {
   autoplayStartWeek?: number | null;
   /** @format int32 */
   autoplayWeeksRemaining?: number | null;
-  game?: Game;
   player?: PlayerProfile;
 }
 
