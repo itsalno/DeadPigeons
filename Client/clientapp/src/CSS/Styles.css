@@ -100,6 +100,35 @@ code {
   color: white;
 }
 
+.autobtn{
+  background-color: darkblue;
+  color: white;
+  text-align: center;
+  font-size: 15px;
+  margin-top: 2.5%;
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  border-radius: 6px;
+  width: 80px;
+  height: 40px;
+}
+
+.autobtn:hover{
+  color: black;
+  background-color: lightblue;
+}
+
+.divAuto{
+  margin-top: 30px;
+  font-size: 20px;
+}
+
+.inputAuto{
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  border-radius: 6px;
+  margin-right: 10px;
+  text-align: center;
+}
+
 .cost{
   height:25px;
   text-align:center;

@@ -27,15 +27,19 @@ export interface Board {
   /** @format uuid */
   id?: string;
   /** @format uuid */
-  playerid?: string | null;
+  playerid?: string;
   /** @format uuid */
   gameid?: string | null;
   /** @format int32 */
   price?: number | null;
-  isautoplay?: boolean | null;
+  autoplayEnabled?: boolean | null;
   /** @format date-time */
   createdAt?: string | null;
   sequence?: string | null;
+  /** @format int32 */
+  autoplayStartWeek?: number | null;
+  /** @format int32 */
+  autoplayWeeksRemaining?: number | null;
   game?: Game;
   player?: PlayerProfile;
 }
@@ -54,15 +58,19 @@ export interface CreateBalanceDTO {
 
 export interface CreateBoardDto {
   /** @format uuid */
-  playerid?: string | null;
+  playerid?: string;
   /** @format uuid */
   gameid?: string | null;
   /** @format int32 */
   price?: number | null;
-  isautoplay?: boolean | null;
+  autoplayEnabled?: boolean | null;
   /** @format date-time */
   createdAt?: string | null;
   sequence?: string | null;
+  /** @format int32 */
+  autoplayStartWeek?: number | null;
+  /** @format int32 */
+  autoplayWeeksRemaining?: number | null;
 }
 
 export interface CreateGameDto {

@@ -9,6 +9,8 @@ import {BalanceAtom} from '../Atoms/BalanceAtom';
 export default function GamesPage() {
 
     const date = new Date();
+    const [autoNum, setAutoNum] = useState(0);
+    const [autoplay, setAutoplay] = useState(false);
     const [num, setNum] = useState(0);
     const [disabled, setDisabled] = useState(true);
     const [cost, setCost] = useState<number>(0);
@@ -46,6 +48,12 @@ export default function GamesPage() {
     }, [playerProfileId]);
 
 
+    
+    
+    const handleAuto = (event) => {
+        setAutoNum(event.currentTarget.value);
+    }
+    
     const handleClick = (event) => {
         const value = parseInt(event.currentTarget.value);
         if (!event.currentTarget.classList.contains("selected")) {
@@ -109,14 +117,23 @@ export default function GamesPage() {
             console.log(cost);
             console.log(new Date().toJSON());
             console.log(seq.toString());
+
+            if(autoNum > 0){
+                setAutoplay(true);
+                console.log(autoNum);
+                console.log(autoplay);
+            }
+            
             try {
                 await http.api.boardCreate({
                     playerid: localStorage.getItem("playerProfileId"),
                     gameid: game.id,
                     price: cost,
-                    isautoplay: false,
+                    autoplayEnabled: autoplay,
                     createdAt: new Date().toJSON(),
                     sequence: seq.toString(),
+                    autoplayStartWeek: localStorage.getItem('week'),
+                    autoplayWeeksRemaining: autoNum,
                 });
 
                 const newBalance = visualBalance;
@@ -146,6 +163,7 @@ export default function GamesPage() {
                 toast.error("An error has occured");
                 console.log(error);
             }
+            
         }
 
     }
