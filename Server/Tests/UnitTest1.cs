@@ -1,6 +1,15 @@
+using System.Net;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Api;
+using DataAccess.Models;
+using Xunit.Abstractions;
+
 namespace Tests;
 
-public class UnitTest1
+public class UnitTest1 : WebApplicationFactory<Program>
 {
     /*
     Facts are tests which are always true. They test invariant conditions.
@@ -8,8 +17,205 @@ public class UnitTest1
     Theories are tests which are only true for a particular set of data.
     [Theory]
      */
+
+    private readonly JsonSerializerOptions _options = new JsonSerializerOptions()
+        { PropertyNameCaseInsensitive = true };
+    
+    //
+    //PlayerProfile tests
+    //
+    
     [Fact]
-    public void Test1()
+    public async Task Get_ActivePlayerProfiles_ReturnsActivePlayerProfiles()
     {
+        var client = CreateClient();
+        var response = await client.GetAsync("/api/PlayerProfile/GetAllPlayers");
+        var body = await response.Content.ReadAsStringAsync();
+        
+        List<PlayerProfile> playerProfiles = JsonSerializer.Deserialize<List<PlayerProfile>>(body, _options)!;
+
+        var isActiveFirst = playerProfiles.First().Isactive;
+        var isActiveLast = playerProfiles.Last().Isactive;
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.True(isActiveFirst);
+        Assert.True(isActiveLast);
     }
+    
+    [Fact]
+    public async Task Get_InactivePlayers_ReturnsInactivePlayerProfiles()
+    {
+        var client = CreateClient();
+        var response = await client.GetAsync("api/PlayerProfile/GetAllInactivePlayers");
+        var body = await response.Content.ReadAsStringAsync();
+
+        List<PlayerProfile> playerProfiles = JsonSerializer.Deserialize<List<PlayerProfile>>(body, _options)!;
+
+        var isActiveFirst = playerProfiles.First().Isactive;
+        var isActiveLast = playerProfiles.Last().Isactive;
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.False(isActiveFirst);
+        Assert.False(isActiveLast);
+    }
+    
+    [Fact]
+    public async Task Patch_PlayerProfileActiveFalse()
+    {
+        var client = CreateClient();
+        //Test player profile guid (its a fake)
+        var id = "ae3a776e-2c5a-4f31-8f40-96ea200dfdec";
+        var content = new StringContent(id, Encoding.UTF8, "application/json");
+        var response = await client.PatchAsync($"/api/PlayerProfile/{id}/softDelete", content);
+        var body = await response.Content.ReadAsStringAsync();
+        
+        PlayerProfile playerProfile = JsonSerializer.Deserialize<PlayerProfile>(body, _options)!;
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.False(playerProfile.Isactive);
+    }
+
+    [Fact]
+    public async Task Patch_PlayerProfileActiveTrue()
+    {
+        var client = CreateClient();
+        var id = "6c363bbd-41b2-4c6e-bde4-ce7c61c7faf3";
+        var content = new StringContent(id, Encoding.UTF8, "application/json");
+        var response = await client.PatchAsync($"/api/PlayerProfile/{id}/makeActive", content);
+        var body = await response.Content.ReadAsStringAsync();
+        
+        PlayerProfile playerProfile = JsonSerializer.Deserialize<PlayerProfile>(body, _options)!;
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.True(playerProfile.Isactive);
+    }
+
+    [Fact]
+    public async Task Put_PlayerProfileBalance_UpdatesBalance()
+    {
+        var client = CreateClient();
+        var id = "6c363bbd-41b2-4c6e-bde4-ce7c61c7faf3";
+        var content = new StringContent("{ 'playerId': '6c363bbd-41b2-4c6e-bde4-ce7c61c7faf3',  'balance': 300}", Encoding.UTF8, "application/json-patch+json");
+        var response = await client.PutAsync($"/api/PlayerProfile/update/{id}", content);
+        var body = await response.Content.ReadAsStringAsync();
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal("Player balance updated successfully.", body);
+        
+    }
+
+    [Fact]
+    public async Task Get_PlayerProfileBalance_ReturnsBalance()
+    {
+        var client = CreateClient();
+        var id = "6c363bbd-41b2-4c6e-bde4-ce7c61c7faf3";
+        
+        var response = await client.GetAsync($"/api/PlayerProfile/getBalance/{id}");
+        var body = await response.Content.ReadAsStringAsync();
+        
+        
+        PlayerProfile playerProfile = JsonSerializer.Deserialize<PlayerProfile>(body, _options)!;
+        
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(playerProfile.Balance);
+
+    }
+    
+    //
+    //Winner Tests
+    //
+
+    [Fact]
+    public async Task Get_Winners_ReturnsWinners()
+    {
+        var client = CreateClient();
+        var response = await client.GetAsync("/api/Winner/GetAllWinners");
+        var body = await response.Content.ReadAsStringAsync();
+        
+        List<Winner> winners = JsonSerializer.Deserialize<List<Winner>>(body, _options)!;
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(winners);
+    }
+    
+    
+    //
+    //Game Tests
+    //
+
+    [Fact]
+    public async Task Get_ActiveGame_ReturnsActiveGame()
+    {
+        var client = CreateClient();
+        var content = new StringContent("", Encoding.UTF8, "text/plain");
+        var response = await client.PostAsync("/api/Game/ActiveGame", content);
+        var body = await response.Content.ReadAsStringAsync();
+        
+        Game game = JsonSerializer.Deserialize<Game>(body, _options)!;
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(game);
+        Assert.True(game.Isactive);
+    }
+
+    [Fact]
+    public async Task Get_AllGames_ReturnsAllGames()
+    {
+        var client = CreateClient();
+        var response = await client.GetAsync("/api/Game/GetAllGames");
+        var body = await response.Content.ReadAsStringAsync();
+        
+        List<Game> games = JsonSerializer.Deserialize<List<Game>>(body, _options)!;
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotEmpty(games);
+    }
+
+    [Fact]
+    public async Task Patch_EndGame_EndsGame()
+    {
+        var client = CreateClient();
+        var id = "d4e5ab18-9e30-45c6-8d5e-d55f8fdd1458";
+        var seq = "123";
+        var response = await client.PatchAsync($"/api/Game/endGame?id={id}&finalSequence={seq}", null);
+        var body = await response.Content.ReadAsStringAsync();
+        
+        Game game = JsonSerializer.Deserialize<Game>(body, _options)!;
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.False(game.Isactive);
+    }
+
+    [Fact]
+    public async Task Put_UpdatePrizepool_UpdatesPrizepool()
+    {
+        var client = CreateClient();
+        var id = "d4e5ab18-9e30-45c6-8d5e-d55f8fdd1458";
+        var content = new StringContent("{'gameId': 'd4e5ab18-9e30-45c6-8d5e-d55f8fdd1458', 'prizepool': 1000}", Encoding.UTF8, "application/json-patch+json");
+        var response = await client.PutAsync($"/api/Game/update/{id}", content);
+        var body = await response.Content.ReadAsStringAsync();
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal("Game prizepool updated successfully.", body);
+    }
+
+    [Fact]
+    public async Task Get_GameById_ReturnsGame()
+    {
+        var client = CreateClient();
+        var id = "d4e5ab18-9e30-45c6-8d5e-d55f8fdd1458";
+        var response = await client.GetAsync($"/api/Game/getGameById/{id}");
+        var body = await response.Content.ReadAsStringAsync();
+        
+        Game game = JsonSerializer.Deserialize<Game>(body, _options)!;
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(game);
+    }
+    
+    
+    //
+    //Board Tests
+    //
 }

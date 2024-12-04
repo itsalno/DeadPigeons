@@ -10,81 +10,81 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Services.Security;
 using Services.Services;
 
+namespace Api;
 
-var builder = WebApplication.CreateBuilder(args);
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-builder.Services.AddDbContext<MyDbContext>(options =>
+public class Program
 {
-    options.UseNpgsql(connectionString);
-    options.EnableSensitiveDataLogging();
-});
-
-
-builder.Services.AddScoped<JWTGenerator>();
-builder.Services.AddScoped<PlayerProfileService>();
-builder.Services.AddScoped<IPlayerProfileRepository, PlayerProfileRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
-builder.Services.AddScoped<BalanceService>();
-builder.Services.AddScoped<GameService>();
-builder.Services.AddScoped<IGameRepository, GameRepository>();
-builder.Services.AddScoped<BoardService>();
-builder.Services.AddScoped<IBoardRepository, BoardRepository>();
-builder.Services.AddScoped<IWinnerRepository, WinnerRepository>();
-builder.Services.AddScoped<WinnerService>();
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-
-
-
-
-builder.Services.AddAuthorization();
-
-builder.Services.AddControllersWithViews()
-    .AddNewtonsoftJson(options =>
-        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-    );
-
-
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+    public static void Main(string[] args)
     {
-        options.TokenValidationParameters = new TokenValidationParameters
+        var builder = WebApplication.CreateBuilder(args);
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+        builder.Services.AddDbContext<MyDbContext>(options =>
         {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"])),
-            ValidateIssuer = false,
-            ValidateAudience = false
-        };
-    });
+            options.UseNpgsql(connectionString);
+            options.EnableSensitiveDataLogging();
+        });
 
 
+        builder.Services.AddScoped<JWTGenerator>();
+        builder.Services.AddScoped<PlayerProfileService>();
+        builder.Services.AddScoped<IPlayerProfileRepository, PlayerProfileRepository>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<UserService>();
+        builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
+        builder.Services.AddScoped<BalanceService>();
+        builder.Services.AddScoped<GameService>();
+        builder.Services.AddScoped<IGameRepository, GameRepository>();
+        builder.Services.AddScoped<BoardService>();
+        builder.Services.AddScoped<IBoardRepository, BoardRepository>();
+        builder.Services.AddScoped<IWinnerRepository, WinnerRepository>();
+        builder.Services.AddScoped<WinnerService>();
+        builder.Services.AddControllers();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
 
 
+        builder.Services.AddAuthorization();
+
+        builder.Services.AddControllersWithViews()
+            .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
 
-var app = builder.Build();
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey =
+                        new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"])),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
 
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+        var app = builder.Build();
+
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.MapControllers();
+        app.UseCors(config => config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
+        app.Run();
+    }
 }
-
-
-app.UseHttpsRedirection();
-
-app.UseAuthentication(); 
-app.UseAuthorization();
-app.MapControllers();
-app.UseCors(config => config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-
-app.Run();

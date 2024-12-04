@@ -23,7 +23,8 @@ public class PlayerProfileService(IPlayerProfileRepository playerProfileReposito
                 Name = player.User.Name,
                 Surname = player.User.Surname,
                 Phone = player.User.Phone,
-                Email = player.User.Email
+                Email = player.User.Email,
+                IsActive = player.Isactive
                 
             })
             .ToList();
@@ -44,7 +45,8 @@ public class PlayerProfileService(IPlayerProfileRepository playerProfileReposito
                 Name = player.User.Name,
                 Surname = player.User.Surname,
                 Phone = player.User.Phone,
-                Email = player.User.Email
+                Email = player.User.Email,
+                IsActive = player.Isactive
                 
             })
             .ToList();
