@@ -1,11 +1,12 @@
 ﻿using DataAccess.Data.Interfaces;
 using DataAccess.Interfaces;
 using DataAccess.Models;
+using Services.Interfaces;
 using Services.TransferModels.Responses;
 
 namespace Services.Services;
 
-public class WinnerService(IWinnerRepository winnerRepository,IGameRepository gameRepository)
+public class WinnerService(IWinnerRepository winnerRepository,IGameRepository gameRepository):IWinnerService
 {
     public List<WinnerDto> GetWinners()
     {

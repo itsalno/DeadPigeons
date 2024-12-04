@@ -1,6 +1,7 @@
 ﻿using DataAccess.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Services.Interfaces;
 using Services.Services;
 using Services.TransferModels.Requests;
 using Services.TransferModels.Responses;
@@ -9,7 +10,7 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BalanceController(BalanceService balanceService): ControllerBase
+public class BalanceController(IBalanceService balanceService): ControllerBase
 {
     
     [HttpPost]

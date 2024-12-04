@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Auth.dto;
+using Services.Interfaces;
 using Services.Security;
 using Services.Services;
 using Services.TransferModels.Responses;
@@ -16,11 +17,11 @@ using Services.TransferModels.Responses;
     {
         
         
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
         private readonly JWTGenerator _jwtGenerator;  
         private readonly MyDbContext _context;
 
-        public AuthController(UserService userService, JWTGenerator jwtGenerator,MyDbContext context)
+        public AuthController(IUserService userService, JWTGenerator jwtGenerator,MyDbContext context)
         {
             _userService = userService;
             _jwtGenerator = jwtGenerator; 

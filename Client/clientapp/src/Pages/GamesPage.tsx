@@ -174,7 +174,6 @@ export default function GamesPage() {
                 for (let i = 0; i < selected.length; i++) {
                     selected[i].classList.remove("selected");
                 }
-                window.location.reload();
             } catch (error) {
                 toast.error("An error has occured");
                 console.log(error);

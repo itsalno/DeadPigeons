@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Services.Interfaces;
 using Services.Services;
 using Services.TransferModels.Requests;
 using Services.TransferModels.Responses;
@@ -12,7 +13,7 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class GameController(GameService gameService) : ControllerBase
+public class GameController(IGameService gameService) : ControllerBase
 {
     [HttpPost]
     [Route("")]

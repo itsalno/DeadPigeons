@@ -95,7 +95,7 @@ public partial class MyDbContext : DbContext
                 .HasDefaultValueSql("uuid_generate_v4()")
                 .HasColumnName("id");
             entity.Property(e => e.Balance).HasColumnName("balance");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasColumnType("timestamp without time zone");
             entity.Property(e => e.Isactive).HasColumnName("isactive");
             entity.Property(e => e.Userid).HasColumnName("userid");
 

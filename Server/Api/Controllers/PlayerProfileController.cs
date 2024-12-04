@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Services;
+using Services.Interfaces;
 using Services.Services;
 using Services.TransferModels.Requests;
 using Services.TransferModels.Responses;
@@ -12,7 +13,7 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PlayerProfileController(PlayerProfileService profileService) : ControllerBase
+public class PlayerProfileController(IPlayerProfileService profileService) : ControllerBase
 {
     
     [Authorize(Roles = "Admin")]
@@ -62,7 +63,7 @@ public class PlayerProfileController(PlayerProfileService profileService) : Cont
 
     [HttpPut]
     [Route("update/{id}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,User")]
     public IActionResult UpdatePlayerBalance(Guid id, [FromBody] UpdatePlayerDTO playerDto)
     {
         if (playerDto == null)
