@@ -56,12 +56,12 @@ public class GameController(GameService gameService) : ControllerBase
     {
         if (gameDto == null)
         {
-            return BadRequest("Invalid player data.");
+            return BadRequest("Invalid game data.");
         }
 
         if (gameDto.GameId != id)
         {
-            return BadRequest("Player ID in URL does not match Player ID in request body.");
+            return BadRequest("Game ID in URL does not match Game ID in request body.");
         }
 
         try

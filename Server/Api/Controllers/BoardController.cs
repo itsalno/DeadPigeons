@@ -15,7 +15,7 @@ public class BoardController(BoardService boardService): ControllerBase
 {
     [HttpPost]
     [Route("")]
-    public ActionResult<Game> CreatePaper(CreateBoardDto createBoardDto)
+    public ActionResult<Game> CreateBoard(CreateBoardDto createBoardDto)
     {
         var board = boardService.CreateBoard(createBoardDto);
         return Ok(board);
