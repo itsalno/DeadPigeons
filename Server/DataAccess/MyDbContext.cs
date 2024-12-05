@@ -95,7 +95,7 @@ public partial class MyDbContext : DbContext
                 .HasDefaultValueSql("uuid_generate_v4()")
                 .HasColumnName("id");
             entity.Property(e => e.Balance).HasColumnName("balance");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasColumnType("timestamp without time zone");
             entity.Property(e => e.Isactive).HasColumnName("isactive");
             entity.Property(e => e.Userid).HasColumnName("userid");
 
@@ -135,11 +135,11 @@ public partial class MyDbContext : DbContext
 
             entity.Property(e => e.Id).HasDefaultValueSql("uuid_generate_v4()");
             entity.Property(e => e.Email).HasColumnType("character varying");
-            entity.Property(e => e.Name).HasColumnType("character varying").HasColumnName("name");
+            entity.Property(e => e.Name).HasColumnType("character varying").HasColumnName("Name");
             entity.Property(e => e.PasswordHash).HasColumnType("character varying");
-            entity.Property(e => e.Phone).HasColumnType("character varying").HasColumnName("phone");
+            entity.Property(e => e.Phone).HasColumnType("character varying").HasColumnName("Phone");
             entity.Property(e => e.Role).HasColumnType("character varying");
-            entity.Property(e => e.Surname).HasColumnType("character varying").HasColumnName("surname");
+            entity.Property(e => e.Surname).HasColumnType("character varying").HasColumnName("Surname");
             entity.Property(e => e.Username).HasColumnType("character varying");
         });
 

@@ -1,8 +1,10 @@
 ﻿using System.Security.Claims;
 using DataAccess.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Services;
+using Services.Interfaces;
 using Services.Services;
 using Services.TransferModels.Requests;
 using Services.TransferModels.Responses;
@@ -11,17 +13,17 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PlayerProfileController(PlayerProfileService profileService) : ControllerBase
+public class PlayerProfileController(IPlayerProfileService profileService) : ControllerBase
 {
     
-    
+    [Authorize(Roles = "Admin")]
     [HttpGet("GetAllPlayers")]
     public ActionResult<List<PlayerDTO>> GetAllPlayerProfiles()
     {
         var players = profileService.GetAllActivePlayers();
         return Ok(players);
     }
-    
+    [Authorize(Roles = "Admin")]
     [HttpGet("GetAllInactivePlayers")]
     public ActionResult<List<PlayerDTO>> GetAllInactivePlayerProfiles()
     {
@@ -31,6 +33,7 @@ public class PlayerProfileController(PlayerProfileService profileService) : Cont
     
     [HttpPatch]
     [Route("{id}/softDelete")]
+    [Authorize(Roles = "Admin")]
     public ActionResult<PlayerProfile> SoftDeleteProfile(Guid id)
     {
         var profile = profileService.SoftDeleteProfile(id);
@@ -45,6 +48,7 @@ public class PlayerProfileController(PlayerProfileService profileService) : Cont
     
     [HttpPatch]
     [Route("{id}/makeActive")]
+    [Authorize(Roles = "Admin")]
     public ActionResult<PlayerProfile> MakeProfileActive(Guid id)
     {
         var profile = profileService.MakeProfileActive(id);
@@ -59,6 +63,7 @@ public class PlayerProfileController(PlayerProfileService profileService) : Cont
 
     [HttpPut]
     [Route("update/{id}")]
+    [Authorize(Roles = "Admin,User")]
     public IActionResult UpdatePlayerBalance(Guid id, [FromBody] UpdatePlayerDTO playerDto)
     {
         if (playerDto == null)
@@ -85,6 +90,7 @@ public class PlayerProfileController(PlayerProfileService profileService) : Cont
 
     [HttpGet]
     [Route("getBalance/{id}")]
+    [Authorize(Roles = "Admin,User")]
     public ActionResult<PlayerProfile> GetPlayerBalance(Guid id)
     {
         

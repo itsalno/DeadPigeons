@@ -1,11 +1,12 @@
 ﻿using DataAccess.Data.Interfaces;
 using DataAccess.Models;
+using Services.Interfaces;
 using Services.TransferModels.Requests;
 using Services.TransferModels.Responses;
 
 namespace Services.Services;
 
-public class BalanceService(IBalanceRepository balanceRepository)
+public class BalanceService(IBalanceRepository balanceRepository):IBalanceService
 {
     public BalanceDTO AddFunds(CreateBalanceDTO createBalanceDto)
     {

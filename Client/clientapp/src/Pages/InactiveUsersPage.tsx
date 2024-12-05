@@ -3,15 +3,18 @@ import { PlayerAtom } from "../Atoms/PlayerAtom";
 import { useEffect } from "react";
 import { http } from '../http';
 import { useNavigate} from 'react-router-dom';
+import addAuthHeaders from "../AuthHeader";
 
 function InactiveUsersPage() {
 
     const navigate = useNavigate();
     const [inactivePlayers, setInactivePlayers] = useAtom(PlayerAtom);
-
-    // Fetch inactive players on mount
+    
+    
     useEffect(() => {
-        http.api.playerProfileGetAllInactivePlayersList()
+        http.api.playerProfileGetAllInactivePlayersList({
+            headers: addAuthHeaders(),
+        })
             .then((response) => {
                 setInactivePlayers(response.data);
             })
@@ -25,7 +28,9 @@ function InactiveUsersPage() {
     };
 
    const makeActive = (id: string) => {
-        http.api.playerProfileMakeActivePartialUpdate(id);
+        http.api.playerProfileMakeActivePartialUpdate(id,{
+            headers: addAuthHeaders(),
+        });
         window.location.reload();
 
         

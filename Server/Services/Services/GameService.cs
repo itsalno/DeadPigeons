@@ -3,6 +3,7 @@ using DataAccess.Data.Interfaces;
 using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using Services.Interfaces;
 using Services.TransferModels.Requests;
 using Services.TransferModels.Responses;
 
@@ -10,7 +11,7 @@ namespace Services.Services;
 
 
 
-public class GameService(IGameRepository gameRepository, IBoardRepository boardRepository, IPlayerProfileRepository playerProfileRepository)
+public class GameService(IGameRepository gameRepository, IBoardRepository boardRepository, IPlayerProfileRepository playerProfileRepository):IGameService
 {
     public GameDto CreateGame(CreateGameDto createGameDto)
     {

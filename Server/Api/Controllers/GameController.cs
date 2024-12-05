@@ -1,6 +1,8 @@
 ﻿using DataAccess.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Services.Interfaces;
 using Services.Services;
 using Services.TransferModels.Requests;
 using Services.TransferModels.Responses;
@@ -11,10 +13,11 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class GameController(GameService gameService) : ControllerBase
+public class GameController(IGameService gameService) : ControllerBase
 {
     [HttpPost]
     [Route("")]
+    [Authorize(Roles = "Admin,User")]
     public ActionResult<Game> CreateGame(CreateGameDto createGameDto)
     {
         var game = gameService.CreateGame(createGameDto);
@@ -23,6 +26,7 @@ public class GameController(GameService gameService) : ControllerBase
 
     [HttpPost]
     [Route("ActiveGame")]
+    [Authorize(Roles = "Admin,User")]
     public ActionResult<Game> GetActiveGame()
     {
         var game = gameService.GetActiveGame();
@@ -30,6 +34,7 @@ public class GameController(GameService gameService) : ControllerBase
     }
 
     [HttpGet("GetAllGames")]
+    [Authorize(Roles = "Admin")]
     public ActionResult<List<Game>> GetAllGames()
     {
         var games = gameService.GetAllGames();
@@ -38,6 +43,7 @@ public class GameController(GameService gameService) : ControllerBase
 
     [HttpPatch]
     [Route("endGame")]
+    [Authorize(Roles = "Admin")]
     public ActionResult<Game> EndGame(Guid id, string finalSequence)
     {
         var game = gameService.EndGame(id, finalSequence);
@@ -52,6 +58,7 @@ public class GameController(GameService gameService) : ControllerBase
     
     [HttpPut]
     [Route("update/{id}")]
+    [Authorize(Roles = "Admin,User")]
     public IActionResult UpdateGame(Guid id, [FromBody] UpdateGameDto gameDto)
     {
         if (gameDto == null)
@@ -78,6 +85,7 @@ public class GameController(GameService gameService) : ControllerBase
 
     [HttpGet]
     [Route("getGameById/{id}")]
+    [Authorize(Roles = "Admin,User")]
     public ActionResult<GameDto> GetById(Guid id)
     {
         var game =gameService.getById(id);

@@ -1,11 +1,12 @@
 using DataAccess.Interfaces;
 using DataAccess.Models;
 using Services.Auth.dto;
+using Services.Interfaces;
 using Services.TransferModels.Requests;
 
 namespace Services.Services;
 
-public class UserService(IUserRepository userRepository,PlayerProfileService playerProfileService)
+public class UserService(IUserRepository userRepository,IPlayerProfileService playerProfileService):IUserService
 {
     
     

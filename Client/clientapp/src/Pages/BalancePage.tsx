@@ -4,6 +4,7 @@ import {CreateBalanceDTO} from "../myApi";
 import toast from 'react-hot-toast';
 import { useAtom } from 'jotai';
 import { BalanceAtom } from '../Atoms/BalanceAtom';
+import addAuthHeaders from '../AuthHeader';
 
 function BalancePage(){
     const [amount, setAmount] = useState(""); 
@@ -26,7 +27,9 @@ function BalancePage(){
 
     useEffect(() => {
         if (playerProfileId) { 
-            http.api.playerProfileGetBalanceDetail(playerProfileId)
+            http.api.playerProfileGetBalanceDetail(playerProfileId,{
+                headers: addAuthHeaders(), 
+            })
                 .then((response) => {
                     setBalance(response.data.balance);
                     setIsActive(response.data.isactive)
@@ -65,7 +68,9 @@ function BalancePage(){
         }
 
         try {
-            await http.api.balanceCreate(balanceDto);
+            await http.api.balanceCreate(balanceDto,{
+                headers: addAuthHeaders(),
+            });
             toast.success("Wait for admmin to approve your transaction");
         } catch (error) {
             toast.error("Couldn't make the operation, please try again.");

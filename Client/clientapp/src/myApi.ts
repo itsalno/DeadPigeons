@@ -507,12 +507,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Auth
      * @name AuthRegisterCreate
      * @request POST:/api/auth/register
+     * @secure
      */
     authRegisterCreate: (data: Register, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/auth/register`,
         method: "POST",
         body: data,
+        secure: true,
         type: ContentType.Json,
         ...params,
       }),
@@ -523,14 +525,32 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Auth
      * @name AuthLoginCreate
      * @request POST:/api/auth/login
+     * @secure
      */
     authLoginCreate: (data: LogIn, params: RequestParams = {}) =>
       this.request<LogInResponseDTO, any>({
         path: `/api/auth/login`,
         method: "POST",
         body: data,
+        secure: true,
         type: ContentType.Json,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name AuthTestList
+     * @request GET:/api/auth/test
+     * @secure
+     */
+    authTestList: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/auth/test`,
+        method: "GET",
+        secure: true,
         ...params,
       }),
 
@@ -540,12 +560,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Balance
      * @name BalanceCreate
      * @request POST:/api/Balance
+     * @secure
      */
     balanceCreate: (data: CreateBalanceDTO, params: RequestParams = {}) =>
       this.request<BalanceDTO, any>({
         path: `/api/Balance`,
         method: "POST",
         body: data,
+        secure: true,
         type: ContentType.Json,
         format: "json",
         ...params,
@@ -557,11 +579,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Balance
      * @name BalanceAllDetail
      * @request GET:/api/Balance/all/{playerId}
+     * @secure
      */
     balanceAllDetail: (playerId: string, params: RequestParams = {}) =>
       this.request<BalanceDTO, any>({
         path: `/api/Balance/all/${playerId}`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -572,11 +596,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Balance
      * @name BalancePendingDetail
      * @request GET:/api/Balance/pending/{playerId}
+     * @secure
      */
     balancePendingDetail: (playerId: string, params: RequestParams = {}) =>
       this.request<BalanceDTO, any>({
         path: `/api/Balance/pending/${playerId}`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -587,6 +613,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Balance
      * @name BalanceApproveTransactionPartialUpdate
      * @request PATCH:/api/Balance/approveTransaction
+     * @secure
      */
     balanceApproveTransactionPartialUpdate: (
       query?: {
@@ -599,6 +626,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/Balance/approveTransaction`,
         method: "PATCH",
         query: query,
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -609,6 +637,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Balance
      * @name BalanceRejectTransactionPartialUpdate
      * @request PATCH:/api/Balance/rejectTransaction
+     * @secure
      */
     balanceRejectTransactionPartialUpdate: (
       query?: {
@@ -621,6 +650,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/Balance/rejectTransaction`,
         method: "PATCH",
         query: query,
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -631,12 +661,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Board
      * @name BoardCreate
      * @request POST:/api/Board
+     * @secure
      */
     boardCreate: (data: CreateBoardDto, params: RequestParams = {}) =>
       this.request<Game, any>({
         path: `/api/Board`,
         method: "POST",
         body: data,
+        secure: true,
         type: ContentType.Json,
         format: "json",
         ...params,
@@ -648,11 +680,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Board
      * @name BoardDetail
      * @request GET:/api/Board/{gameId}
+     * @secure
      */
     boardDetail: (gameId: string, params: RequestParams = {}) =>
       this.request<DetailGameHystoryDto, any>({
         path: `/api/Board/${gameId}`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -663,12 +697,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Game
      * @name GameCreate
      * @request POST:/api/Game
+     * @secure
      */
     gameCreate: (data: CreateGameDto, params: RequestParams = {}) =>
       this.request<Game, any>({
         path: `/api/Game`,
         method: "POST",
         body: data,
+        secure: true,
         type: ContentType.Json,
         format: "json",
         ...params,
@@ -680,11 +716,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Game
      * @name GameActiveGameCreate
      * @request POST:/api/Game/ActiveGame
+     * @secure
      */
     gameActiveGameCreate: (params: RequestParams = {}) =>
       this.request<Game, any>({
         path: `/api/Game/ActiveGame`,
         method: "POST",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -695,11 +733,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Game
      * @name GameGetAllGamesList
      * @request GET:/api/Game/GetAllGames
+     * @secure
      */
     gameGetAllGamesList: (params: RequestParams = {}) =>
       this.request<Game[], any>({
         path: `/api/Game/GetAllGames`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -710,6 +750,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Game
      * @name GameEndGamePartialUpdate
      * @request PATCH:/api/Game/endGame
+     * @secure
      */
     gameEndGamePartialUpdate: (
       query?: {
@@ -723,6 +764,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/Game/endGame`,
         method: "PATCH",
         query: query,
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -733,12 +775,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Game
      * @name GameUpdateUpdate
      * @request PUT:/api/Game/update/{id}
+     * @secure
      */
     gameUpdateUpdate: (id: string, data: UpdateGameDto, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/Game/update/${id}`,
         method: "PUT",
         body: data,
+        secure: true,
         type: ContentType.Json,
         ...params,
       }),
@@ -749,11 +793,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Game
      * @name GameGetGameByIdDetail
      * @request GET:/api/Game/getGameById/{id}
+     * @secure
      */
     gameGetGameByIdDetail: (id: string, params: RequestParams = {}) =>
       this.request<GameDto, any>({
         path: `/api/Game/getGameById/${id}`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -764,11 +810,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags PlayerProfile
      * @name PlayerProfileGetAllPlayersList
      * @request GET:/api/PlayerProfile/GetAllPlayers
+     * @secure
      */
     playerProfileGetAllPlayersList: (params: RequestParams = {}) =>
       this.request<PlayerDTO[], any>({
         path: `/api/PlayerProfile/GetAllPlayers`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -779,11 +827,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags PlayerProfile
      * @name PlayerProfileGetAllInactivePlayersList
      * @request GET:/api/PlayerProfile/GetAllInactivePlayers
+     * @secure
      */
     playerProfileGetAllInactivePlayersList: (params: RequestParams = {}) =>
       this.request<PlayerDTO[], any>({
         path: `/api/PlayerProfile/GetAllInactivePlayers`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -794,11 +844,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags PlayerProfile
      * @name PlayerProfileSoftDeletePartialUpdate
      * @request PATCH:/api/PlayerProfile/{id}/softDelete
+     * @secure
      */
     playerProfileSoftDeletePartialUpdate: (id: string, params: RequestParams = {}) =>
       this.request<PlayerProfile, any>({
         path: `/api/PlayerProfile/${id}/softDelete`,
         method: "PATCH",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -809,11 +861,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags PlayerProfile
      * @name PlayerProfileMakeActivePartialUpdate
      * @request PATCH:/api/PlayerProfile/{id}/makeActive
+     * @secure
      */
     playerProfileMakeActivePartialUpdate: (id: string, params: RequestParams = {}) =>
       this.request<PlayerProfile, any>({
         path: `/api/PlayerProfile/${id}/makeActive`,
         method: "PATCH",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -824,12 +878,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags PlayerProfile
      * @name PlayerProfileUpdateUpdate
      * @request PUT:/api/PlayerProfile/update/{id}
+     * @secure
      */
     playerProfileUpdateUpdate: (id: string, data: UpdatePlayerDTO, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/PlayerProfile/update/${id}`,
         method: "PUT",
         body: data,
+        secure: true,
         type: ContentType.Json,
         ...params,
       }),
@@ -840,11 +896,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags PlayerProfile
      * @name PlayerProfileGetBalanceDetail
      * @request GET:/api/PlayerProfile/getBalance/{id}
+     * @secure
      */
     playerProfileGetBalanceDetail: (id: string, params: RequestParams = {}) =>
       this.request<PlayerProfile, any>({
         path: `/api/PlayerProfile/getBalance/${id}`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -855,11 +913,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Winner
      * @name WinnerGetAllWinnersList
      * @request GET:/api/Winner/GetAllWinners
+     * @secure
      */
     winnerGetAllWinnersList: (params: RequestParams = {}) =>
       this.request<WinnerDto[], any>({
         path: `/api/Winner/GetAllWinners`,
         method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -870,11 +930,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags Winner
      * @name WinnerProcessWinnersCreate
      * @request POST:/api/Winner/process-winners/{gameId}
+     * @secure
      */
     winnerProcessWinnersCreate: (gameId: string, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/Winner/process-winners/${gameId}`,
         method: "POST",
+        secure: true,
         ...params,
       }),
   };

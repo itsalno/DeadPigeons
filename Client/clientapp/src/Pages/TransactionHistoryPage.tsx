@@ -3,6 +3,7 @@ import { http } from "../http";
 import { useParams } from "react-router-dom";
 import { BalanceDTO } from "../myApi";
 import toast from 'react-hot-toast';
+import addAuthHeaders from "../AuthHeader";
 
 function TransactionHistoryPage() {
 
@@ -13,8 +14,9 @@ function TransactionHistoryPage() {
 
     console.log(playerId);
     useEffect(() => {
-        // Fetch all transactions
-        http.api.balanceAllDetail(playerId)
+        http.api.balanceAllDetail(playerId,{
+            headers: addAuthHeaders(), 
+        })
             .then((response) => {
                 setTransactions(response.data);
             })
@@ -22,8 +24,10 @@ function TransactionHistoryPage() {
                 console.error("Failed to fetch transactions", error);
             });
 
-        // Fetch pending transactions
-        http.api.balancePendingDetail(playerId)
+        
+        http.api.balancePendingDetail(playerId,{
+            headers: addAuthHeaders(),  
+        })
             .then((response) => {
                 setPendingTransactions(response.data);
             })
@@ -48,8 +52,12 @@ function TransactionHistoryPage() {
                 balance: parseInt(transaction.amount.toString()), // Ensure amount is an integer
             };
             
-            await http.api.playerProfileUpdateUpdate(transaction.playerId, updatePlayerDto);
-            await http.api.balanceApproveTransactionPartialUpdate({id : transactionId})
+            await http.api.playerProfileUpdateUpdate(transaction.playerId, updatePlayerDto,{
+                headers: addAuthHeaders(), 
+            });
+            await http.api.balanceApproveTransactionPartialUpdate({id : transactionId},{
+                headers: addAuthHeaders(), 
+            })
             
             toast.success("Successfully replenished the player's balance");
             window.location.reload();
@@ -70,7 +78,9 @@ function TransactionHistoryPage() {
         }
 
         try {
-            await http.api.balanceRejectTransactionPartialUpdate({id: transactionId});
+            await http.api.balanceRejectTransactionPartialUpdate({id: transactionId},{
+                headers: addAuthHeaders(), 
+            });
 
             toast.success("Successfully rejected a transaction");
             window.location.reload();

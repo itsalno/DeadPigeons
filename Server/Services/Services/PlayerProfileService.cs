@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using DataAccess.Interfaces;
 using DataAccess.Models;
+using Services.Interfaces;
 using Services.TransferModels.Requests;
 using Services.TransferModels.Responses;
 
@@ -8,7 +9,7 @@ namespace Services.Services;
 
 
 
-public class PlayerProfileService(IPlayerProfileRepository playerProfileRepository,MyDbContext context) 
+public class PlayerProfileService(IPlayerProfileRepository playerProfileRepository,MyDbContext context):IPlayerProfileService 
 {
     public List<PlayerDTO> GetAllActivePlayers()
     {
@@ -101,7 +102,7 @@ public class PlayerProfileService(IPlayerProfileRepository playerProfileReposito
             Userid = userId,
             Balance = createPlayerDto.InitialBalance,
             Isactive = createPlayerDto.IsActive,
-            CreatedAt = 0
+            CreatedAt = DateTime.Now
         };
 
         return playerProfileRepository.CreatePlayerProfile(playerProfile);

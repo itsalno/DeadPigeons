@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import toast from "react-hot-toast";
 import { http } from "../http";
 import { useNavigate } from 'react-router-dom';
+import addAuthHeaders from "../AuthHeader";
 
 export default function RegisterUserPage(){
 
@@ -36,8 +37,7 @@ export default function RegisterUserPage(){
                 phone:formData.phone,
                 email: formData.email,
                 password: formData.password,
-                
-            });
+            },{headers: addAuthHeaders()});
             navigate("/Users")
             toast.success('Registration successful!');
            

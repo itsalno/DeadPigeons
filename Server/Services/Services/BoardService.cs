@@ -1,11 +1,12 @@
 ﻿using DataAccess.Interfaces;
 using DataAccess.Models;
+using Services.Interfaces;
 using Services.TransferModels.Requests;
 using Services.TransferModels.Responses;
 
 namespace Services.Services;
 
-public class BoardService(IBoardRepository boardRepository)
+public class BoardService(IBoardRepository boardRepository):IBoardService
 {
     public BoardDto CreateBoard(CreateBoardDto createBoardDto)
     {

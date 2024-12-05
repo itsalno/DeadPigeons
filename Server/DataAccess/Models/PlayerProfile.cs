@@ -13,7 +13,7 @@ public partial class PlayerProfile
 
     public bool? Isactive { get; set; }
 
-    public int? CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
     public virtual ICollection<Board> Boards { get; set; } = new List<Board>();
 

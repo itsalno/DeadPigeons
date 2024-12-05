@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import {http} from '../http';
 import {BalanceAtom} from '../Atoms/BalanceAtom';
 import { atomWithStorage } from 'jotai/utils';
+import addAuthHeaders from '../AuthHeader';
 
 export default function GamesPage() {
 
@@ -42,8 +43,9 @@ export default function GamesPage() {
      
     useEffect(() => {
         if (playerProfileId) {
-            //this is used in the balance page to get the balance but we can also use it to get the isActive
-            http.api.playerProfileGetBalanceDetail(playerProfileId)
+            http.api.playerProfileGetBalanceDetail(playerProfileId,{
+                headers: addAuthHeaders(),
+            })
                 .then((response) => {
                     setIsActive(response.data.isactive)
                 })
@@ -120,7 +122,9 @@ export default function GamesPage() {
                 GameId: game.id,
                 Prizepool: cost,
             };
-            http.api.gameUpdateUpdate(game.id, updateGameDto);
+            http.api.gameUpdateUpdate(game.id, updateGameDto,{
+                headers: addAuthHeaders(), 
+            });
 
             console.log("Game ID:", game.id);
             const newBalance = balance;
@@ -142,7 +146,7 @@ export default function GamesPage() {
                     sequence: seq.toString(),
                     autoplayStartWeek: localStorage.getItem('week'),
                     autoplayWeeksRemaining: autoNum,
-                });
+                },{headers: addAuthHeaders()});
 
                 const newBalance = visualBalance;
                 setBalance(newBalance);
@@ -153,7 +157,9 @@ export default function GamesPage() {
                     balance: -cost,
                 };
 
-                http.api.playerProfileUpdateUpdate(localStorage.getItem('playerProfileId'), updatePlayerDto);
+                http.api.playerProfileUpdateUpdate(localStorage.getItem('playerProfileId'), updatePlayerDto,{
+                    headers: addAuthHeaders(), 
+                });
 
 
                 toast.success("Your board has been saved");
@@ -168,7 +174,6 @@ export default function GamesPage() {
                 for (let i = 0; i < selected.length; i++) {
                     selected[i].classList.remove("selected");
                 }
-                //window.location.reload();
             } catch (error) {
                 toast.error("An error has occured");
                 console.log(error);
