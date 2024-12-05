@@ -49,7 +49,11 @@ public class WinnerService(IWinnerRepository winnerRepository,IGameRepository ga
         var matchingBoards = winnerRepository.GetMatchingBoards(gameId, winningSequence);
         if (!matchingBoards.Any())
         {
-            return "No matching boards found.";
+            game.Carryover = (game.Prizepool ?? 0);
+            game.Prizepool = 0; 
+            gameRepository.UpdateGame(game); 
+
+            return "No matching boards found. Prize pool carried over to the next game.";
         }
         
         int prizePool = game.Prizepool ?? 0;
@@ -69,6 +73,9 @@ public class WinnerService(IWinnerRepository winnerRepository,IGameRepository ga
         }).ToList();
         
         winnerRepository.SaveWinners(winners);
+        
+        game.Carryover = 0; 
+        gameRepository.UpdateGame(game);
 
         return $"{winners.Count} winners processed successfully. Each winner receives {amountPerWinner:C}.";
     }
