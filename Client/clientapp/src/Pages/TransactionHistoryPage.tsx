@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { BalanceDTO } from "../myApi";
 import toast from 'react-hot-toast';
 import addAuthHeaders from "../AuthHeader";
+import { useAtom } from 'jotai';
+import { BalanceAtom } from '../Atoms/BalanceAtom';
 
 function TransactionHistoryPage() {
 
@@ -11,7 +13,28 @@ function TransactionHistoryPage() {
     const {playerId} = useParams();
     const [transactions, setTransactions] = useState<BalanceDTO[]>([]);
     const [pendingTransactions, setPendingTransactions] = useState<BalanceDTO[]>([]);
+    const [balance, setBalance] = useAtom(BalanceAtom);
 
+
+
+
+
+    useEffect(() => {
+        if (playerId) {
+            http.api.playerProfileGetBalanceDetail(playerId,{
+                headers: addAuthHeaders(),
+            })
+                .then((response) => {
+                    setBalance(response.data.balance);
+                    
+                })
+                .catch((error) => {
+                    toast.error("Failed to fetch current balance.");
+                    console.error(error);
+                });
+        }
+    }, [playerId]);
+    
     console.log(playerId);
     useEffect(() => {
         http.api.balanceAllDetail(playerId,{

@@ -44,4 +44,11 @@ public class GameRepository(MyDbContext context) : IGameRepository
         context.Games.Update(game);
         context.SaveChanges();
     }
+    
+    public int? GetPricePoolByGameId(Guid gameId)
+    {
+        var game = context.Games.FirstOrDefault(g => g.Id == gameId);
+
+        return game?.Prizepool;
+    }
 }

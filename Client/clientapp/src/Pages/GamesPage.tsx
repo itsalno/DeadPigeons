@@ -34,13 +34,35 @@ export default function GamesPage() {
     useEffect(() => {
         if (storedPlayerProfileId) {
             setPlayerProfileId(storedPlayerProfileId);
+            setVisualBalance(balance);
         } else {
             toast.error("Please log in.");
             return;
         }
     }, []);
 
-     
+
+    useEffect(() => {
+        const fetchPrizePool = async () => {
+            if (!game?.id) {
+                console.error("Game ID is undefined.");
+                return;
+            }
+
+            try {
+                const response = await http.api.gamePricepoolByIdDetail(game.id);
+                const pricepool: number = response.data;
+                setPrizePool(pricepool);
+            } catch (error) {
+                console.error("Failed to fetch prize pool:", error);
+            }
+        };
+
+        fetchPrizePool();
+    }, [game?.id]);
+
+
+
     useEffect(() => {
         if (playerProfileId) {
             http.api.playerProfileGetBalanceDetail(playerProfileId,{
@@ -198,7 +220,7 @@ export default function GamesPage() {
 
 
             <div className="balance">
-                <p>Balance: <b>{visualBalance} DKK</b></p>
+                <p>Balance: <b>{balance} DKK</b></p>
             </div>
             <div className="balance">
                 <p>Total prizepool for the game: <b>{prizepool} DKK</b></p>

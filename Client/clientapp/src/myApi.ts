@@ -173,6 +173,7 @@ export interface PlayerDTO {
   name?: string | null;
   surname?: string | null;
   phone?: string | null;
+  isActive?: boolean | null;
 }
 
 export interface PlayerProfile {
@@ -183,8 +184,8 @@ export interface PlayerProfile {
   /** @format int32 */
   balance?: number | null;
   isactive?: boolean | null;
-  /** @format int32 */
-  createdAt?: number | null;
+  /** @format date-time */
+  createdAt?: string;
   boards?: Board[] | null;
   transactions?: Transaction[] | null;
   user?: User;
@@ -541,22 +542,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Auth
-     * @name AuthTestList
-     * @request GET:/api/auth/test
-     * @secure
-     */
-    authTestList: (params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/api/auth/test`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
      * @tags Balance
      * @name BalanceCreate
      * @request POST:/api/Balance
@@ -798,6 +783,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     gameGetGameByIdDetail: (id: string, params: RequestParams = {}) =>
       this.request<GameDto, any>({
         path: `/api/Game/getGameById/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GamePricepoolByIdDetail
+     * @request GET:/api/Game/PricepoolById/{id}
+     * @secure
+     */
+    gamePricepoolByIdDetail: (id: string, params: RequestParams = {}) =>
+      this.request<number, any>({
+        path: `/api/Game/PricepoolById/${id}`,
         method: "GET",
         secure: true,
         format: "json",
