@@ -50,6 +50,9 @@ public class GameService(IGameRepository gameRepository, IBoardRepository boardR
         Console.WriteLine(week);
 
         int year = date.Year;
+        
+        var lastGame = gameRepository.GetLastGame();
+        int carryover = lastGame?.Carryover ?? 0;
 
         Game game1 = new Game()
         {
@@ -58,7 +61,10 @@ public class GameService(IGameRepository gameRepository, IBoardRepository boardR
             CreatedAt = date,
             StartingDate = lastMonday,
             EndingDate = nextSunday,
-            Isactive = true
+            Isactive = true,
+            Prizepool = carryover,
+            Carryover = 0
+            
         };
         Game newGame = gameRepository.CreateGame(game1);
         Guid newId = newGame.Id;

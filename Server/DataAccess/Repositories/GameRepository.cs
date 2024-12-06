@@ -44,4 +44,11 @@ public class GameRepository(MyDbContext context) : IGameRepository
         context.Games.Update(game);
         context.SaveChanges();
     }
+    
+    public Game GetLastGame()
+    {
+        return context.Games
+            .OrderByDescending(g => g.CreatedAt)
+            .FirstOrDefault();
+    }
 }
