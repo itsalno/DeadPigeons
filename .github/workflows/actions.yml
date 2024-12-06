@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - alekss
   pull_request:
 
 jobs:
