@@ -2,8 +2,12 @@ import React, {useEffect, useState} from "react";
 import { http } from '../http';
 import toast from "react-hot-toast";
 import { useNavigate } from 'react-router-dom';
+import { useAtom } from 'jotai';
+import { isLoggedInAtom } from '../Atoms/AuthAtom';
 function ResetPasswordPage() {
 
+
+    const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
     const [formData, setFormData] = useState({
         newPassword: "",
         repeatPassword: "",
@@ -14,6 +18,7 @@ function ResetPasswordPage() {
 
     useEffect(() => {
         const storedUserId = localStorage.getItem("userId");
+        setIsLoggedIn(false);
 
         if (storedUserId) {
             setUserId(storedUserId);
