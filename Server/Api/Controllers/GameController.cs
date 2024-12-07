@@ -17,7 +17,7 @@ public class GameController(IGameService gameService) : ControllerBase
 {
     [HttpPost]
     [Route("")]
-    [Authorize(Roles = "Admin,User")]
+    [AllowAnonymous]
     public ActionResult<Game> CreateGame(CreateGameDto createGameDto)
     {
         var game = gameService.CreateGame(createGameDto);
@@ -26,7 +26,7 @@ public class GameController(IGameService gameService) : ControllerBase
 
     [HttpPost]
     [Route("ActiveGame")]
-    [Authorize(Roles = "Admin,User")]
+    [AllowAnonymous]
     public ActionResult<Game> GetActiveGame()
     {
         var game = gameService.GetActiveGame();
@@ -58,7 +58,7 @@ public class GameController(IGameService gameService) : ControllerBase
     
     [HttpPut]
     [Route("update/{id}")]
-    [Authorize(Roles = "Admin,User")]
+    [AllowAnonymous]
     public IActionResult UpdateGame(Guid id, [FromBody] UpdateGameDto gameDto)
     {
         if (gameDto == null)
