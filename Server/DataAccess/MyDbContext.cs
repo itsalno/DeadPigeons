@@ -141,6 +141,7 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.Role).HasColumnType("character varying");
             entity.Property(e => e.Surname).HasColumnType("character varying").HasColumnName("surname");
             entity.Property(e => e.Username).HasColumnType("character varying");
+            entity.Property(e => e.FirstPass).HasColumnName("firstpass");
         });
 
         modelBuilder.Entity<Winner>(entity =>

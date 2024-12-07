@@ -14,7 +14,8 @@ export default function RegisterUserPage(){
         password: '',
         name:'',
         surname:'',
-        phone:''
+        phone:'',
+        firstpass: true
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,6 +38,8 @@ export default function RegisterUserPage(){
                 phone:formData.phone,
                 email: formData.email,
                 password: formData.password,
+                firstPass: formData.firstpass
+                
             },{headers: addAuthHeaders()});
             navigate("/Users")
             toast.success('Registration successful!');

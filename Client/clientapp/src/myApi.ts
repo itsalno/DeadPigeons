@@ -161,6 +161,9 @@ export interface LogIn {
 export interface LogInResponseDTO {
   token?: string | null;
   playerProfileId?: string | null;
+  firstPass?: boolean;
+  /** @format uuid */
+  userId?: string;
 }
 
 export interface PlayerDTO {
@@ -214,6 +217,7 @@ export interface Register {
    * @minLength 1
    */
   phone: string;
+  firstPass?: boolean;
 }
 
 export interface Transaction {
@@ -255,6 +259,7 @@ export interface User {
   name?: string | null;
   surname?: string | null;
   phone?: string | null;
+  firstPass?: boolean;
   playerProfiles?: PlayerProfile[] | null;
 }
 
@@ -535,6 +540,30 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name AuthResetPassPartialUpdate
+     * @request PATCH:/api/auth/{id}/resetPass
+     * @secure
+     */
+    authResetPassPartialUpdate: (
+      id: string,
+      query?: {
+        newPass?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<User, any>({
+        path: `/api/auth/${id}/resetPass`,
+        method: "PATCH",
+        query: query,
+        secure: true,
         format: "json",
         ...params,
       }),

@@ -21,4 +21,6 @@ public class Register
     
     [Required,DataType(DataType.PhoneNumber)]
     public string Phone { get; set; }
+    
+    public bool FirstPass { get; set; }
 }
