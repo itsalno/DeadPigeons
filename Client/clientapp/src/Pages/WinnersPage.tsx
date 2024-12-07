@@ -14,7 +14,7 @@ function WinnersPage() {
         }).then((response) => {
             setWinner(response.data);
         }).catch(e => {
-            console.log("Failed to fetch winners data", e);
+            console.error("Failed to fetch winners data", e);
         })
     }, []);
 

@@ -35,7 +35,6 @@ function TransactionHistoryPage() {
         }
     }, [playerId]);
     
-    console.log(playerId);
     useEffect(() => {
         http.api.balanceAllDetail(playerId,{
             headers: addAuthHeaders(), 
@@ -81,9 +80,12 @@ function TransactionHistoryPage() {
             await http.api.balanceApproveTransactionPartialUpdate({id : transactionId},{
                 headers: addAuthHeaders(), 
             })
+
+            setPendingTransactions((prev) => prev.filter((transaction) => transaction.id !== transactionId));
+            setTransactions((prev) => [...prev, transaction]);
+          
             
             toast.success("Successfully replenished the player's balance");
-            window.location.reload();
         } catch (error) {
             console.error("Failed to approve transaction or update balance", error);
             toast.error("Something went wrong. Please try again.");
@@ -104,9 +106,10 @@ function TransactionHistoryPage() {
             await http.api.balanceRejectTransactionPartialUpdate({id: transactionId},{
                 headers: addAuthHeaders(), 
             });
-
+            
+            setPendingTransactions((prev) => prev.filter((transaction) => transaction.id !== transactionId));
             toast.success("Successfully rejected a transaction");
-            window.location.reload();
+            
         } catch (error) {
             console.error("Failed to reject transaction", error);
             toast.error("Something went wrong. Please try again.");

@@ -16,7 +16,7 @@ function HistoryOfGames() {
         }).then((response) => {
             setGames(response.data);
         }).catch(e => {
-            console.log("Failed to Fetch all papers" + e)
+           console.error(e)
         })
     }, [])
 

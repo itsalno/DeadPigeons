@@ -34,7 +34,6 @@ export default function GamesPage() {
     useEffect(() => {
         if (storedPlayerProfileId) {
             setPlayerProfileId(storedPlayerProfileId);
-            setVisualBalance(balance);
         } else {
             toast.error("Please log in.");
             return;
@@ -70,6 +69,7 @@ export default function GamesPage() {
             })
                 .then((response) => {
                     setIsActive(response.data.isactive)
+                    setBalance(response.data.balance)
                 })
                 .catch((error) => {
                     toast.error("Failed to fetch current balance.");
@@ -83,7 +83,7 @@ export default function GamesPage() {
     
     const handleAuto = (event) => {
         setAutoNum(event.currentTarget.value);
-        console.log(autoNum);
+       
     }
     
     const handleClick = (event) => {
@@ -129,16 +129,7 @@ export default function GamesPage() {
         } else {
             if(autoNum > 0){
                 setAutoplay(true);
-                console.log(autoplay);
-                console.log(autoNum);
             }
-
-            console.log("Submitting board...");
-            console.log("Game ID:", game.id);
-            console.log("Selected Tiles:", seq);
-            console.log("Cost:", cost);
-            console.log("Balance:", visualBalance);
-            console.log("Creating prizepool", game.id, cost)
 
             const updateGameDto = {
                 GameId: game.id,
@@ -148,14 +139,8 @@ export default function GamesPage() {
                 headers: addAuthHeaders(), 
             });
 
-            console.log("Game ID:", game.id);
+           
             const newBalance = balance;
-            console.log(localStorage.getItem("playerProfileId"));
-            console.log(game.id);
-            console.log(cost);
-            console.log(new Date().toJSON());
-            console.log(seq.toString());
-
             
             
             try {
@@ -198,7 +183,6 @@ export default function GamesPage() {
                 }
             } catch (error) {
                 toast.error("An error has occured");
-                console.log(error);
             }
             
         }
