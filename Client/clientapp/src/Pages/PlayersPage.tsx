@@ -16,7 +16,7 @@ function PlayersPage() {
         }).then((response) => {
                 setPlayer(response.data);
         }).catch(e => {
-            console.log("Failed to Fetch all papers" + e)
+            console.error("Failed to Fetch all papers" + e)
         })
     }, [])
 
@@ -28,9 +28,7 @@ function PlayersPage() {
         http.api.playerProfileSoftDeletePartialUpdate(id,{
             headers: addAuthHeaders(),
         });
-        window.location.reload();
-
-        navigate("/Users")
+        setPlayer((prev) => prev.filter((player) => player.playerId !== id));
 
     };
 

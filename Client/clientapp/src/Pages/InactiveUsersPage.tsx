@@ -31,7 +31,7 @@ function InactiveUsersPage() {
         http.api.playerProfileMakeActivePartialUpdate(id,{
             headers: addAuthHeaders(),
         });
-        window.location.reload();
+       setInactivePlayers((prev) => prev.filter((player) => player.playerId !== id));
 
         
     };
