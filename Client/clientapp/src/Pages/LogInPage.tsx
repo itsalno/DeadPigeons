@@ -60,6 +60,13 @@ const LogInPage: React.FC = () => {
                 localStorage.setItem("userId", userId);
                 setIsLoggedIn(true);
 
+              if (firstPass) {
+                navigate("/ResetPass")
+               }else {
+                navigate("/");
+                toast.success('Login successful!');
+                 }
+
                
 
                 http.api.gameActiveGameCreate({headers: addAuthHeaders()}).then((response) => {
@@ -72,12 +79,7 @@ const LogInPage: React.FC = () => {
                 localStorage.setItem('year', game.year);
                 
                 
-                if (firstPass) {
-                navigate("/ResetPass")
-                }else {
-                    navigate("/");
-                    toast.success('Login successful!');
-                }
+               
 
         } catch (err) {
             toast.error('An error occurred. Please try again.');
