@@ -9,7 +9,7 @@ using Xunit.Abstractions;
 
 namespace Tests;
 
-public class UnitTest1 : WebApplicationFactory<Program>
+public class IntegrationTests : WebApplicationFactory<Program>
 {
     /*
     Facts are tests which are always true. They test invariant conditions.
@@ -17,10 +17,17 @@ public class UnitTest1 : WebApplicationFactory<Program>
     Theories are tests which are only true for a particular set of data.
     [Theory]
      */
+    
 
     private readonly JsonSerializerOptions _options = new JsonSerializerOptions()
         { PropertyNameCaseInsensitive = true };
-    
+
+    private string GetAdminJwtToken()
+    {
+        var token = Environment.GetEnvironmentVariable("ADMIN_JWT_TOKEN");
+        return token.Trim();
+    }
+
     //
     //PlayerProfile tests
     //
@@ -29,6 +36,8 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Get_ActivePlayerProfiles_ReturnsActivePlayerProfiles()
     {
         var client = CreateClient();
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var response = await client.GetAsync("/api/PlayerProfile/GetAllPlayers");
         var body = await response.Content.ReadAsStringAsync();
         
@@ -46,6 +55,8 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Get_InactivePlayers_ReturnsInactivePlayerProfiles()
     {
         var client = CreateClient();
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var response = await client.GetAsync("api/PlayerProfile/GetAllInactivePlayers");
         var body = await response.Content.ReadAsStringAsync();
 
@@ -63,6 +74,8 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Patch_PlayerProfileActiveFalse()
     {
         var client = CreateClient();
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         //Test player profile guid (its a fake)
         var id = "ae3a776e-2c5a-4f31-8f40-96ea200dfdec";
         var content = new StringContent(id, Encoding.UTF8, "application/json");
@@ -79,6 +92,8 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Patch_PlayerProfileActiveFalse_NotFound()
     {
         var client = CreateClient();
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         //Test player profile guid (its a fake)
         var id = "ae3a776e-2c5a-4b31-8a45-96fa220dfdec";
         var content = new StringContent(id, Encoding.UTF8, "application/json");
@@ -93,7 +108,9 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Patch_PlayerProfileActiveTrue()
     {
         var client = CreateClient();
-        var id = "6c363bbd-41b2-4c6e-bde4-ce7c61c7faf3";
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
+        var id = "4c551a01-0559-4052-8d4c-92db28095dd4";
         var content = new StringContent(id, Encoding.UTF8, "application/json");
         var response = await client.PatchAsync($"/api/PlayerProfile/{id}/makeActive", content);
         var body = await response.Content.ReadAsStringAsync();
@@ -108,6 +125,8 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Patch_PlayerProfileActiveTrue_NotFound()
     {
         var client = CreateClient();
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var id = "6c353fbd-42b2-4d6e-ace4-ce7c51c7fbf3";
         var content = new StringContent(id, Encoding.UTF8, "application/json");
         var response = await client.PatchAsync($"/api/PlayerProfile/{id}/makeActive", content);
@@ -121,6 +140,8 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Put_PlayerProfileBalance_UpdatesBalance()
     {
         var client = CreateClient();
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var id = "6c363bbd-41b2-4c6e-bde4-ce7c61c7faf3";
         var content = new StringContent("{ 'playerId': '6c363bbd-41b2-4c6e-bde4-ce7c61c7faf3',  'balance': 300}", Encoding.UTF8, "application/json-patch+json");
         var response = await client.PutAsync($"/api/PlayerProfile/update/{id}", content);
@@ -135,6 +156,8 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Put_PlayerProfileBalance_NotFound()
     {
         var client = CreateClient();
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var id = "6c363bbd-41b2-4c6e-bde4-bd6d52a4faf3";
         var content = new StringContent("{ 'playerId': '6c363bbd-41b2-4c6e-bde4-bd6d52a4faf3',  'balance': 300}", Encoding.UTF8, "application/json-patch+json");
         var response = await client.PutAsync($"/api/PlayerProfile/update/{id}", content);
@@ -148,6 +171,8 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Put_PlayerProfileBalance_BadRequest()
     {
         var client = CreateClient();
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var id = "6c363bbd-41b2-4c6e-bde4-bd6d52a4faf3";
         var content = new StringContent("{ 'playerId': 'ae3a776e-2c5a-4b31-8a45-96fa220dfdec',  'balance': 200}", Encoding.UTF8, "application/json-patch+json");
         var response = await client.PutAsync($"/api/PlayerProfile/update/{id}", content);
@@ -161,7 +186,9 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Get_PlayerProfileBalance_ReturnsBalance()
     {
         var client = CreateClient();
-        var id = "6c363bbd-41b2-4c6e-bde4-ce7c61c7faf3";
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
+        var id = "4c551a01-0559-4052-8d4c-92db28095dd4";
         var response = await client.GetAsync($"/api/PlayerProfile/getBalance/{id}");
         var body = await response.Content.ReadAsStringAsync();
         
@@ -176,6 +203,8 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Get_PlayerProfileBalance_NotFound()
     {
         var client = CreateClient();
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var id = "6c363bbd-41b2-4c6e-bde4-bd6d52a4faf3";
         var response = await client.GetAsync($"/api/PlayerProfile/getBalance/{id}");
         var body = await response.Content.ReadAsStringAsync();
@@ -192,6 +221,8 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Get_Winners_ReturnsWinners()
     {
         var client = CreateClient();
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var response = await client.GetAsync("/api/Winner/GetAllWinners");
         var body = await response.Content.ReadAsStringAsync();
         
@@ -210,6 +241,8 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Get_ActiveGame_ReturnsActiveGame()
     {
         var client = CreateClient();
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var content = new StringContent("", Encoding.UTF8, "text/plain");
         var response = await client.PostAsync("/api/Game/ActiveGame", content);
         var body = await response.Content.ReadAsStringAsync();
@@ -225,6 +258,8 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Get_AllGames_ReturnsAllGames()
     {
         var client = CreateClient();
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var response = await client.GetAsync("/api/Game/GetAllGames");
         var body = await response.Content.ReadAsStringAsync();
         
@@ -238,7 +273,9 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Patch_EndGame_EndsGame()
     {
         var client = CreateClient();
-        var id = "d4e5ab18-9e30-45c6-8d5e-d55f8fdd1458";
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
+        var id = "2c7e0ab3-86f8-478c-b4ec-bd6ff53bd308";
         var seq = "123";
         var response = await client.PatchAsync($"/api/Game/endGame?id={id}&finalSequence={seq}", null);
         var body = await response.Content.ReadAsStringAsync();
@@ -253,6 +290,8 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Patch_EndGame_NotFound()
     {
         var client = CreateClient();
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var id = "d4e5ab18-9e30-45c6-8d5e-d55f8fdb2458";
         var seq = "123";
         var response = await client.PatchAsync($"/api/Game/endGame?id={id}&finalSequence={seq}", null);
@@ -268,6 +307,8 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Put_UpdatePrizepool_UpdatesPrizepool()
     {
         var client = CreateClient();
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var id = "d4e5ab18-9e30-45c6-8d5e-d55f8fdd1458";
         var content = new StringContent("{'gameId': 'd4e5ab18-9e30-45c6-8d5e-d55f8fdd1458', 'prizepool': 1000}", Encoding.UTF8, "application/json-patch+json");
         var response = await client.PutAsync($"/api/Game/update/{id}", content);
@@ -281,6 +322,8 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Put_UpdatePrizepool_BadRequest()
     {
         var client = CreateClient();
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var id = "d4e5ab18-9e30-45c6-8d5e-d55f8fdb2458";
         var content = new StringContent("{'gameId': 'd4e5ab18-9e30-45c6-8d5e-d55f8fdd1458', 'prizepool': 1000}", Encoding.UTF8, "application/json-patch+json");
         var response = await client.PutAsync($"/api/Game/update/{id}", content);
@@ -294,7 +337,9 @@ public class UnitTest1 : WebApplicationFactory<Program>
     public async Task Get_GameById_ReturnsGame()
     {
         var client = CreateClient();
-        var id = "d4e5ab18-9e30-45c6-8d5e-d55f8fdd1458";
+        client.DefaultRequestHeaders.Authorization = 
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
+        var id = "2c7e0ab3-86f8-478c-b4ec-bd6ff53bd308";
         var response = await client.GetAsync($"/api/Game/getGameById/{id}");
         var body = await response.Content.ReadAsStringAsync();
         

@@ -51,4 +51,11 @@ public class GameRepository(MyDbContext context) : IGameRepository
 
         return game?.Prizepool;
     }
+    
+    public Game GetLastGame()
+    {
+        return context.Games
+            .OrderByDescending(g => g.CreatedAt)
+            .FirstOrDefault();
+    }
 }

@@ -17,6 +17,9 @@ public interface IGameRepository
 
     public int? GetPricePoolByGameId(Guid gameId);
     
+    public Game GetLastGame();
+
+
 
 
 }
