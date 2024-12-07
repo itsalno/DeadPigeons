@@ -19,7 +19,8 @@ const LogInPage: React.FC = () => {
         password: '',
         name:'',
         surname:'',
-        phone:''
+        phone:'',
+       
     });
 
     const [loading, setLoading] = useState(false);
@@ -45,7 +46,9 @@ const LogInPage: React.FC = () => {
                     password: formData.password,
                 });
                 
-                const {token, playerProfileId} = response.data;
+                const {token, playerProfileId, firstPass, userId} = response.data;
+
+           
 
                 localStorage.setItem("token", token);
                 localStorage.setItem("playerProfileId", playerProfileId);
@@ -54,6 +57,7 @@ const LogInPage: React.FC = () => {
 
 
                 localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem("userId", userId);
                 setIsLoggedIn(true);
 
                
@@ -66,9 +70,14 @@ const LogInPage: React.FC = () => {
                 
                 localStorage.setItem('week', game.week);
                 localStorage.setItem('year', game.year);
-
-            navigate("/");
-            toast.success('Login successful!');
+                
+                
+                if (firstPass) {
+                navigate("/ResetPass")
+                }else {
+                    navigate("/");
+                    toast.success('Login successful!');
+                }
 
         } catch (err) {
             toast.error('An error occurred. Please try again.');

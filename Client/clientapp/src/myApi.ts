@@ -161,6 +161,9 @@ export interface LogIn {
 export interface LogInResponseDTO {
   token?: string | null;
   playerProfileId?: string | null;
+  firstPass?: boolean;
+  /** @format uuid */
+  userId?: string;
 }
 
 export interface PlayerDTO {
@@ -173,6 +176,7 @@ export interface PlayerDTO {
   name?: string | null;
   surname?: string | null;
   phone?: string | null;
+  isActive?: boolean | null;
 }
 
 export interface PlayerProfile {
@@ -183,8 +187,8 @@ export interface PlayerProfile {
   /** @format int32 */
   balance?: number | null;
   isactive?: boolean | null;
-  /** @format int32 */
-  createdAt?: number | null;
+  /** @format date-time */
+  createdAt?: string;
   boards?: Board[] | null;
   transactions?: Transaction[] | null;
   user?: User;
@@ -213,6 +217,7 @@ export interface Register {
    * @minLength 1
    */
   phone: string;
+  firstPass?: boolean;
 }
 
 export interface Transaction {
@@ -254,6 +259,7 @@ export interface User {
   name?: string | null;
   surname?: string | null;
   phone?: string | null;
+  firstPass?: boolean;
   playerProfiles?: PlayerProfile[] | null;
 }
 
@@ -542,15 +548,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Auth
-     * @name AuthTestList
-     * @request GET:/api/auth/test
+     * @name AuthResetPassPartialUpdate
+     * @request PATCH:/api/auth/{id}/resetPass
      * @secure
      */
-    authTestList: (params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/api/auth/test`,
-        method: "GET",
+    authResetPassPartialUpdate: (
+      id: string,
+      query?: {
+        newPass?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<User, any>({
+        path: `/api/auth/${id}/resetPass`,
+        method: "PATCH",
+        query: query,
         secure: true,
+        format: "json",
         ...params,
       }),
 
@@ -798,6 +812,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     gameGetGameByIdDetail: (id: string, params: RequestParams = {}) =>
       this.request<GameDto, any>({
         path: `/api/Game/getGameById/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GamePricepoolByIdDetail
+     * @request GET:/api/Game/PricepoolById/{id}
+     * @secure
+     */
+    gamePricepoolByIdDetail: (id: string, params: RequestParams = {}) =>
+      this.request<number, any>({
+        path: `/api/Game/PricepoolById/${id}`,
         method: "GET",
         secure: true,
         format: "json",

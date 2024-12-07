@@ -14,7 +14,9 @@ public interface IGameRepository
 
     public void EndGame(Game game);
     public void UpdateGame(Game game);
+
+    public int? GetPricePoolByGameId(Guid gameId);
     
-    
+
 
 }

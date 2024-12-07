@@ -123,4 +123,17 @@ public class GameService(IGameRepository gameRepository, IBoardRepository boardR
         return gameRepository.GetById(id);
     }
     
+    public int? GetPricePoolByGameId(Guid gameId)
+    {
+        var pricepool = gameRepository.GetPricePoolByGameId(gameId);
+
+        if (pricepool.HasValue) 
+        {
+            return (int)(pricepool.Value * 0.7); 
+        }
+
+        return null; 
+
+    }
+    
 }

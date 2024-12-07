@@ -92,4 +92,14 @@ public class GameController(IGameService gameService) : ControllerBase
         return Ok(game);
     }
     
+    [HttpGet]
+    [Route("PricepoolById/{id}")]
+    public int GetPricePoolByGameId(Guid id)
+    {
+        var pricepool = gameService.GetPricePoolByGameId(id);
+
+        // If the value is null, return a default value (e.g., 0).
+        return pricepool ?? 0;
+    }
+    
 }

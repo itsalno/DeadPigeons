@@ -52,6 +52,7 @@ using Services.TransferModels.Responses;
                 return Unauthorized(new { Message = "Invalid credentials" });
             }
             
+            
             var token = _jwtGenerator.GenerateJwtToken(user);
             Console.WriteLine($"Logged in user: {user.Username}, UserId: {user.Id}");
             
@@ -78,9 +79,26 @@ using Services.TransferModels.Responses;
             {
                 Token = token,
                 PlayerProfileId = playerProfile.Id.ToString(),
+                FirstPass = user.FirstPass,
+                UserId = user.Id
             };
             
             return Ok(loginResponse);
+        }
+        
+        [HttpPatch]
+        [Route("{id}/resetPass")]
+        
+        public ActionResult<User> ResetPass(Guid id, string newPass)
+        {
+            var user = _userService.ResetPassword(id, newPass);
+
+            if (user == null)
+            {
+                return NotFound(new { message = "Profile not found" });
+            }
+
+            return Ok(user);
         }
 
         

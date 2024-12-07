@@ -22,7 +22,8 @@ public class UserService(IUserRepository userRepository,IPlayerProfileService pl
             Surname = model.Surname,
             Phone = model.Phone,
             PasswordHash = hashedPassword,
-            Role = "User"
+            Role = "User",
+            FirstPass = model.FirstPass
         };
 
         var createdUser = userRepository.CreateUser(user);
@@ -41,6 +42,18 @@ public class UserService(IUserRepository userRepository,IPlayerProfileService pl
     public User GetUserByUsername(string username)
     {
         return userRepository.GetUserByUsername(username);
+    }
+    
+    public User? ResetPassword(Guid id, string newPass)
+    {
+        var user = userRepository.GetById(id);
+        if (user == null) return null;
+
+        user.FirstPass = false;
+        var hashedPassword = PasswordHasher.HashPassword(newPass);
+        user.PasswordHash = hashedPassword;
+        userRepository.UpdateUser(user);
+        return user;
     }
     
     

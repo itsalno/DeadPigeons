@@ -15,6 +15,7 @@ export default function Navigation() {
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('token');
         localStorage.removeItem('playerProfileId');
+        localStorage.removeItem('userId');
         setIsLoggedIn(false);
         navigate("/");
     };

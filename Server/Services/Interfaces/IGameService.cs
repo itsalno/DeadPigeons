@@ -12,4 +12,5 @@ public interface IGameService
      Game? EndGame(Guid id, string finalSequence);
      void UpdateGame(UpdateGameDto updateGameDto);
      Game? getById(Guid id);
+     public int? GetPricePoolByGameId(Guid gameId);
 }

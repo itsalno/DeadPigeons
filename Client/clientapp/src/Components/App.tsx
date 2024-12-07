@@ -18,6 +18,8 @@ import { isLoggedInAtom } from "../Atoms/AuthAtom";
 import RegisterUserPage from "../Pages/RegisterUserPage";
 import DetailGameHistoryPage from "../Pages/DetailGameHistoryPage";
 import ProtectedRoute from "./ProtectedRoute";
+import ResetPasswordPage from "../Pages/ResetPasswordPage";
+
 
 const App = () => {
     const [theme, setTheme] = useAtom(ThemeAtom);
@@ -44,6 +46,7 @@ const App = () => {
                 {/* Everybody */}
                 <Route path="/" element={<IntroPage />} />
                 <Route path="/LogIn" element={<LogInPage />} />
+                <Route path="/ResetPass" element={<ResetPasswordPage />} />
 
                 {/* User */}
                 <Route path="/Games" element={<ProtectedRoute requiredRole="User"><GamesPage /></ProtectedRoute>} />

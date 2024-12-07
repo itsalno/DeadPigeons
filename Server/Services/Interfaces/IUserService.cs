@@ -7,4 +7,6 @@ public interface IUserService
 {
      User RegisterUser(Register model);
      User GetUserByUsername(string username);
+
+     public User? ResetPassword(Guid id, string newPass);
 }

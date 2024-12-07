@@ -20,6 +20,8 @@ public partial class User
     public string? Surname { get; set; }
 
     public string? Phone { get; set; }
+    
+    public bool FirstPass { get; set; }
 
     public virtual ICollection<PlayerProfile> PlayerProfiles { get; set; } = new List<PlayerProfile>();
 }

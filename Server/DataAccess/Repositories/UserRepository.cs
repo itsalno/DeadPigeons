@@ -19,4 +19,15 @@ public class UserRepository(MyDbContext context):IUserRepository
     {
         return context.User.SingleOrDefault(u => u.Username == username);
     }
+    
+    public User GetById(Guid id)
+    {
+        return context.User.FirstOrDefault(u => u.Id == id);
+    }
+    
+    public void UpdateUser(User user)
+    {
+        context.User.Update(user);
+        context.SaveChanges();
+    }
 }
