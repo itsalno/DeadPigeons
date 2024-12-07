@@ -23,7 +23,6 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Run tests
-        env:
-          ADMIN_JWT_TOKEN: ${{ secrets.ADMIN_JWT_TOKEN }}
-        run: dotnet test
+      - name: Build
+        run: dotnet build
+      

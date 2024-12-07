@@ -57,10 +57,28 @@ public class WinnerService(IWinnerRepository winnerRepository,IGameRepository ga
         }
         
         int prizePool = game.Prizepool ?? 0;
-        decimal prizePoolForWinners = prizePool * 0.7m;
+        int prizePoolForWinners = (int)(prizePool * 0.7); 
 
         int numberOfWinningBoards = matchingBoards.Count();
-        decimal amountPerWinner = numberOfWinningBoards > 0 ? prizePoolForWinners / numberOfWinningBoards : 0;
+        decimal amountPerBoard = numberOfWinningBoards > 0 ? (decimal)prizePoolForWinners / numberOfWinningBoards : 0;
+
+        int maxWinningPerPlayer = 5000; 
+        int carryoverFromExcess = 0;
+        
+        var playerWinnings = matchingBoards
+            .GroupBy(board => board.Playerid)
+            .ToDictionary(group => group.Key, group =>
+            {
+                decimal totalWinnings = group.Count() * amountPerBoard;
+
+                if (totalWinnings > maxWinningPerPlayer)
+                {
+                    carryoverFromExcess += (int)(totalWinnings - maxWinningPerPlayer); 
+                    totalWinnings = maxWinningPerPlayer;
+                }
+
+                return totalWinnings;
+            });
 
         
         var winners = matchingBoards.Select(board => new Winner
@@ -69,14 +87,15 @@ public class WinnerService(IWinnerRepository winnerRepository,IGameRepository ga
             Sequence = board.Sequence,
             Playerid = board.Playerid,
             CreatedAt = DateTime.UtcNow,
-            AmountWon = amountPerWinner 
+            AmountWon = amountPerBoard 
         }).ToList();
         
         winnerRepository.SaveWinners(winners);
         
+        game.Carryover = (game.Carryover ?? 0) + carryoverFromExcess;
         game.Carryover = 0; 
         gameRepository.UpdateGame(game);
 
-        return $"{winners.Count} winners processed successfully. Each winner receives {amountPerWinner:C}.";
+        return $"{winners.Count} winners processed successfully. Each winner receives {amountPerBoard:C}.";
     }
 }
