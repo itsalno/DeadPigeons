@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using DataAccess.Interfaces;
 using DataAccess.Models;
+using FluentValidation;
 using Services.Interfaces;
 using Services.TransferModels.Requests;
 using Services.TransferModels.Responses;
@@ -9,7 +10,7 @@ namespace Services.Services;
 
 
 
-public class PlayerProfileService(IPlayerProfileRepository playerProfileRepository,MyDbContext context):IPlayerProfileService 
+public class PlayerProfileService(IPlayerProfileRepository playerProfileRepository,MyDbContext context, IValidator<PlayerProfile> createPlayerProfileValidator):IPlayerProfileService 
 {
     public List<PlayerDTO> GetAllActivePlayers()
     {
@@ -104,6 +105,8 @@ public class PlayerProfileService(IPlayerProfileRepository playerProfileReposito
             Isactive = createPlayerDto.IsActive,
             CreatedAt = DateTime.Now
         };
+        
+        createPlayerProfileValidator.ValidateAndThrow(playerProfile);
 
         return playerProfileRepository.CreatePlayerProfile(playerProfile);
     }

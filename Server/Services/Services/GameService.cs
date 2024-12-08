@@ -3,6 +3,7 @@ using DataAccess.Data.Interfaces;
 using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using FluentValidation;
 using Services.Interfaces;
 using Services.TransferModels.Requests;
 using Services.TransferModels.Responses;
@@ -11,10 +12,11 @@ namespace Services.Services;
 
 
 
-public class GameService(IGameRepository gameRepository, IBoardRepository boardRepository, IPlayerProfileRepository playerProfileRepository):IGameService
+public class GameService(IGameRepository gameRepository, IBoardRepository boardRepository, IPlayerProfileRepository playerProfileRepository, IValidator<CreateGameDto> createGameValidator):IGameService
 {
     public GameDto CreateGame(CreateGameDto createGameDto)
     {
+        createGameValidator.ValidateAndThrow(createGameDto);
         var game = createGameDto.ToGame();
         Game newGame = gameRepository.CreateGame(game);
         return new GameDto().FromEntity(newGame);

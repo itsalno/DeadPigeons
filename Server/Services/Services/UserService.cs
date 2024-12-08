@@ -1,12 +1,13 @@
 using DataAccess.Interfaces;
 using DataAccess.Models;
+using FluentValidation;
 using Services.Auth.dto;
 using Services.Interfaces;
 using Services.TransferModels.Requests;
 
 namespace Services.Services;
 
-public class UserService(IUserRepository userRepository,IPlayerProfileService playerProfileService):IUserService
+public class UserService(IUserRepository userRepository,IPlayerProfileService playerProfileService, IValidator<User> createUserValidator):IUserService
 {
     
     
@@ -25,6 +26,8 @@ public class UserService(IUserRepository userRepository,IPlayerProfileService pl
             Role = "User",
             FirstPass = model.FirstPass
         };
+        
+        createUserValidator.ValidateAndThrow(user);
 
         var createdUser = userRepository.CreateUser(user);
         

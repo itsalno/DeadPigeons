@@ -1,15 +1,17 @@
 ﻿using DataAccess.Interfaces;
 using DataAccess.Models;
+using FluentValidation;
 using Services.Interfaces;
 using Services.TransferModels.Requests;
 using Services.TransferModels.Responses;
 
 namespace Services.Services;
 
-public class BoardService(IBoardRepository boardRepository):IBoardService
+public class BoardService(IBoardRepository boardRepository, IValidator<CreateBoardDto> createBoardValidator):IBoardService
 {
     public BoardDto CreateBoard(CreateBoardDto createBoardDto)
     {
+        createBoardValidator.ValidateAndThrow(createBoardDto);
         var board = createBoardDto.ToBoard();
         Board newBoard = boardRepository.CreateBoard(board);
         return new BoardDto().FromEntity(newBoard);
