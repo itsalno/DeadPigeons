@@ -25,8 +25,10 @@ public class IntegrationTests : WebApplicationFactory<Program>
     private string GetAdminJwtToken()
     {
         var token = Environment.GetEnvironmentVariable("TOKEN_CONTENT");
+        var trimmedtoken = token.Trim();
         
-        return token;
+        
+        return trimmedtoken;
     }
 
     //
