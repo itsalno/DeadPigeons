@@ -26,11 +26,12 @@ const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
 
     useEffect(() => {
-        const loggedInStatus = localStorage.getItem('isLoggedIn');
+        setIsLoggedIn(false)
+        /*const loggedInStatus = localStorage.getItem('isLoggedIn');
 
         if (loggedInStatus === 'true') {
             setIsLoggedIn(true); // Update atom state
-        }
+        }*/
     }, []);
 
     useEffect(() => {
