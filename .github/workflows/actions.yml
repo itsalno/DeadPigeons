@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-     
   pull_request:
 
 jobs:
@@ -25,4 +24,11 @@ jobs:
 
       - name: Build
         run: dotnet build
-      
+
+      - name: Add token.txt
+        run: |
+          echo "${{ secrets.TOKEN_CONTENT }}" > ./Tests/token.txt
+          
+        
+      - name: Run Tests
+        run: dotnet test --no-build --verbosity normal

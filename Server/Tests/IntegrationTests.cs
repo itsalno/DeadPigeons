@@ -24,8 +24,14 @@ public class IntegrationTests : WebApplicationFactory<Program>
 
     private string GetAdminJwtToken()
     {
-        var token = Environment.GetEnvironmentVariable("ADMIN_JWT_TOKEN");
-        return token.Trim();
+        var testProjectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?
+            .Parent?.Parent?.Parent?.FullName;
+
+        var tokenFilePath = Path.Combine(testProjectDirectory, "token.txt");
+
+        var token = File.ReadAllText(tokenFilePath).Trim();
+        
+        return token;
     }
 
     //
