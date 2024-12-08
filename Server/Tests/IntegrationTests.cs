@@ -43,8 +43,9 @@ public class IntegrationTests : WebApplicationFactory<Program>
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var response = await client.GetAsync("/api/PlayerProfile/GetAllPlayers");
         var body = await response.Content.ReadAsStringAsync();
+        var sanitizedBody = body.Trim();
         
-        List<PlayerProfile> playerProfiles = JsonSerializer.Deserialize<List<PlayerProfile>>(body, _options)!;
+        List<PlayerProfile> playerProfiles = JsonSerializer.Deserialize<List<PlayerProfile>>(sanitizedBody, _options)!;
 
         var isActiveFirst = playerProfiles.First().Isactive;
         var isActiveLast = playerProfiles.Last().Isactive;
@@ -62,8 +63,9 @@ public class IntegrationTests : WebApplicationFactory<Program>
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var response = await client.GetAsync("api/PlayerProfile/GetAllInactivePlayers");
         var body = await response.Content.ReadAsStringAsync();
+        var sanitizedBody = body.Trim();
 
-        List<PlayerProfile> playerProfiles = JsonSerializer.Deserialize<List<PlayerProfile>>(body, _options)!;
+        List<PlayerProfile> playerProfiles = JsonSerializer.Deserialize<List<PlayerProfile>>(sanitizedBody, _options)!;
 
         var isActiveFirst = playerProfiles.First().Isactive;
         var isActiveLast = playerProfiles.Last().Isactive;
@@ -84,8 +86,9 @@ public class IntegrationTests : WebApplicationFactory<Program>
         var content = new StringContent(id, Encoding.UTF8, "application/json");
         var response = await client.PatchAsync($"/api/PlayerProfile/{id}/softDelete", content);
         var body = await response.Content.ReadAsStringAsync();
+        var sanitizedBody = body.Trim();
         
-        PlayerProfile playerProfile = JsonSerializer.Deserialize<PlayerProfile>(body, _options)!;
+        PlayerProfile playerProfile = JsonSerializer.Deserialize<PlayerProfile>(sanitizedBody, _options)!;
         
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.False(playerProfile.Isactive);
@@ -117,8 +120,9 @@ public class IntegrationTests : WebApplicationFactory<Program>
         var content = new StringContent(id, Encoding.UTF8, "application/json");
         var response = await client.PatchAsync($"/api/PlayerProfile/{id}/makeActive", content);
         var body = await response.Content.ReadAsStringAsync();
+        var sanitizedBody = body.Trim();
         
-        PlayerProfile playerProfile = JsonSerializer.Deserialize<PlayerProfile>(body, _options)!;
+        PlayerProfile playerProfile = JsonSerializer.Deserialize<PlayerProfile>(sanitizedBody, _options)!;
         
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.True(playerProfile.Isactive);
@@ -134,9 +138,10 @@ public class IntegrationTests : WebApplicationFactory<Program>
         var content = new StringContent(id, Encoding.UTF8, "application/json");
         var response = await client.PatchAsync($"/api/PlayerProfile/{id}/makeActive", content);
         var body = await response.Content.ReadAsStringAsync();
+        var sanitizedBody = body.Trim();
         
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        Assert.Equal("{\"message\":\"Profile not found\"}", body);
+        Assert.Equal("{\"message\":\"Profile not found\"}", sanitizedBody);
     }
 
     [Fact]
@@ -149,9 +154,10 @@ public class IntegrationTests : WebApplicationFactory<Program>
         var content = new StringContent("{ 'playerId': '6c363bbd-41b2-4c6e-bde4-ce7c61c7faf3',  'balance': 300}", Encoding.UTF8, "application/json-patch+json");
         var response = await client.PutAsync($"/api/PlayerProfile/update/{id}", content);
         var body = await response.Content.ReadAsStringAsync();
+        var sanitizedBody = body.Trim();
         
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal("Player balance updated successfully.", body);
+        Assert.Equal("Player balance updated successfully.", sanitizedBody);
         
     }
 
@@ -194,8 +200,9 @@ public class IntegrationTests : WebApplicationFactory<Program>
         var id = "4c551a01-0559-4052-8d4c-92db28095dd4";
         var response = await client.GetAsync($"/api/PlayerProfile/getBalance/{id}");
         var body = await response.Content.ReadAsStringAsync();
+        var sanitizedBody = body.Trim();
         
-        PlayerProfile playerProfile = JsonSerializer.Deserialize<PlayerProfile>(body, _options)!;
+        PlayerProfile playerProfile = JsonSerializer.Deserialize<PlayerProfile>(sanitizedBody, _options)!;
         
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(playerProfile.Balance);
