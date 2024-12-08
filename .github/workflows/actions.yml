@@ -25,10 +25,8 @@ jobs:
       - name: Build
         run: dotnet build
 
-      - name: Add token.txt
-        run: |
-          echo "${{ secrets.TOKEN_CONTENT }}" > ./Tests/token.txt
-          
-        
       - name: Run Tests
-        run: dotnet test --no-build --verbosity normal
+        env:
+          TOKEN_CONTENT: ${{ secrets.TOKEN_CONTENT }} 
+        run: dotnet test
+
