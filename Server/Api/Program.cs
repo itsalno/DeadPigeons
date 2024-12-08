@@ -4,6 +4,7 @@ using DataAccess.Data.Interfaces;
 using DataAccess.Models;
 using DataAccess.Interfaces;
 using DataAccess.Repositories;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using Services.Interfaces;
 using Services.Security;
 using Services.Services;
+using Services.Validators;
 
 namespace Api;
 
@@ -29,74 +31,79 @@ public class Program
             options.EnableSensitiveDataLogging();
         });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"])),
-            ValidateIssuer = false,
-            ValidateAudience = false
-        };
-    });
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
-});
-
-
-builder.Services.AddScoped<JWTGenerator>();
-builder.Services.AddScoped<IPlayerProfileService,PlayerProfileService>();
-builder.Services.AddScoped<IPlayerProfileRepository, PlayerProfileRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService,UserService>();
-builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
-builder.Services.AddScoped<IBalanceService,BalanceService>();
-builder.Services.AddScoped<IGameService,GameService>();
-builder.Services.AddScoped<IGameRepository, GameRepository>();
-builder.Services.AddScoped<IBoardService,BoardService>();
-builder.Services.AddScoped<IBoardRepository, BoardRepository>();
-builder.Services.AddScoped<IWinnerRepository, WinnerRepository>();
-builder.Services.AddScoped<IWinnerService,WinnerService>();
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header
-    });
-
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
-                Reference = new OpenApiReference
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey =
+                        new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"])),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+            options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
+        });
+
+
+        builder.Services.AddScoped<JWTGenerator>();
+        builder.Services.AddScoped<IPlayerProfileService, PlayerProfileService>();
+        builder.Services.AddScoped<IPlayerProfileRepository, PlayerProfileRepository>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
+        builder.Services.AddScoped<IBalanceService, BalanceService>();
+        builder.Services.AddScoped<IGameService, GameService>();
+        builder.Services.AddScoped<IGameRepository, GameRepository>();
+        builder.Services.AddScoped<IBoardService, BoardService>();
+        builder.Services.AddScoped<IBoardRepository, BoardRepository>();
+        builder.Services.AddScoped<IWinnerRepository, WinnerRepository>();
+        builder.Services.AddScoped<IWinnerService, WinnerService>();
+        builder.Services.AddControllers();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ValidateAddBalance>());
+        builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ValidateCreateBoard>());
+        builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ValidateCreateGame>());
+        builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ValidateCreatePlayerProfile>());
+        builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ValidateCreateUser>());
+
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header
+            });
+
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
                 }
-            },
-            Array.Empty<string>()
-        }
-    });
-});
+            });
+        });
 
         builder.Services.AddAuthorization();
 
-builder.Services.AddControllersWithViews()
-    .AddNewtonsoftJson(options =>
-        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-    );
-
-
+        builder.Services.AddControllersWithViews()
+            .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
 
         var app = builder.Build();
