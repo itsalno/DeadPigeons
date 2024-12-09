@@ -118,7 +118,7 @@ public class Program
         
         var app = builder.Build();
         
-        app.MapGet("/", () => $"Hello {target}!");
+        app.MapGet("/", () => $"Hello {target}!").AllowAnonymous();
 
         
         
