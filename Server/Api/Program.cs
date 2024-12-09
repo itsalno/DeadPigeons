@@ -8,6 +8,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.OpenApi.Models;
 using Services.Interfaces;
 using Services.Security;
@@ -22,27 +23,33 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        
+        var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+        var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
 
-        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+        builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
+        builder.Configuration["Jwt:Key"] = jwtKey;
+        
 
         builder.Services.AddDbContext<MyDbContext>(options =>
         {
             options.UseNpgsql(connectionString);
             options.EnableSensitiveDataLogging();
         });
-
+        
+        
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
             {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey =
-                        new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"])),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey)),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+        });
         builder.Services.AddAuthorization(options =>
         {
             options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
@@ -87,7 +94,7 @@ public class Program
                 {
                     new OpenApiSecurityScheme
                     {
-                        Reference = new OpenApiReference
+                         Reference = new OpenApiReference
                         {
                             Type = ReferenceType.SecurityScheme,
                             Id = "Bearer"
@@ -105,8 +112,19 @@ public class Program
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
-
+        var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+        var url = $"http://0.0.0.0:{port}";
+        var target = Environment.GetEnvironmentVariable("TARGET") ?? "World";
+        
         var app = builder.Build();
+        
+        
+        app.UseForwardedHeaders(
+            new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            }
+        );
 
 
         if (app.Environment.IsDevelopment())
