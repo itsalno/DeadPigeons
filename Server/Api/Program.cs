@@ -35,7 +35,7 @@ public class Program
         builder.Services.AddDbContext<MyDbContext>(options =>
         {
             options.UseNpgsql(connectionString);
-            options.EnableSensitiveDataLogging();
+            //options.EnableSensitiveDataLogging();
         });
         
         
@@ -118,6 +118,9 @@ public class Program
         
         var app = builder.Build();
         
+        app.MapGet("/", () => $"Hello {target}!");
+
+        
         
         app.UseForwardedHeaders(
             new ForwardedHeadersOptions
@@ -141,6 +144,6 @@ public class Program
         app.MapControllers();
         app.UseCors(config => config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
-        app.Run();
+        app.Run(url);
     }
 }
