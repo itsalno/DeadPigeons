@@ -6,7 +6,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -61,3 +61,6 @@ jobs:
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
+        
+        
+        
