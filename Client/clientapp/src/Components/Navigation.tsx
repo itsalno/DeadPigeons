@@ -20,8 +20,7 @@ interface JwtPayload {
 export default function Navigation() {
 
     const [isOpen, setOpen] = useState(false);
-    //const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
     const navigate = useNavigate();
 
     let userRole = null
