@@ -28,9 +28,10 @@ public class Program
         var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
 
 
-        builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
-        builder.Configuration["Jwt:Key"] = jwtKey;
-        
+        //var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
+        //builder.Configuration["Jwt:Key"] = jwtKey;
+        //var jwtKey = builder.Configuration["Jwt:Key"];
+
 
         builder.Services.AddDbContext<MyDbContext>(options =>
         {

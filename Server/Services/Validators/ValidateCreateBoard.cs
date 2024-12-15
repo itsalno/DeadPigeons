@@ -18,12 +18,10 @@ public class ValidateCreateBoard : AbstractValidator<CreateBoardDto>
         RuleFor(b => b.AutoplayEnabled)
             .NotNull().WithMessage("AutoplayEnabled cannot be null")
             .NotEmpty().WithMessage("AutoplayEnabled cannot be empty");
-        
+
         RuleFor(b => b.Sequence)
             .NotNull().WithMessage("Sequence cannot be null")
-            .NotEmpty().WithMessage("Sequence cannot be empty")
-            .MinimumLength(5).WithMessage("Sequence must be between 5 and 8 characters")
-            .MaximumLength(8).WithMessage("Sequence must be between 5 and 8 characters");
+            .NotEmpty().WithMessage("Sequence cannot be empty");
         
         RuleFor(b=>b.Price).GreaterThanOrEqualTo(20).WithMessage("Price cannot be less than 20");
     }

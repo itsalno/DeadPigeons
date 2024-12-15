@@ -22,8 +22,8 @@ import ResetPasswordPage from "../Pages/ResetPasswordPage";
 
 
 const App = () => {
-    const [theme, setTheme] = useAtom(ThemeAtom);
-    const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
+    const [theme] = useAtom(ThemeAtom);
+    const [, setIsLoggedIn] = useAtom(isLoggedInAtom);
 
     useEffect(() => {
         setIsLoggedIn(false)

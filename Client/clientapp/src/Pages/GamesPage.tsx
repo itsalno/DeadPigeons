@@ -5,7 +5,6 @@ import {useEffect, useState} from 'react';
 import toast from 'react-hot-toast';
 import {http} from '../http';
 import {BalanceAtom} from '../Atoms/BalanceAtom';
-import { atomWithStorage } from 'jotai/utils';
 import addAuthHeaders from '../AuthHeader';
 
 export default function GamesPage() {
@@ -13,7 +12,7 @@ export default function GamesPage() {
     const date = new Date();
     const [autoNum, setAutoNum] = useState(0);
     const [autoplay, setAutoplay] = useState(false);
-    const [num, setNum] = useState(0);
+    //const [num, setNum] = useState(0);
     const [disabled, setDisabled] = useState(true);
     const [cost, setCost] = useState<number>(0);
     const [game] = useAtom(activeGameAtom);
@@ -135,15 +134,17 @@ export default function GamesPage() {
                 GameId: game.id,
                 Prizepool: cost,
             };
+            // @ts-ignore
             http.api.gameUpdateUpdate(game.id, updateGameDto,{
                 headers: addAuthHeaders(), 
             });
 
            
-            const newBalance = balance;
+            //const newBalance = balance;
             
             
             try {
+                
                 await http.api.boardCreate({
                     playerid: localStorage.getItem("playerProfileId"),
                     gameid: game.id,

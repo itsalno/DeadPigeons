@@ -25,3 +25,7 @@ jobs:
       - name: Build
         run: dotnet build
 
+      - name: Test
+        env:
+          TOKEN_CONTENT: ${{ secrets.TOKEN_CONTENT }}
+        run: dotnet test

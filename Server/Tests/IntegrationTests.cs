@@ -25,10 +25,8 @@ public class IntegrationTests : WebApplicationFactory<Program>
     private string GetAdminJwtToken()
     {
         var token = Environment.GetEnvironmentVariable("TOKEN_CONTENT");
-        var trimmedtoken = token.Trim();
+        return token?.Trim() ?? throw new InvalidOperationException("TOKEN_CONTENT is not set.");
         
-        
-        return trimmedtoken;
     }
 
     //

@@ -7,7 +7,7 @@ import { isLoggedInAtom } from '../Atoms/AuthAtom';
 function ResetPasswordPage() {
 
 
-    const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
+    const [, setIsLoggedIn] = useAtom(isLoggedInAtom);
     const [formData, setFormData] = useState({
         newPassword: "",
         repeatPassword: "",

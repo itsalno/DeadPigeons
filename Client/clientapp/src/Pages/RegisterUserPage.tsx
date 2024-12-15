@@ -6,7 +6,7 @@ import addAuthHeaders from "../AuthHeader";
 
 export default function RegisterUserPage(){
 
-    const [loading, setLoading] = useState(false);
+    const [, setLoading] = useState(false);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: '',

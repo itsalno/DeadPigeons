@@ -5,12 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { isLoggedInAtom } from '../Atoms/AuthAtom';
 import { activeGameAtom } from '../Atoms/GameAtom';
-import { jwtDecode } from 'jwt-decode';
 import addAuthHeaders from '../AuthHeader';
 
 const LogInPage: React.FC = () => {
     
-    const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom);
+    const [, setIsLoggedIn] = useAtom(isLoggedInAtom);
     const [game, setGame] = useAtom(activeGameAtom);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -23,7 +22,7 @@ const LogInPage: React.FC = () => {
        
     });
 
-    const [loading, setLoading] = useState(false);
+    const [, setLoading] = useState(false);
 
     
 
@@ -72,10 +71,11 @@ const LogInPage: React.FC = () => {
                 http.api.gameActiveGameCreate({headers: addAuthHeaders()}).then((response) => {
                     setGame(response.data)
                 });
-                
-                
-                
+
+
+            // @ts-ignore
                 localStorage.setItem('week', game.week);
+            // @ts-ignore
                 localStorage.setItem('year', game.year);
                 
                 

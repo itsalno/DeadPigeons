@@ -13,7 +13,7 @@ function TransactionHistoryPage() {
     const {playerId} = useParams();
     const [transactions, setTransactions] = useState<BalanceDTO[]>([]);
     const [pendingTransactions, setPendingTransactions] = useState<BalanceDTO[]>([]);
-    const [balance, setBalance] = useAtom(BalanceAtom);
+    const [, setBalance] = useAtom(BalanceAtom);
 
 
 
@@ -40,7 +40,7 @@ function TransactionHistoryPage() {
             headers: addAuthHeaders(), 
         })
             .then((response) => {
-                setTransactions(response.data);
+                setTransactions(response.data as BalanceDTO[]);
             })
             .catch((error) => {
                 console.error("Failed to fetch transactions", error);
@@ -51,7 +51,7 @@ function TransactionHistoryPage() {
             headers: addAuthHeaders(),  
         })
             .then((response) => {
-                setPendingTransactions(response.data);
+                setPendingTransactions(response.data as BalanceDTO[]);
             })
             .catch((error) => {
                 console.error("Failed to fetch pending transactions", error);

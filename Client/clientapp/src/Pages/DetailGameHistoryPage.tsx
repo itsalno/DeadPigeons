@@ -23,7 +23,7 @@ function DetailGameHistoryPage() {
                 const response = await http.api.boardDetail(gameId,{
                     headers: addAuthHeaders(), 
                 }); 
-                setHistory(response.data);
+                setHistory(response.data as DetailGameHystoryDto[]);
             } catch (error) {
                 toast.error("Failed to fetch game history.");
                 console.error(error);
