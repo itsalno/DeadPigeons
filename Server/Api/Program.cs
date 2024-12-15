@@ -26,17 +26,12 @@ public class Program
         
         var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"] ?? Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
         var jwtKey = builder.Configuration["Jwt:Key"] ?? Environment.GetEnvironmentVariable("JWT_KEY");
-
-
-        //var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
-        //builder.Configuration["Jwt:Key"] = jwtKey;
-        //var jwtKey = builder.Configuration["Jwt:Key"];
+        
 
 
         builder.Services.AddDbContext<MyDbContext>(options =>
         {
             options.UseNpgsql(connectionString);
-            //options.EnableSensitiveDataLogging();
         });
         
         
