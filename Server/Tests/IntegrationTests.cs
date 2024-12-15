@@ -24,7 +24,6 @@ public class IntegrationTests : WebApplicationFactory<Program>
 
     private string GetAdminJwtToken()
     {
-        //This token is generated just for testing purposes
         var token = Environment.GetEnvironmentVariable("TOKEN_CONTENT");
         return token;
     }
@@ -84,7 +83,7 @@ public class IntegrationTests : WebApplicationFactory<Program>
         client.DefaultRequestHeaders.Authorization = 
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         //Test player profile guid (its a fake)
-        var id = "ae3a776e-2c5a-4f31-8f40-96ea200dfdec";
+        var id = "c8ff48d3-e82d-446d-afae-825d1804d308";
         var content = new StringContent(id, Encoding.UTF8, "application/json");
         var response = await client.PatchAsync($"/api/PlayerProfile/{id}/softDelete", content);
         var body = await response.Content.ReadAsStringAsync();
@@ -150,7 +149,7 @@ public class IntegrationTests : WebApplicationFactory<Program>
         client.DefaultRequestHeaders.Authorization = 
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var id = "c8ff48d3-e82d-446d-afae-825d1804d308";
-        var content = new StringContent("{ 'playerId': '6c363bbd-41b2-4c6e-bde4-ce7c61c7faf3',  'balance': 300}", Encoding.UTF8, "application/json-patch+json");
+        var content = new StringContent("{ 'playerId': 'c8ff48d3-e82d-446d-afae-825d1804d308',  'balance': 300}", Encoding.UTF8, "application/json-patch+json");
         var response = await client.PutAsync($"/api/PlayerProfile/update/{id}", content);
         var body = await response.Content.ReadAsStringAsync();
         
@@ -317,7 +316,7 @@ public class IntegrationTests : WebApplicationFactory<Program>
         client.DefaultRequestHeaders.Authorization = 
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
         var id = "6ef01d72-897a-4ebe-a422-5d7a8d8b8223";
-        var content = new StringContent("{'gameId': 'd4e5ab18-9e30-45c6-8d5e-d55f8fdd1458', 'prizepool': 1000}", Encoding.UTF8, "application/json-patch+json");
+        var content = new StringContent("{'gameId': '6ef01d72-897a-4ebe-a422-5d7a8d8b8223', 'prizepool': 1000}", Encoding.UTF8, "application/json-patch+json");
         var response = await client.PutAsync($"/api/Game/update/{id}", content);
         var body = await response.Content.ReadAsStringAsync();
         
@@ -346,7 +345,7 @@ public class IntegrationTests : WebApplicationFactory<Program>
         var client = CreateClient();
         client.DefaultRequestHeaders.Authorization = 
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAdminJwtToken());
-        var id = "2c7e0ab3-86f8-478c-b4ec-bd6ff53bd308";
+        var id = "ef5268bc-9d01-49a9-8ddf-d01d0e12aee2";
         var response = await client.GetAsync($"/api/Game/getGameById/{id}");
         var body = await response.Content.ReadAsStringAsync();
         
