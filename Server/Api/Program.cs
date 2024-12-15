@@ -24,8 +24,8 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         
-        var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"] ?? Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-        var jwtKey = builder.Configuration["Jwt:Key"] ?? Environment.GetEnvironmentVariable("JWT_KEY");
+        var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+        var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
         
 
 
