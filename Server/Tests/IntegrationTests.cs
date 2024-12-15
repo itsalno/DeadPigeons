@@ -28,12 +28,6 @@ public class IntegrationTests : WebApplicationFactory<Program>
         return token;
     }
 
-    private string GetUserJwtToken()
-    {
-        const string? token = "";
-        return token?.Trim() ?? throw new InvalidOperationException("Token is not set");
-    }
-
     //
     //PlayerProfile tests
     //
