@@ -26,7 +26,9 @@ jobs:
       - name: Build
         run: dotnet build
 
-      - name: Test
+      - name: Run tests
         env:
+          DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
+          JWT_KEY: ${{ secrets.JWT_KEY }}
           TOKEN_CONTENT: ${{ secrets.TOKEN_CONTENT }}
-        run: dotnet test
+        run: dotnet test 
