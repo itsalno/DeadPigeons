@@ -8,8 +8,7 @@ import { useAtom } from 'jotai';
 import { BalanceAtom } from '../Atoms/BalanceAtom';
 
 function TransactionHistoryPage() {
-
-    const [approvedAmounts, setApprovedAmounts] = useState<number[]>([]);
+    
     const {playerId} = useParams();
     const [transactions, setTransactions] = useState<BalanceDTO[]>([]);
     const [pendingTransactions, setPendingTransactions] = useState<BalanceDTO[]>([]);

@@ -24,8 +24,12 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         
+        
         var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
         var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
+        
+        builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
+        builder.Configuration["Jwt:Key"] = jwtKey;
         
 
 
@@ -33,6 +37,7 @@ public class Program
         {
             options.UseNpgsql(connectionString);
         });
+        
         
         
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -140,6 +145,6 @@ public class Program
         app.MapControllers();
         app.UseCors(config => config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
-        app.Run(url);
+        app.Run();
     }
 }

@@ -152,6 +152,7 @@ export default function GamesPage() {
                     autoplayEnabled: autoplay,
                     createdAt: new Date().toJSON(),
                     sequence: seq.toString(),
+                    // @ts-ignore
                     autoplayStartWeek: localStorage.getItem('week'),
                     autoplayWeeksRemaining: autoNum,
                 },{headers: addAuthHeaders()});
