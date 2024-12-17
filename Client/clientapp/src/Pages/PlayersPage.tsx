@@ -49,10 +49,14 @@ function PlayersPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {/* Button Section */}
                     <div className="flex flex-col space-y-4">
-                        <Link to="/RegisterUser" className="btn btn-ghost small-case text-l m-1">
+                        <Link to="/RegisterUser"
+                              className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                        >
                             Register a New User
                         </Link>
-                        <Link to="/InactiveUsers" className="btn btn-ghost small-case text-l m-1">
+                        <Link to="/InactiveUsers"
+                              className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                        >
                             View Inactive Users
                         </Link>
                     </div>

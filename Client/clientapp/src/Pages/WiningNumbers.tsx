@@ -30,11 +30,11 @@ function WiningNumbers() {
                 headers: addAuthHeaders(),
             });
             toast.success("Winners have been determined!")
-            navigate("/Winners")
         } catch (error) {
             toast.error('Error processing winners!');
             setIsDisabled(false);
         }
+        navigate("/Winners")
     };
 
     const EndGame = () => {
@@ -93,7 +93,7 @@ function WiningNumbers() {
                     disabled={winingNum.length !== 3}
                     onClick={EndGame}
                 >
-                    Next
+                    Add sequence
                 </button>
 
                 {/* Reset Button */}
@@ -110,7 +110,7 @@ function WiningNumbers() {
                             ? "bg-gray-400 cursor-not-allowed"
                             : "bg-green-500 hover:bg-blue-600 focus:ring focus:ring-blue-300"
                         }`}>
-                    Determine Winners</button>
+                    Show Winners</button>
             </section>
             {/* Footer Section */}
             <footer className="text-center text-gray-500 bg-gray-100 py-6">

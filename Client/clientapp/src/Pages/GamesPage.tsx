@@ -6,20 +6,23 @@ import toast from 'react-hot-toast';
 import {http} from '../http';
 import {BalanceAtom} from '../Atoms/BalanceAtom';
 import addAuthHeaders from '../AuthHeader';
+import { PrizepoolAtom } from '../Atoms/PrizepoolAtom';
 
 export default function GamesPage() {
 
     const date = new Date();
     const [autoNum, setAutoNum] = useState(0);
     const [autoplay, setAutoplay] = useState(false);
-    //const [num, setNum] = useState(0);
     const [disabled, setDisabled] = useState(true);
     const [cost, setCost] = useState<number>(0);
     const [game] = useAtom(activeGameAtom);
     const [seq, setSeq] = useState([]);
     const [balance, setBalance] = useAtom(BalanceAtom);
     const [visualBalance, setVisualBalance] = useState<number>(balance ?? 0);
-    const [prizepool,setPrizePool]=useState<number>(0)
+    const [prizepool,setPrizePool]=useAtom(PrizepoolAtom);
+    const week = parseInt(localStorage.getItem('week') || '0', 10);
+    const year = parseInt(localStorage.getItem('year') || '0', 10);
+
 
     const [isActive, setIsActive] = useState(true);
     const [playerProfileId, setPlayerProfileId] = useState("");
@@ -40,22 +43,22 @@ export default function GamesPage() {
     }, []);
 
 
+    const fetchPrizePool = async () => {
+        if (!game?.id) {
+            console.error("Game ID is undefined.");
+            return;
+        }
+
+        try {
+            const response = await http.api.gamePricepoolByIdDetail(game.id);
+            const pricepool: number = response.data;
+            setPrizePool(pricepool);
+        } catch (error) {
+            console.error("Failed to fetch prize pool:", error);
+        }
+    };
+    
     useEffect(() => {
-        const fetchPrizePool = async () => {
-            if (!game?.id) {
-                console.error("Game ID is undefined.");
-                return;
-            }
-
-            try {
-                const response = await http.api.gamePricepoolByIdDetail(game.id);
-                const pricepool: number = response.data;
-                setPrizePool(pricepool);
-            } catch (error) {
-                console.error("Failed to fetch prize pool:", error);
-            }
-        };
-
         fetchPrizePool();
     }, [game?.id]);
 
@@ -134,17 +137,15 @@ export default function GamesPage() {
                 GameId: game.id,
                 Prizepool: cost,
             };
+            
             // @ts-ignore
             http.api.gameUpdateUpdate(game.id, updateGameDto,{
                 headers: addAuthHeaders(), 
             });
 
-           
-            //const newBalance = balance;
             
             
             try {
-                
                 await http.api.boardCreate({
                     playerid: localStorage.getItem("playerProfileId"),
                     gameid: game.id,
@@ -152,8 +153,8 @@ export default function GamesPage() {
                     autoplayEnabled: autoplay,
                     createdAt: new Date().toJSON(),
                     sequence: seq.toString(),
-                    // @ts-ignore
-                    autoplayStartWeek: localStorage.getItem('week'),
+                    
+                    autoplayStartWeek: week,
                     autoplayWeeksRemaining: autoNum,
                 },{headers: addAuthHeaders()});
 
@@ -170,7 +171,7 @@ export default function GamesPage() {
                     headers: addAuthHeaders(), 
                 });
 
-
+                fetchPrizePool();
                 toast.success("Your board has been saved");
 
                 setSeq([]);
@@ -200,7 +201,7 @@ export default function GamesPage() {
                     {/* Game Title Section */}
                     <header className="text-center bg-red-600 text-white py-16">
                         <p className="text-4xl font-bold">
-                            Currently playing: Week {localStorage.getItem('week')}, {localStorage.getItem('year')}
+                            Currently playing: Week {week}, {year}
                         </p>
                     </header>
 

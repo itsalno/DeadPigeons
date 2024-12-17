@@ -1,3 +1,3 @@
-import { atom } from 'jotai';
+import { atomWithStorage } from 'jotai/utils';
 
-export const isLoggedInAtom = atom(false);
+export const isLoggedInAtom = atomWithStorage<boolean>("logstatus",false);

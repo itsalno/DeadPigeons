@@ -128,21 +128,25 @@ export default function Navigation() {
                 <ThemeSwitcher/>
             </div>
             <div className="flex-none">
-                {!isLoggedIn && (
-                    <Link to="/LogIn" className="btn btn-ghost small-case text-l m-1">Log In</Link>
+                {isOpen && (
+                    <>
+                        <div>
+                            {!isLoggedIn && (
+                                <button className="btn btn-ghost small-case text-l m-1 mob">
+                                    <Link to="/LogIn">Log In</Link>
+                                </button>
+                            )}
+                        </div>
+                    </>
                 )}
+                <div>
+                    {!isLoggedIn && (
+                        <button className="btn btn-ghost small-case text-l m-1 mob">
+                            <Link to="/LogIn">Log In</Link>
+                        </button>
+                    )}
+                </div>
             </div>
-            {isOpen && (
-                <>
-                    <div>
-                        {!isLoggedIn && (
-                            <button className="btn btn-ghost small-case text-l m-1 mob">
-                                <Link to="/LogIn" >Log In</Link>
-                            </button>
-                        )}
-                    </div>
-                </>
-            )}
 
         </div>
     );

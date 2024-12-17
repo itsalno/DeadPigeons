@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { http } from '../http';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { isLoggedInAtom } from '../Atoms/AuthAtom';
 import { activeGameAtom } from '../Atoms/GameAtom';
-import addAuthHeaders from '../AuthHeader';
 
 const LogInPage: React.FC = () => {
     
     const [, setIsLoggedIn] = useAtom(isLoggedInAtom);
-    const [game, setGame] = useAtom(activeGameAtom);
+    const [, setGame] = useAtom(activeGameAtom);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: '',
@@ -24,7 +23,27 @@ const LogInPage: React.FC = () => {
 
     const [, setLoading] = useState(false);
 
-    
+    useEffect(() => {
+        const now = new Date();
+        
+        const year = now.getFullYear();
+
+        const week = getISOWeek(now);
+
+        localStorage.setItem("week",week.toString())
+        localStorage.setItem("year",year.toString())
+    }, []);
+
+
+    function getISOWeek(date) {
+        const tempDate = new Date(date.getTime());
+        tempDate.setHours(0, 0, 0, 0); 
+        tempDate.setDate(tempDate.getDate() + 3 - ((tempDate.getDay() + 6) % 7)); 
+        const firstThursday = new Date(tempDate.getFullYear(), 0, 4); 
+        // @ts-ignore
+        const diff = tempDate - firstThursday; 
+        return 1 + Math.round(diff / (7 * 24 * 60 * 60 * 1000)); 
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value, type, checked} = e.target;
@@ -67,16 +86,13 @@ const LogInPage: React.FC = () => {
                  }
 
                
-
-                http.api.gameActiveGameCreate({headers: addAuthHeaders()}).then((response) => {
-                    setGame(response.data)
-                });
-
-
-            // @ts-ignore
-                localStorage.setItem('week', game.week);
-            // @ts-ignore
-                localStorage.setItem('year', game.year);
+              
+              http.api.gameActiveGameCreate().then((response) => {
+                  setGame(response.data)
+              });
+                
+               
+              
                 
                 
                

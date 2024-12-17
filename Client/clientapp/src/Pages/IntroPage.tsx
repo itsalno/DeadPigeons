@@ -2,6 +2,8 @@ import logo from '../assets/logo.png';
 
 function IntroPage(){
 
+    
+
 
     return (
         <div className="w-full mx-auto space-y-16 text-gray-800">
