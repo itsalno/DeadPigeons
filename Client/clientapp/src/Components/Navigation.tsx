@@ -132,6 +132,18 @@ export default function Navigation() {
                     <Link to="/LogIn" className="btn btn-ghost small-case text-l m-1">Log In</Link>
                 )}
             </div>
+            {isOpen && (
+                <>
+                    <div>
+                        {!isLoggedIn && (
+                            <button className="btn btn-ghost small-case text-l m-1 mob">
+                                <Link to="/LogIn" >Log In</Link>
+                            </button>
+                        )}
+                    </div>
+                </>
+            )}
+
         </div>
     );
 }
