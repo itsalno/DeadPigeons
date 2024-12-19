@@ -73,8 +73,7 @@ const LogInPage: React.FC = () => {
                 
                 
 
-
-                localStorage.setItem('isLoggedIn', 'true');
+                
                 localStorage.setItem("userId", userId);
                 setIsLoggedIn(true);
 

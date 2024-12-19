@@ -1,7 +1,7 @@
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import { Route, Routes } from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
 import { ThemeAtom } from "../Atoms/ThemeAtom";
 import Navigation from "./Navigation";
 import IntroPage from "../Pages/IntroPage";
@@ -18,13 +18,47 @@ import RegisterUserPage from "../Pages/RegisterUserPage";
 import DetailGameHistoryPage from "../Pages/DetailGameHistoryPage";
 import ProtectedRoute from "./ProtectedRoute";
 import ResetPasswordPage from "../Pages/ResetPasswordPage";
+import { jwtDecode } from "jwt-decode";
+import { isLoggedInAtom } from "../Atoms/AuthAtom";
+
+interface JwtPayload {
+    sub: string;
+    name: string;
+    role: string;
+    iat: number;
+    exp: number;
+}
 
 
 const App = () => {
     const [theme] = useAtom(ThemeAtom);
-    //const [, setIsLoggedIn] = useAtom(isLoggedInAtom);
-
+    const [, setIsLoggedIn] = useAtom(isLoggedInAtom);
+    const navigate = useNavigate();
     
+    
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                const decoded = jwtDecode<JwtPayload>(token);
+                const now = Math.floor(Date.now() / 1000); 
+
+                if (decoded.exp > now) {
+                    setIsLoggedIn(true);
+                } else {
+                    localStorage.clear(); 
+                    setIsLoggedIn(false);
+                }
+            } catch (err) {
+                console.error("Invalid token");
+                localStorage.clear(); 
+                setIsLoggedIn(false);
+                navigate("/")
+            }
+        } else {
+            setIsLoggedIn(false);
+        }
+    }, []);
 
     useEffect(() => {
         localStorage.setItem('theme', theme);
